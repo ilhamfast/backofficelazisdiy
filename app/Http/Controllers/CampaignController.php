@@ -9,16 +9,16 @@ class CampaignController extends Controller
 {
     public function index()
     {
-        $response = Http::get('http://103.23.103.43/lazismuDIY/backendLazismuDIY/public/api/campaigns')->json();
+        $campaignsResponse = Http::get('http://10.99.23.111/lazismuDIY/backendLazismuDIY/public/api/campaigns');
+        $categoriesResponse = Http::get('http://10.99.23.111/lazismuDIY/backendLazismuDIY/public/api/campaign-categories')->json();
     
-        $campaigns = $response['data'];
-    
-        $categories = Http::get('http://103.23.103.43/lazismuDIY/backendLazismuDIY/public/api/campaign-categories')->json();
-    
-        return view('campaign.index', compact('campaigns', 'categories'));
+        return view('campaign.index', [
+            'campaigns' => $campaignsResponse['data'],
+            'categories' => $categoriesResponse
+        ]);
     }
     
-    
+
     
 
     public function store(Request $request)
@@ -60,7 +60,7 @@ class CampaignController extends Controller
         }
 
         // Mengirim data ke API
-        $response = $requestHttp->post('http://103.23.103.43/lazismuDIY/backendLazismuDIY/public/api/campaigns', [
+        $response = $requestHttp->post('http://localhost/lazismuDIY/backendLazismuDIY/public/api/campaigns', [
             'campaign_category_id' => $request->input('campaign_category_id'),
             'campaign_name' => $request->input('campaign_name'),
             'campaign_code' => $request->input('campaign_code'),
@@ -118,7 +118,7 @@ class CampaignController extends Controller
     }
 
     // Mengirim data ke API untuk update
-    $response = $requestHttp->put("http://103.23.103.43/lazismuDIY/backendLazismuDIY/public/api/campaigns/{$id}", [
+    $response = $requestHttp->put("http://localhost/lazismuDIY/backendLazismuDIY/public/api/campaigns/{$id}", [
         'campaign_category_id' => $request->input('campaign_category_id'),
         'campaign_name' => $request->input('campaign_name'),
         'campaign_code' => $request->input('campaign_code'),
