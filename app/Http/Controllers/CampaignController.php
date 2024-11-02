@@ -58,7 +58,7 @@ class CampaignController extends Controller
         }
 
         // Mengirim data ke API
-        $response = $requestHttp->post('http://localhost/lazismuDIY/backendLazismuDIY/public/api/campaigns', [
+        $response = $requestHttp->post('http://10.99.23.111/lazismuDIY/backendLazismuDIY/public/api/campaigns', [
             'campaign_category_id' => $request->input('campaign_category_id'),
             'campaign_name' => $request->input('campaign_name'),
             'campaign_code' => $request->input('campaign_code'),
@@ -113,7 +113,7 @@ class CampaignController extends Controller
     }
 
     // Mengirim data ke API untuk update
-    $response = $requestHttp->put("http://103.23.103.43/lazismuDIY/backendLazismuDIY/public/api/campaigns/{$id}", [
+    $response = $requestHttp->put("http://10.99.23.111/lazismuDIY/backendLazismuDIY/public/api/campaigns/{$id}", [
         'campaign_category_id' => $request->input('campaign_category_id'),
         'campaign_name' => $request->input('campaign_name'),
         'campaign_code' => $request->input('campaign_code'),
