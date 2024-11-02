@@ -48,7 +48,7 @@
                             <th>Campaign</th>
                             <th>Creator</th>
                             <th>Lokasi</th>
-                            <th>Tanggal & Waktu</th>
+                            <th>Tanggal Mulai</th>
                             <th>Target</th>
                             <th>Terkumpul</th>
                             <th>Status</th>
@@ -63,7 +63,7 @@
                             <td>{{ $campaign['campaign_name'] }}</td>
                             <td>{{ $campaign['creator'] ?? 'Lazismu DIY' }}</td>
                             <td>{{ $campaign['location'] }}</td>
-                            <td>{{ $campaign['start_date'] }} - {{ $campaign['end_date'] }}</td>
+                            <td>{{ $campaign['start_date'] }}</td>
                             <td>{{ number_format($campaign['target_amount']) }}</td>
                             <td>{{ number_format($campaign['current_amount']) }}</td>
                             <td><span class="text-success">Aktif</span></td>
@@ -118,10 +118,6 @@
                                             <div class="mb-3">
                                                 <label for="startDate" class="form-label">Tanggal Mulai</label>
                                                 <input type="date" name="start_date" class="form-control" value="{{ $campaign['start_date'] }}" required>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="endDate" class="form-label">Tanggal Selesai</label>
-                                                <input type="date" name="end_date" class="form-control" value="{{ $campaign['end_date'] }}" required>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="campaign_thumbnail" class="form-label">Thumbnail</label>
@@ -194,10 +190,6 @@
                                     <div class="mb-3">
                                         <label for="startDate" class="form-label">Tanggal Mulai</label>
                                         <input type="date" name="start_date" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="endDate" class="form-label">Tanggal Selesai</label>
-                                        <input type="date" name="end_date" class="form-control" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="campaign_thumbnail" class="form-label">Thumbnail</label>
