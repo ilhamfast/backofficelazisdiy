@@ -23,10 +23,8 @@ class CampaignController extends Controller
 
     public function store(Request $request)
     {
-        // Membuat instance Http untuk request multipart
         $requestHttp = Http::asMultipart();
 
-        // Meng-attach file jika ada file yang diunggah
         if ($request->hasFile('campaign_thumbnail')) {
             $requestHttp->attach(
                 'campaign_thumbnail',
@@ -71,7 +69,6 @@ class CampaignController extends Controller
             'end_date' => $request->input('end_date'),
         ]);
 
-        // Cek respons API
         if ($response->successful()) {
             return redirect()->back()->with('success', 'Campaign created successfully!');
         } else {
@@ -81,10 +78,8 @@ class CampaignController extends Controller
 
     public function update(Request $request, $id)
 {
-    // Membuat instance Http untuk request multipart
     $requestHttp = Http::asMultipart();
 
-    // Meng-attach file jika ada file yang diunggah
     if ($request->hasFile('campaign_thumbnail')) {
         $requestHttp->attach(
             'campaign_thumbnail',
@@ -118,7 +113,7 @@ class CampaignController extends Controller
     }
 
     // Mengirim data ke API untuk update
-    $response = $requestHttp->put("http://localhost/lazismuDIY/backendLazismuDIY/public/api/campaigns/{$id}", [
+    $response = $requestHttp->put("http://103.23.103.43/lazismuDIY/backendLazismuDIY/public/api/campaigns/{$id}", [
         'campaign_category_id' => $request->input('campaign_category_id'),
         'campaign_name' => $request->input('campaign_name'),
         'campaign_code' => $request->input('campaign_code'),
@@ -129,7 +124,6 @@ class CampaignController extends Controller
         'end_date' => $request->input('end_date'),
     ]);
 
-    // Cek respons API
     if ($response->successful()) {
         return redirect()->back()->with('success', 'Campaign updated successfully!');
     } else {
