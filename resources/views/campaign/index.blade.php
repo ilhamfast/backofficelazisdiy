@@ -76,6 +76,7 @@
                             </td>
                         </tr>
 
+
                         <!-- Modal Edit Campaign-->
                         <div class="modal fade" id="editCampaign{{ $campaign['id'] }}" tabindex="-1" aria-labelledby="editCampaignLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-scrollable">
@@ -149,6 +150,26 @@
                         @endforeach
                     </tbody>
                 </table>
+
+                <div class="d-flex justify-content-center mt-4">
+                <!-- Tombol Previous -->
+                @if ($pagination['current_page'] > 1)
+                    <a href="?page={{ $pagination['current_page'] - 1 }}" class="btn btn-primary mx-1">Previous</a>
+                @endif
+
+                <!-- Tombol Nomor Halaman -->
+                @for ($i = 1; $i <= $pagination['last_page']; $i++)
+                    <a href="?page={{ $i }}" class="btn btn-light mx-1 {{ $i == $pagination['current_page'] ? 'active' : '' }}">
+                        {{ $i }}
+                    </a>
+                @endfor
+
+                <!-- Tombol Next -->
+                @if ($pagination['current_page'] < $pagination['last_page'])
+                    <a href="?page={{ $pagination['current_page'] + 1 }}" class="btn btn-primary mx-1">Next</a>
+                @endif
+            </div>
+
 
                 <!-- Modal Create Campaign-->
                 <div class="modal fade" id="createcampaign" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"

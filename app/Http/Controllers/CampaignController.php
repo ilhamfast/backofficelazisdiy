@@ -7,16 +7,29 @@ use Illuminate\Http\Request;
 
 class CampaignController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $campaignsResponse = Http::get('http://10.99.23.111/lazismuDIY/backendLazismuDIY/public/api/campaigns');
-        $categoriesResponse = Http::get('http://10.99.23.111/lazismuDIY/backendLazismuDIY/public/api/campaign-categories')->json();
+
+        $page = $request->get('page', 1);
     
+        $campaignsUrl = "http://10.99.23.111/lazismuDIY/backendLazismuDIY/public/api/campaigns?page={$page}";
+        $categoriesUrl = "http://10.99.23.111/lazismuDIY/backendLazismuDIY/public/api/campaign-categories";
+
+        $campaignsResponse = Http::get($campaignsUrl)->json();
+        $categoriesResponse = Http::get($categoriesUrl)->json();
+
         return view('campaign.index', [
             'campaigns' => $campaignsResponse['data'],
-            'categories' => $categoriesResponse
+            'categories' => $categoriesResponse,
+            'pagination' => [
+                'current_page' => $campaignsResponse['current_page'],
+                'last_page' => $campaignsResponse['last_page'],
+                'next_page_url' => $campaignsResponse['next_page_url'],
+                'prev_page_url' => $campaignsResponse['prev_page_url']
+            ]
         ]);
     }
+    
     
 
     
