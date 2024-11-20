@@ -9,35 +9,32 @@ class CampaignController extends Controller
 {
     public function index(Request $request)
     {
-
         $page = $request->get('page', 1);
         $search = $request->get('search', '');
-
         $baseUrl = env('API_BASE_URL');
-
         $campaignsUrl = "{$baseUrl}/campaigns?page={$page}";
         $categoriesUrl = "{$baseUrl}/campaign-categories";
-
         
-
         $campaignsResponse = Http::get($campaignsUrl)->json();
         $categoriesResponse = Http::get($categoriesUrl)->json();
-
-        // Transform campaign data to include category information
-        $campaigns = collect($campaignsResponse['data'])->map(function ($campaign) {
-            $campaign['category_name'] = $campaign['category']['campaign_category'] ?? 'No Category';
-            return $campaign;
-        })->sortByDesc('created_at');
-
-        if ($search) {
-            $campaigns = $campaigns
-                ->filter(function ($campaign) use ($search) {
-                    $searchLower = strtolower($search);
-                    return str_contains(strtolower($campaign['campaign_name']), $searchLower);
+        
+        $campaigns = collect($campaignsResponse['data'])
+            ->map(function ($campaign) {
+                $campaign['category_name'] = $campaign['category']['campaign_category'] ?? 'No Category';
+                return $campaign;
+            })
+            ->when($search, function ($collection) use ($search) {
+                return $collection->filter(function ($campaign) use ($search) {
+                    return str_contains(
+                        strtolower($campaign['campaign_name']),
+                        strtolower($search)
+                    );
                 });
-        }
+            })
+            ->sortByDesc('created_at')
+            ->values();
 
-        return view('campaign.index', [
+        $data = [
             'campaigns' => $campaigns,
             'categories' => $categoriesResponse,
             'pagination' => [
@@ -48,9 +45,51 @@ class CampaignController extends Controller
                 'per_page' => $campaignsResponse['per_page'],
                 'total' => $campaignsResponse['total'],
             ]
-        ]);
+        ];
+
+        return view('campaign.index', $data);
     }
 
+    
+    public function search(Request $request)
+    {
+        if ($request->ajax()) {
+            $page = $request->get('page', 1);
+            $search = $request->get('search', '');
+            $baseUrl = env('API_BASE_URL');
+            $campaignsUrl = "{$baseUrl}/campaigns?page={$page}";
+            
+            $campaignsResponse = Http::get($campaignsUrl)->json();
+            
+            $campaigns = collect($campaignsResponse['data'])
+                ->map(function ($campaign) {
+                    $campaign['category_name'] = $campaign['category']['campaign_category'] ?? 'No Category';
+                    return $campaign;
+                })
+                ->when($search, function ($collection) use ($search) {
+                    return $collection->filter(function ($campaign) use ($search) {
+                        return str_contains(
+                            strtolower($campaign['campaign_name']),
+                            strtolower($search)
+                        );
+                    });
+                })
+                ->sortByDesc('created_at')
+                ->values();
+
+            return response()->json([
+                'campaigns' => $campaigns,
+                'pagination' => [
+                    'current_page' => $campaignsResponse['current_page'],
+                    'last_page' => $campaignsResponse['last_page'],
+                    'next_page_url' => $campaignsResponse['next_page_url'],
+                    'prev_page_url' => $campaignsResponse['prev_page_url'],
+                    'per_page' => $campaignsResponse['per_page'],
+                    'total' => $campaignsResponse['total'],
+                ]
+            ]);
+        }
+    }
 
 
 

@@ -10,6 +10,7 @@ Route::get('/', function () {
 })->name('dashboard.index');
 
 Route::get('/campaign', [CampaignController::class, 'index'])->name('campaign.index');
+Route::get('/campaigns/search', [CampaignController::class, 'search'])->name('campaigns.search');
 Route::post('/campaign', [CampaignController::class, 'store'])->name('campaign.store');
 Route::put('/campaign/{id}', [CampaignController::class, 'update'])->name('campaign.update');
 Route::get('/users', [PenggunaController::class, 'index'])->name('pengguna.index');

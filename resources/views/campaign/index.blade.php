@@ -241,7 +241,387 @@
         </main>
     </div>
     </div>
+
+    {{-- <script>
+        let typingTimer;
+        const doneTypingInterval = 500; // Wait for 500ms after user stops typing
+        const searchInput = document.getElementById('searchInput');
+        const transactionTable = document.getElementById('transaction-table');
+
+        // Add event listener for search input
+        searchInput.addEventListener('keyup', function() {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(performSearch, doneTypingInterval);
+        });
+
+        function performSearch() {
+            const searchQuery = searchInput.value;
+
+            // Show loading state
+            const tbody = transactionTable.querySelector('tbody');
+            tbody.innerHTML = `
+            <tr>
+                <td colspan="8" class="px-6 py-4 text-center">
+                    <div class="flex justify-center items-center">
+                        <svg class="animate-spin h-5 w-5 mr-3 text-gray-500" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Searching...
+                    </div>
+                </td>
+            </tr>
+        `;
+
+            // Make AJAX request
+            fetch(`/campaigns/search?search=${encodeURIComponent(searchQuery)}`, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    updateTable(data.campaigns, data.pagination);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    tbody.innerHTML = `
+                <tr>
+                    <td colspan="8" class="px-6 py-4 text-center text-red-500">
+                        An error occurred while searching. Please try again.
+                    </td>
+                </tr>
+            `;
+                });
+        }
+
+        function updateTable(campaigns, pagination) {
+            const tbody = transactionTable.querySelector('tbody');
+
+            if (campaigns.length === 0) {
+                tbody.innerHTML = `
+                <tr>
+                    <td colspan="8" class="px-6 py-4 text-center">
+                        <div class="flex flex-col items-center justify-center space-y-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <p class="text-gray-500">Data nama campaign yang anda cari tidak ditemukan!.</p>
+                        </div>
+                    </td>
+                </tr>
+            `;
+                return;
+            }
+
+            // Generate table rows
+            tbody.innerHTML = campaigns.map((campaign, index) => `
+        <tr>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                ${(pagination.current_page - 1) * pagination.per_page + index + 1}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                ${campaign.category_name}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                ${campaign.campaign_name ?? 'Email not available'}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                ${campaign.location}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                Rp ${new Intl.NumberFormat('id-ID').format(campaign.target_amount)}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                Rp ${new Intl.NumberFormat('id-ID').format(campaign.current_amount)}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                ${campaign.active == 1 
+                    ? '<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Aktif</span>'
+                    : '<span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">Tidak Aktif</span>'
+                }
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <div class="flex items-center gap-2">
+                    <button class="text-yellow-800">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                        </svg>
+                    </button>
+                    <button class="text-red-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                        </svg>
+                    </button>
+                </div>
+            </td>
+        </tr>
+     `).join('');
+
+            // Update pagination
+            updatePagination(pagination);
+        }
+
+        function updatePagination(pagination) {
+            const paginationContainer = document.querySelector('#pagination nav');
+            let paginationHTML = '';
+
+            // Previous button
+            if (pagination.current_page > 1) {
+                paginationHTML += `
+            <a href="?page=${pagination.current_page - 1}" 
+               class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+                <span>Previous</span>
+                <svg class="size-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+                </svg>
+            </a>
+        `;
+            }
+
+            // Page numbers
+            for (let i = 1; i <= pagination.last_page; i++) {
+                paginationHTML += `
+            <a href="?page=${i}" 
+               class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${i === pagination.current_page ? 'bg-indigo-600 text-white' : ''}">
+                ${i}
+            </a>
+        `;
+            }
+
+            // Next button
+            if (pagination.current_page < pagination.last_page) {
+                paginationHTML += `
+            <a href="?page=${pagination.current_page + 1}" 
+               class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+                <span>Next</span>
+                <svg class="size-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                </svg>
+            </a>
+        `;
+            }
+
+            paginationContainer.innerHTML = paginationHTML;
+        }
+    </script> --}}
+
+    <script>
+        let typingTimer;
+        const doneTypingInterval = 500; // Wait for 500ms after user stops typing
+        const searchInput = document.getElementById('searchInput');
+        const transactionTable = document.getElementById('transaction-table');
+
+        // Add event listener for search input
+        searchInput.addEventListener('keyup', function() {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(performSearch, doneTypingInterval);
+        });
+
+        // Initialize search input from URL params
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const searchQuery = urlParams.get('search');
+            if (searchQuery) {
+                searchInput.value = searchQuery;
+                performSearch();
+            }
+        });
+
+        function performSearch() {
+            const searchQuery = searchInput.value;
+
+            // Update URL with search parameter
+            const url = new URL(window.location);
+            if (searchQuery) {
+                url.searchParams.set('search', searchQuery);
+                url.searchParams.set('page', '1'); // Reset to first page on new search
+            } else {
+                url.searchParams.delete('search');
+            }
+            window.history.pushState({}, '', url);
+
+            // Show loading state
+            const tbody = transactionTable.querySelector('tbody');
+            tbody.innerHTML = `
+        <tr>
+            <td colspan="8" class="px-6 py-4 text-center">
+                <div class="flex justify-center items-center">
+                    <svg class="animate-spin h-5 w-5 mr-3 text-gray-500" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Searching...
+                </div>
+            </td>
+        </tr>
+        `;
+
+            // Make AJAX request
+            fetch(`/campaigns/search?search=${encodeURIComponent(searchQuery)}`, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    updateTable(data.campaigns, data.pagination);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    tbody.innerHTML = `
+            <tr>
+                <td colspan="8" class="px-6 py-4 text-center text-red-500">
+                    An error occurred while searching. Please try again.
+                </td>
+            </tr>
+        `;
+                });
+        }
+
+        function updateTable(campaigns, pagination) {
+            // Existing table update code remains the same
+            const tbody = transactionTable.querySelector('tbody');
+
+            if (campaigns.length === 0) {
+                tbody.innerHTML = `
+            <tr>
+                <td colspan="8" class="px-6 py-4 text-center">
+                    <div class="flex flex-col items-center justify-center space-y-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <p class="text-gray-500">Data nama campaign yang anda cari tidak ditemukan!.</p>
+                    </div>
+                </td>
+            </tr>
+        `;
+                return;
+            }
+
+            tbody.innerHTML = campaigns.map((campaign, index) => `
+        <tr>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                ${(pagination.current_page - 1) * pagination.per_page + index + 1}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                ${campaign.category_name}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                ${campaign.campaign_name ?? 'Email not available'}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                ${campaign.location}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                Rp ${new Intl.NumberFormat('id-ID').format(campaign.target_amount)}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                Rp ${new Intl.NumberFormat('id-ID').format(campaign.current_amount)}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                ${campaign.active == 1 
+                    ? '<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Aktif</span>'
+                    : '<span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">Tidak Aktif</span>'
+                }
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <div class="flex items-center gap-2">
+                    <button class="text-yellow-800">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                        </svg>
+                    </button>
+                    <button class="text-red-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                        </svg>
+                    </button>
+                </div>
+            </td>
+        </tr>
+        `).join('');
+
+            updatePagination(pagination);
+        }
+
+        function updatePagination(pagination) {
+            const paginationContainer = document.querySelector('#pagination nav');
+            let paginationHTML = '';
+
+            // Get current search query
+            const url = new URL(window.location);
+            const searchQuery = url.searchParams.get('search');
+
+            // Previous button
+            if (pagination.current_page > 1) {
+                const prevUrl = new URL(window.location);
+                prevUrl.searchParams.set('page', pagination.current_page - 1);
+                paginationHTML += `
+            <a href="javascript:void(0)" 
+               onclick="handlePageClick(${pagination.current_page - 1})"
+               class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+                <span>Previous</span>
+                <svg class="size-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+                </svg>
+            </a>
+        `;
+            }
+
+            // Page numbers
+            for (let i = 1; i <= pagination.last_page; i++) {
+                const pageUrl = new URL(window.location);
+                pageUrl.searchParams.set('page', i);
+                paginationHTML += `
+            <a href="javascript:void(0)" 
+               onclick="handlePageClick(${i})"
+               class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${i === pagination.current_page ? 'bg-indigo-600 text-white' : ''}">
+                ${i}
+            </a>
+        `;
+            }
+
+            // Next button
+            if (pagination.current_page < pagination.last_page) {
+                const nextUrl = new URL(window.location);
+                nextUrl.searchParams.set('page', pagination.current_page + 1);
+                paginationHTML += `
+            <a href="javascript:void(0)" 
+               onclick="handlePageClick(${pagination.current_page + 1})"
+               class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+                <span>Next</span>
+                <svg class="size-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                </svg>
+            </a>
+        `;
+            }
+
+            paginationContainer.innerHTML = paginationHTML;
+        }
+
+        // Handle pagination clicks
+        function handlePageClick(page) {
+            const url = new URL(window.location);
+            url.searchParams.set('page', page);
+            window.history.pushState({}, '', url);
+
+            const searchQuery = url.searchParams.get('search') || '';
+
+            fetch(`/campaigns/search?search=${encodeURIComponent(searchQuery)}&page=${page}`, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    updateTable(data.campaigns, data.pagination);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
 </body>
-
-
 </html>
