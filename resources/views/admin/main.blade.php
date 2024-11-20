@@ -1,59 +1,32 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Admin Lazismu</title>
-    @include('includes.head')
-    @include('includes.header')
-    <!-- Link ke file CSS custom -->
-    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
+    <title>Dashboard</title>
+    @vite('resources/css/app.css')
 </head>
 
-<body>
-    <div class="container">
-        <!-- Sidebar -->
-        <div class="sidebar">
+<body class="h-screen bg-gray-100">
+    <div class="flex h-full">
+        <aside class="w-64 h-full bg-white shadow-md fixed">
             @include('includes.sidebar')
-        </div>
+        </aside>
 
         <!-- Main Content -->
-        <div class="main-content">
-            <main id="main" class="main">
-                <div class="pagetitle">
-                    <h1>Admin Lazismu</h1>
-                    <nav>
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                            <li class="breadcrumb-item active">Lazismu</li>
-                        </ol>
-                    </nav>
-                </div>
-                <!-- End Page Title -->
+        <div class="flex-1 pl-64">
+            <!-- Header -->
+            <header class="bg-white p-4 shadow-md mb-10">
+                @include('includes.header')
+            </header>
 
-                <!-- Konten utama lainnya bisa ditambahkan di sini -->
+            <!-- Content -->
+            <main class="p-4 mt-16"> <!-- Padding top for the main content -->
+                <p>Isi konten utama di sini...</p>
             </main>
-            <!-- Footer -->
-            <footer id="footer" class="footer">
-                <div class="credits">
-                    Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-                </div>
-            </footer>
         </div>
     </div>
-
-    <!-- Vendor JS Files -->
-    <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
-    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/vendor/chart.js/chart.umd.js"></script>
-    <script src="assets/vendor/echarts/echarts.min.js"></script>
-    <script src="assets/vendor/quill/quill.js"></script>
-    <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
-    <script src="assets/vendor/tinymce/tinymce.min.js"></script>
-    <script src="assets/vendor/php-email-form/validate.js"></script>
-    <script src="assets/js/main.js"></script>
 </body>
 
 </html>

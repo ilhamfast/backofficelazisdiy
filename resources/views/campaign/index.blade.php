@@ -1,247 +1,247 @@
-@include('includes.head')
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Campaign Table</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .table-container {
-            overflow: hidden;
-            border-radius: 10px;
-        }
-
-        .btn-approve {
-            background-color: #28a745;
-            color: white;
-        }
-
-        .btn-edit {
-            background-color: #ffc107;
-            color: white;
-        }
-
-        .btn-tutup {
-            background-color: #dc3545;
-            color: white;
-        }
-    </style>
-    @include('includes.header')
+    @vite('resources/css/app.css')
+    <title>Pengguna</title>
 </head>
 
-<body>
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-3">
-                @include('includes.sidebar')
-            </div>
-            <div class="col-md-9">
-                <button type="button" class="btn btn-warning mt-4" data-bs-toggle="modal" data-bs-target="#createcampaign">
-                    Create Campaign
-                </button>
-                <table class="table table-bordered mt-4">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>ID</th>
-                            <th>Campaign</th>
-                            <th>Creator</th>
-                            <th>Lokasi</th>
-                            <th>Tanggal Mulai</th>
-                            <th>Target</th>
-                            <th>Terkumpul</th>
-                            <th>Status</th>
-                            <th>Approved</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($campaigns as $campaign)
-                        <tr>
-                            <td>{{ $campaign['id'] }}</td>
-                            <td>{{ $campaign['campaign_name'] }}</td>
-                            <td>{{ $campaign['creator'] ?? 'Lazismu DIY' }}</td>
-                            <td>{{ $campaign['location'] }}</td>
-                            <td>{{ $campaign['start_date'] }}</td>
-                            <td>{{ number_format($campaign['target_amount']) }}</td>
-                            <td>{{ number_format($campaign['current_amount']) }}</td>
-                            <td><span class="text-success">Aktif</span></td>
-                            <td>
-                                <button class="btn btn-approve btn-sm">Approve</button>
-                            </td>
-                            <td>
-                                <button class="btn btn-edit btn-sm" data-bs-toggle="modal" data-bs-target="#editCampaign{{ $campaign['id'] }}">Edit</button>
-                                <button class="btn btn-tutup btn-sm">Tutup</button>
-                            </td>
-                        </tr>
+<body class="h-screen bg-gray-100 overflow-x-hidden">
+    <div class="flex h-full">
+        <!-- Sidebar -->
+        <aside class="w-64 h-full bg-white shadow-md fixed z-40">
+            @include('includes.sidebar')
+        </aside>
 
+        <!-- Main Content -->
+        <div class="flex-1 ml-64">
+            <!-- Header -->
+            <header class="bg-white p-4 shadow-md mb-10">
+                @include('includes.header')
+            </header>
 
-                        <!-- Modal Edit Campaign-->
-                        <div class="modal fade" id="editCampaign{{ $campaign['id'] }}" tabindex="-1" aria-labelledby="editCampaignLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-scrollable">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="editCampaignLabel">Edit Campaign</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <!-- Content -->
+            <main class="p-4 max-w-7xl grid grid-cols-4 gap-4">
+                <div class="bg-white col-span-3 rounded-md mt-3 shadow-xl">
+                    <div class="mx-5">
+                        <div class="flex justify-between items-center mb-6">
+                            <div class="mt-2">
+                                <h1 class="text-2xl font-semibold text-gray-900">Campaign</h1>
+                                <div class="relative mt-5">
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                                        </svg>
                                     </div>
-                                    <div class="modal-body">
-                                        <form action="{{ route('campaign.update', $campaign['id']) }}" method="POST" enctype="multipart/form-data">
-                                            @csrf
-                                            @method('PUT')
-                                            <div class="mb-3">
-                                                <label for="campaign_category_id" class="form-label">Category</label>
-                                                <select class="form-select" name="campaign_category_id" required>
-                                                    <option value="">Select Category</option>
-                                                    @foreach ($categories as $category)
-                                                        <option value="{{ $category['id'] }}" {{ $campaign['campaign_category_id'] == $category['id'] ? 'selected' : '' }}>
-                                                            {{ $category['campaign_category'] }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            <div class="mb-3">
-                                                <input type="text" name="campaign_name" class="form-control" placeholder="Campaign Name" value="{{ $campaign['campaign_name'] }}" required>
-                                            </div>
-                                            <div class="mb-3">
-                                                <input type="text" name="campaign_code" class="form-control" placeholder="Code Campaign" value="{{ $campaign['campaign_code'] }}" required>
-                                            </div>
-                                            <div class="form-floating mb-3">
-                                                <textarea name="description" class="form-control" placeholder="Deskripsi" id="floatingTextarea" style="height: 100px;" required>{{ $campaign['description'] }}</textarea>
-                                                <label for="floatingTextarea">Deskripsi</label>
-                                            </div>
-                                            <div class="mb-3">
-                                                <input type="text" name="location" class="form-control" placeholder="Lokasi" value="{{ $campaign['location'] }}" required>
-                                            </div>
-                                            <div class="mb-3">
-                                                <input type="number" name="target_amount" class="form-control" placeholder="Target Amount" value="{{ $campaign['target_amount'] }}" required>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="startDate" class="form-label">Tanggal Mulai</label>
-                                                <input type="date" name="start_date" class="form-control" value="{{ $campaign['start_date'] }}" required>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="campaign_thumbnail" class="form-label">Thumbnail</label>
-                                                <input class="form-control" type="file" name="campaign_thumbnail" accept="image/*">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="campaign_image1" class="form-label">Image 1</label>
-                                                <input class="form-control" type="file" name="campaign_image1" accept="image/*">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="campaign_image2" class="form-label">Image 2</label>
-                                                <input class="form-control" type="file" name="campaign_image2" accept="image/*">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="campaign_image3" class="form-label">Image 3</label>
-                                                <input class="form-control" type="file" name="campaign_image3" accept="image/*">
-                                            </div>
+                                    <input type="text" name="search" id="searchInput"
+                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                        placeholder="cari nama campaign...">
+                                </div>
+                            </div>
 
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Decline</button>
-                                                <button type="submit" class="btn btn-primary">Update</button>
-                                            </div>
-                                        </form>
+                            <!-- Form Pencarian -->
+                            <div class="relative mt-10">
+                                <button type="" class="bg-green-600 p-2 rounded-md shadow-md text-white">Buat
+                                    Campaign</button>
+                            </div>
+                        </div>
+                        <div class="overflow-auto w-full">
+                            <table id="transaction-table" class="min-w-full bg-white table-auto overflow-x-auto">
+                                <thead class="sticky top-0 z-10">
+                                    <!-- Table Header -->
+                                    <tr>
+                                        <th
+                                            class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            No
+                                        </th>
+                                        <th
+                                            class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Kategori
+                                        </th>
+                                        <th
+                                            class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Nama
+                                        </th>
+                                        <th
+                                            class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Lokasi
+                                        </th>
+                                        <th
+                                            class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Target
+                                        </th>
+                                        <th
+                                            class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Terkumpul </th>
+                                        <th
+                                            class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Aktif </th>
+                                        <th
+                                            class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Aksi </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    @foreach ($campaigns as $index => $campaign)
+                                        @php
+                                            $globalIndex =
+                                                ($pagination['current_page'] - 1) * $pagination['per_page'] +
+                                                $index +
+                                                1;
+                                        @endphp
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                {{ $globalIndex }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                {{ $campaign['category_name'] }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                {{ $campaign['campaign_name'] ?? 'Email not available' }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                {{ $campaign['location'] }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                Rp {{ number_format($campaign['target_amount'], 0, ',', '.') }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                Rp {{ number_format($campaign['current_amount'], 0, ',', '.') }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                @if ($campaign['active'] == 1)
+                                                    <span
+                                                        class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                                                        Aktif
+                                                    </span>
+                                                @else
+                                                    <span
+                                                        class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">
+                                                        Tidak Aktif
+                                                    </span>
+                                                @endif
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                <div class="flex items-center gap-2">
+                                                    <button class="text-yellow-800">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                            class="w-5">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                                        </svg>
+                                                    </button>
+                                                    <button class="text-red-600">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                            class="w-5">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                                        </svg>
+
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                            <div id="pagination"
+                                class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
+
+
+                                <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+                                    <div>
+                                        <p class="text-sm text-gray-700">
+                                            Showing
+                                            <span
+                                                class="font-medium">{{ ($pagination['current_page'] - 1) * $pagination['per_page'] + 1 }}</span>
+                                            to
+                                            <span class="font-medium">
+                                                {{ $pagination['current_page'] * $pagination['per_page'] > $pagination['total'] ? $pagination['total'] : $pagination['current_page'] * $pagination['per_page'] }}
+                                            </span>
+                                            of
+                                            <span class="font-medium">{{ $pagination['total'] }}</span>
+                                            results
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm"
+                                            aria-label="Pagination">
+                                            <!-- Tombol Previous -->
+                                            @if ($pagination['current_page'] > 1)
+                                                <a href="?page={{ $pagination['current_page'] - 1 }}"
+                                                    class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+                                                    <span>Previous</span>
+                                                    <svg class="size-5" viewBox="0 0 20 20" fill="currentColor"
+                                                        aria-hidden="true">
+                                                        <path fill-rule="evenodd"
+                                                            d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z"
+                                                            clip-rule="evenodd" />
+                                                    </svg>
+                                                </a>
+                                            @endif
+
+                                            <!-- Tombol Nomor Halaman -->
+                                            @for ($i = 1; $i <= $pagination['last_page']; $i++)
+                                                <a href="?page={{ $i }}"
+                                                    class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 {{ $i == $pagination['current_page'] ? 'bg-indigo-600 text-white' : '' }}">
+                                                    {{ $i }}
+                                                </a>
+                                            @endfor
+
+                                            <!-- Tombol Next -->
+                                            @if ($pagination['current_page'] < $pagination['last_page'])
+                                                <a href="?page={{ $pagination['current_page'] + 1 }}"
+                                                    class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+                                                    <span>Next</span>
+                                                    <svg class="size-5" viewBox="0 0 20 20" fill="currentColor"
+                                                        aria-hidden="true">
+                                                        <path fill-rule="evenodd"
+                                                            d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z"
+                                                            clip-rule="evenodd" />
+                                                    </svg>
+                                                </a>
+                                            @endif
+                                        </nav>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                        @endforeach
-                    </tbody>
-                </table>
-
-                <div class="d-flex justify-content-center mt-4">
-                <!-- Tombol Previous -->
-                @if ($pagination['current_page'] > 1)
-                    <a href="?page={{ $pagination['current_page'] - 1 }}" class="btn btn-primary mx-1">Previous</a>
-                @endif
-
-                <!-- Tombol Nomor Halaman -->
-                @for ($i = 1; $i <= $pagination['last_page']; $i++)
-                    <a href="?page={{ $i }}" class="btn btn-light mx-1 {{ $i == $pagination['current_page'] ? 'active' : '' }}">
-                        {{ $i }}
-                    </a>
-                @endfor
-
-                <!-- Tombol Next -->
-                @if ($pagination['current_page'] < $pagination['last_page'])
-                    <a href="?page={{ $pagination['current_page'] + 1 }}" class="btn btn-primary mx-1">Next</a>
-                @endif
-            </div>
-
-                <!-- Modal Create Campaign-->
-                <div class="modal fade" id="createcampaign" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-scrollable">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Create Campaign</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                </div>
+                <div class="bg-white rounded-md shadow-xl mt-3">
+                    <div class="mx-5 mt-2">
+                        <div class="flex items-center justify-between">
+                            <h1 class="font-semibold text-xl">Kategori</h1>
+                            <!-- Form Pencarian -->
+                            <div class="relative mt-3">
+                                <button type="" class="bg-green-600 p-2 rounded-md shadow-md text-white">Buat
+                                    Kategori</button>
                             </div>
-                            <div class="modal-body">
-                                <form action="{{ route('campaign.store') }}" method="POST" enctype="multipart/form-data">
-                                    @csrf
-                                    <div class="mb-3">
-                                        <label for="campaign_category_id" class="form-label">Category</label>
-                                        <select class="form-select" name="campaign_category_id" required>
-                                            <option value="">Select Category</option>
-                                            @foreach ($categories as $category)
-                                            <option value="{{ $category['id'] }}">{{ $category['campaign_category'] }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <input type="text" name="campaign_name" class="form-control" placeholder="Campaign Name" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <input type="text" name="campaign_code" class="form-control" placeholder="Code Campaign" required>
-                                    </div>
-                                    <div class="form-floating mb-3">
-                                        <textarea name="description" class="form-control" placeholder="Deskripsi" id="floatingTextarea" style="height: 100px;" required></textarea>
-                                        <label for="floatingTextarea">Deskripsi</label>
-                                    </div>
-                                    <div class="mb-3">
-                                        <input type="text" name="location" class="form-control" placeholder="Lokasi" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <input type="number" name="target_amount" class="form-control" placeholder="Target Amount" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="startDate" class="form-label">Tanggal Mulai</label>
-                                        <input type="date" name="start_date" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="campaign_thumbnail" class="form-label">Thumbnail</label>
-                                        <input class="form-control" type="file" name="campaign_thumbnail" accept="image/*" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="campaign_image1" class="form-label">Image 1</label>
-                                        <input class="form-control" type="file" name="campaign_image1" accept="image/*">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="campaign_image2" class="form-label">Image 2</label>
-                                        <input class="form-control" type="file" name="campaign_image2" accept="image/*">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="campaign_image3" class="form-label">Image 3</label>
-                                        <input class="form-control" type="file" name="campaign_image3" accept="image/*">
-                                    </div>
-
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Decline</button>
-                                        <button type="submit" class="btn btn-primary">Create</button>
-                                    </div>
-                                </form>
+                        </div>
+                        <div class="mt-3">
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                                    </svg>
+                                </div>
+                                <input type="text" name="search" id="searchInput"
+                                    class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    placeholder="cari kategori...">
                             </div>
                         </div>
                     </div>
                 </div>
-
-            </div>
         </div>
+        </main>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    </div>
 </body>
+
 
 </html>

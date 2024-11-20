@@ -1,34 +1,37 @@
-<!-- ======= Header ======= -->
-  <header id="header" class="header fixed-top d-flex align-items-center">
+<header class="flex justify-between ml-64 w-[calc(100%-16rem)] fixed top-0 left-0 bg-white shadow-md p-4">
+  <div id="time-display"></div>
+  <div class="flex items-center">
+    <img src="assets/img/messages-2.jpg" alt="" class="rounded-full w-8 h-8 mr-2">
+    <span class="mx-2">Jhon.</span>
+  </div>
+</header>
 
-    <div class="d-flex align-items-center justify-content-between">
-      <a href="index.html" class="logo d-flex align-items-center">
-        <img src="assets/img/lazismu-logo.png" alt="">
-        <span class="d-none d-lg-block">Lazismu</span>
-      </a>
-      <i class="bi bi-list toggle-sidebar-btn"></i>
-    </div><!-- End Logo -->
+<script>
+  // Ambil waktu dari server
+  let serverTime = new Date("{{ \Carbon\Carbon::now()->format('Y-m-d H:i:s') }}");
 
-    
+  function updateClock() {
+      // Tambahkan satu detik ke waktu server
+      serverTime.setSeconds(serverTime.getSeconds() + 1);
 
-    <nav class="header-nav ms-auto">
-      <ul class="d-flex align-items-center">
+      // Format waktu
+      const options = {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+      };
 
-    
+      // Tampilkan waktu di elemen HTML
+      document.getElementById('time-display').innerText = serverTime.toLocaleString('id-ID', options);
+  }
 
-      <!-- End Messages Nav -->
+  // Jalankan pembaruan waktu setiap detik
+  setInterval(updateClock, 1000);
+  updateClock(); // Panggil langsung untuk menampilkan waktu awal
 
-        <li class="nav-item dropdown pe-3">
 
-          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-            <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
-          </a><!-- End Profile Iamge Icon -->
-
-          <!-- End Profile Dropdown Items -->
-        </li><!-- End Profile Nav -->
-
-      </ul>
-    </nav><!-- End Icons Navigation -->
-
-  </header>
+</script>
