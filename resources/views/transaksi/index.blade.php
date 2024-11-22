@@ -5,25 +5,26 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Pengguna</title>
+    {{-- @vite('resources/css/app.css') --}}
+    <title>Transaksi</title>
 </head>
 
 <body class="h-screen bg-gray-100 overflow-x-hidden">
     <div class="flex h-full">
         <!-- Sidebar -->
-        <aside class="w-64 h-full bg-white shadow-md fixed z-40">
+        <aside class="w-56 h-full bg-white shadow-md fixed z-40">
             @include('includes.sidebar')
         </aside>
 
         <!-- Main Content -->
-        <div class="flex-1 ml-64">
+        <div class="flex-1 ml-56">
             <!-- Header -->
             <header class="bg-white p-4 shadow-md mb-10">
                 @include('includes.header')
             </header>
 
             <!-- Content -->
-            <main class="p-4 max-w-7xl">
+            <main class="p-4 max-w-5xl mx-auto">
                 <div class="bg-white rounded-md mt-3 mx-5 shadow-xl">
                     <div class="mx-5">
                         <div class="flex justify-between items-center mb-6">

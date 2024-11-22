@@ -5,27 +5,44 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="//unpkg.com/alpinejs" defer></script>
+    {{-- @vite('resources/css/app.css') --}}
+    {{-- <script src="//unpkg.com/alpinejs" defer></script> --}}
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.min.css" rel="stylesheet">
+
+
     <title>Pengguna</title>
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+
+        ,
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
 </head>
 
 <body class="h-screen bg-gray-100 overflow-x-hidden">
+    @include('sweetalert::alert')
     <div class="flex h-full">
         <!-- Sidebar -->
-        <aside class="w-64 h-full bg-white shadow-md fixed z-40">
+        <aside class="w-56 h-full bg-white shadow-md fixed z-40">
             @include('includes.sidebar')
         </aside>
 
         <!-- Main Content -->
-        <div class="flex-1 ml-64">
+        <div class="flex-1 ml-56">
             <!-- Header -->
             <header class="bg-white p-4 shadow-md mb-10">
                 @include('includes.header')
             </header>
 
             <!-- Content -->
-            <main class="p-4 max-w-7xl grid grid-cols-4 gap-4">
-                <div class="bg-white col-span-3 rounded-md mt-3 shadow-xl">
+            <main class="p-4 max-w-5xl mx-auto">
+                <div class="bg-white col-span-3 rounded-md mt-2 mx-2 shadow-xl">
                     <div class="mx-5">
                         <div class="flex justify-between items-center mb-6">
                             <div class="mt-2">
@@ -44,90 +61,212 @@
                                 </div>
                             </div>
 
-                            <!-- Form Pencarian -->
-                            <div x-data="{ showModal: localStorage.getItem('showModal') === 'true' }" x-init="if (showModal) { localStorage.setItem('showModal', 'false') }" class="relative mt-10">
+                            <div x-data="{ isOpen: false }" class="relative mt-10">
 
                                 <!-- Tombol untuk membuka modal -->
-                                <button @click="showModal = true; localStorage.setItem('showModal', 'true')"
+                                <button type="button" @click="isOpen = true"
                                     class="bg-green-600 p-2 rounded-md shadow-md text-white">Buat Campaign</button>
 
                                 <!-- Modal -->
-                                <div x-show="showModal" x-transition:enter="ease-out duration-300"
-                                    x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-                                    x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100"
-                                    x-transition:leave-end="opacity-0" class="relative z-20"
+                                <div x-cloak x-show="isOpen" x-transition:enter="ease-out duration-300"
+                                    x-transition:enter-start="opacity-0 scale-95"
+                                    x-transition:enter-end="opacity-100 scale-100"
+                                    x-transition:leave="ease-in duration-200"
+                                    x-transition:leave-start="opacity-100 scale-100"
+                                    x-transition:leave-end="opacity-0 scale-95"
+                                    class="fixed inset-0 z-20 flex items-center justify-center"
                                     aria-labelledby="modal-title" role="dialog" aria-modal="true">
 
                                     <!-- Backdrop -->
-                                    <div x-show="showModal" x-transition:enter="ease-out duration-300"
-                                        x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-                                        x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100"
-                                        x-transition:leave-end="opacity-0"
-                                        class="fixed inset-0 bg-gray-500/75 transition-opacity" aria-hidden="true">
-                                    </div>
+                                    <div class="fixed inset-0 bg-gray-500/75 transition-opacity" aria-hidden="true"
+                                        @click="isOpen = false"></div>
 
                                     <!-- Modal content -->
-                                    <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
-                                        <div
-                                            class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                                            <div
-                                                class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-                                                <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-                                                    <div class="sm:flex sm:items-start">
-                                                        <div
-                                                            class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:size-10">
-                                                            <svg class="size-6 text-red-600" fill="none"
-                                                                viewBox="0 0 24 24" stroke-width="1.5"
-                                                                stroke="currentColor" aria-hidden="true"
-                                                                data-slot="icon">
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                    d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
-                                                            </svg>
-                                                        </div>
-                                                        <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                                                            <h3 class="text-base font-semibold text-gray-900"
-                                                                id="modal-title">Buat Campaign</h3>
-                                                            <div class="mt-2">
-                                                                <p class="text-sm text-gray-500">Isi detail campaign
-                                                                    yang ingin Anda buat.</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                    <div
+                                        class="ml-56 mt-14 relative bg-white rounded-lg shadow-xl w-full max-w-4xl p-6 overflow-hidden transform transition-all">
+                                        <!-- Header -->
+                                        <div class="flex items-center justify-between">
+                                            <h3 class="text-lg font-medium text-gray-900 mb-3" id="modal-title">Buat
+                                                Campaign
+                                            </h3>
+                                            <button @click="isOpen = false" class="text-gray-400 hover:text-gray-500">
+                                                <span class="sr-only">Close</span>
+                                                &#10005;
+                                            </button>
+                                        </div>
+
+                                        <!-- Formulir Campaign -->
+                                        <form id="campaign-form" action="{{ route('campaign.store') }}" method="POST"
+                                            enctype="multipart/form-data" class="h-96 overflow-y-auto">
+                                            @csrf
+                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                                <!-- Pilih Kategori -->
+                                                <div>
+                                                    <label for="campaign_category_id"
+                                                        class="block text-sm font-medium text-gray-700 mb-2">Kategori
+                                                        campaign</label>
+                                                    <select name="campaign_category_id" id="campaign_category_id"
+                                                        class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                        required>
+                                                        <option value="" disabled selected>Pilih kategori</option>
+                                                        @foreach ($categories as $category)
+                                                            <option value="{{ $category['id'] }}"
+                                                                {{ request('category') == $category['id'] ? 'selected' : '' }}>
+                                                                {{ $category['campaign_category'] }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
-                                                <!-- Formulir Campaign -->
-                                                <div class="bg-white px-4 pb-4 sm:p-6">
-                                                    <form action="{{ route('campaign.store') }}" method="POST">
-                                                        @csrf
-                                                        <div class="mb-4">
-                                                            <label for="title"
-                                                                class="block text-sm font-medium text-gray-700">Judul
-                                                                Campaign</label>
-                                                            <input type="text" name="title" id="title"
-                                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                                                required>
-                                                        </div>
-                                                        <div class="mb-4">
-                                                            <label for="description"
-                                                                class="block text-sm font-medium text-gray-700">Deskripsi
-                                                                Campaign</label>
-                                                            <textarea name="description" id="description" rows="3"
-                                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                                                required></textarea>
-                                                        </div>
-                                                        <div class="px-6 py-4 bg-gray-50 flex justify-end">
-                                                            <button type="button"
-                                                                @click="showModal = false; localStorage.setItem('showModal', 'false')"
-                                                                class="mr-3 inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50">Batal</button>
-                                                            <button type="submit"
-                                                                class="inline-flex justify-center rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700">Simpan</button>
-                                                        </div>
-                                                    </form>
+
+                                                <!-- Nama Campaign -->
+                                                <div>
+                                                    <label for="campaign_name"
+                                                        class="block text-sm font-medium text-gray-700 mb-2">Nama
+                                                        campaign</label>
+                                                    <input type="text" name="campaign_name" id="campaign_name"
+                                                        class="mt-1 block w-full py-1.5 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border"
+                                                        placeholder="Masukkan nama campaign..." required>
+                                                </div>
+
+
+                                                <div>
+                                                    <label for="campaign_code"
+                                                        class="block text-sm font-medium text-gray-700 mb-2">Kode
+                                                        Campaign</label>
+                                                    <input type="text" name="campaign_code" id="campaign_code"
+                                                        class="mt-1 block w-full py-1.5 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border"
+                                                        placeholder="Masukkan kode campaign..." required>
+                                                </div>
+                                                <div>
+                                                    <label for="description"
+                                                        class="block text-sm font-medium text-gray-700 mb-2">Deskripsi
+                                                        Campaign</label>
+                                                    <textarea name="description" id="description" rows="3"
+                                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border px-2"
+                                                        placeholder="Masukkan deskripsi campaign..." required></textarea>
+                                                </div>
+                                                <div>
+                                                    <label for="location"
+                                                        class="block text-sm font-medium text-gray-700 mb-2">Lokasi</label>
+                                                    <input type="text" name="location" id="location"
+                                                        class="mt-1 block w-full py-1.5 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border"
+                                                        placeholder="Masukkan lokasi..." required>
+                                                </div>
+                                                <div class="relative">
+                                                    <label for="formatted_target_amount"
+                                                        class="block text-sm font-medium text-gray-700 mb-2">
+                                                        Target donasi (Rp):
+                                                    </label>
+                                                    <!-- Wrapper untuk input -->
+                                                    <div class="relative mt-1">
+                                                        <!-- Label Rp di dalam input -->
+                                                        <span
+                                                            class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                                                            Rp
+                                                        </span>
+                                                        <!-- Input Tampilan -->
+                                                        <input type="text" id="formatted_target_amount"
+                                                            class="pl-10 pr-3 block w-full py-1.5 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border"
+                                                            placeholder="Masukkan target donasi..." required>
+                                                    </div>
+                                                    <!-- Input Nilai Asli (Tersembunyi) -->
+                                                    <input type="hidden" name="target_amount" id="target_amount">
+                                                </div>
+
+                                                <div>
+                                                    <label for="start_date"
+                                                        class="block text-sm font-medium text-gray-700 mb-2">Tanggal
+                                                        mulai</label>
+                                                    <input type="date" name="start_date" id="start_date"
+                                                        class="mt-1 block w-full py-1.5 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border"
+                                                        required>
+                                                </div>
+                                                <div>
+                                                    <label for="end_date"
+                                                        class="block text-sm font-medium text-gray-700 mb-2">Tanggal
+                                                        selesai</label>
+                                                    <input type="date" name="end_date" id="end_date"
+                                                        class="mt-1 block w-full py-1.5 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border"
+                                                        required>
+                                                </div>
+                                                <div>
+                                                    <label for="campaign_thumbnail"
+                                                        class="block text-sm font-medium text-gray-700 mb-2">
+                                                        Thumbnail Campaign 
+                                                        <span class="italic text-xs">( Hanya file JPEG, JPG, atau PNG, max 2MB )</span>
+                                                    </label>
+                                                    <input type="file" name="campaign_thumbnail"
+                                                        id="campaign_thumbnail"
+                                                        class="mt-1 block w-full py-1.5 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border"
+                                                        accept="image/*" required>
+                                                    <p id="campaign_thumbnail-error"
+                                                        class="hidden text-sm text-red-500 mt-1">Ukuran file tidak
+                                                        boleh lebih dari 2MB!</p>
+                                                </div>
+
+                                                <!-- Input Campaign Image 1 -->
+                                                <div>
+                                                    <label for="campaign_image1"
+                                                        class="block text-sm font-medium text-gray-700 mb-2">
+                                                        Campaign Image 1
+                                                        <span class="italic text-xs">( Hanya file JPEG, JPG, atau PNG, max 2MB )</span>
+                                                    </label>
+                                                    <input type="file" name="campaign_image1" id="campaign_image1"
+                                                        class="mt-1 block w-full py-1.5 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border"
+                                                        accept="image/*" required>
+                                                    <p id="campaign_image1-error"
+                                                        class="hidden text-sm text-red-500 mt-1">Ukuran file tidak
+                                                        boleh lebih dari 2MB!</p>
+                                                </div>
+
+                                                <!-- Input Campaign Image 2 -->
+                                                <div>
+                                                    <label for="campaign_image2"
+                                                        class="block text-sm font-medium text-gray-700 mb-2">
+                                                        Campaign Image 2
+                                                        <span class="italic text-xs">( Hanya file JPEG, JPG, atau PNG, max 2MB )</span>
+                                                    </label>
+                                                    <input type="file" name="campaign_image2" id="campaign_image2"
+                                                        class="mt-1 block w-full py-1.5 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border"
+                                                        accept="image/*" required>
+                                                    <p id="campaign_image2-error"
+                                                        class="hidden text-sm text-red-500 mt-1">Ukuran file tidak
+                                                        boleh lebih dari 2MB!</p>
+                                                </div>
+
+                                                <!-- Input Campaign Image 3 -->
+                                                <div>
+                                                    <label for="campaign_image3"
+                                                        class="block text-sm font-medium text-gray-700 mb-2">
+                                                        Campaign Image 3
+                                                        <span class="italic text-xs">( Hanya file JPEG, JPG, atau PNG, max 2MB )</span>
+                                                    </label>
+                                                    <input type="file" name="campaign_image3" id="campaign_image3"
+                                                        class="mt-1 block w-full py-1.5 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border"
+                                                        accept="image/*">
+                                                    <p id="campaign_image3-error"
+                                                        class="hidden text-sm text-red-500 mt-1">Ukuran file tidak
+                                                        boleh lebih dari 2MB!</p>
                                                 </div>
                                             </div>
-                                        </div>
+
+                                            <!-- Tombol Batal dan Simpan -->
+                                            <div class="flex justify-end mt-6 space-x-3">
+                                                <button type="button" @click="isOpen = false"
+                                                    class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50">
+                                                    Batal
+                                                </button>
+                                                <button type="submit"
+                                                    class="inline-flex justify-center rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700">
+                                                    Simpan
+                                                </button>
+                                            </div>
+                                        </form>
+
                                     </div>
                                 </div>
                             </div>
+
 
 
                         </div>
@@ -293,32 +432,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="bg-white rounded-md shadow-xl mt-3">
-                    <div class="mx-5 mt-2">
-                        <div class="flex items-center justify-between">
-                            <h1 class="font-semibold text-xl">Kategori</h1>
-                            <!-- Form Pencarian -->
-                            <div class="relative mt-3">
-                                <button type="" class="bg-green-600 p-2 rounded-md shadow-md text-white">Buat
-                                    Kategori</button>
-                            </div>
-                        </div>
-                        <div class="mt-3">
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke-width="1.5" stroke="currentColor" class="size-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                                    </svg>
-                                </div>
-                                <input type="text" name="search" id="searchInput"
-                                    class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                    placeholder="cari kategori...">
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                
         </div>
         </main>
     </div>
@@ -704,7 +818,175 @@
                     console.error('Error:', error);
                 });
         }
+
+        // Ambil elemen input
+        const formattedInput = document.getElementById('formatted_target_amount');
+        const rawInput = document.getElementById('target_amount');
+
+        // Event untuk memformat tampilan
+        formattedInput.addEventListener('input', (e) => {
+            // Ambil nilai tanpa karakter selain angka
+            const rawValue = e.target.value.replace(/[^0-9]/g, '');
+            // Format tampilan dengan titik pemisah ribuan
+            e.target.value = rawValue.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            // Simpan nilai asli ke input tersembunyi
+            rawInput.value = rawValue;
+        });
+
+
+        // document.addEventListener("DOMContentLoaded", () => {
+        //     const form = document.getElementById("campaign-form");
+        //     const fileInputs = ["campaign_thumbnail", "campaign_image1", "campaign_image2", "campaign_image3"];
+
+        //     // Add change event listeners to all file inputs
+        //     fileInputs.forEach((fileInputId) => {
+        //         const fileInput = document.getElementById(fileInputId);
+        //         if (fileInput) {
+        //             fileInput.addEventListener("change", function() {
+        //                 validateFileSize(fileInputId);
+        //             });
+        //         }
+        //     });
+
+        //     // Validate file size on change
+        //     function validateFileSize(fileInputId) {
+        //         const fileInput = document.getElementById(fileInputId);
+        //         const errorElement = document.getElementById(`${fileInputId}-error`);
+
+        //         if (fileInput && fileInput.files.length > 0) {
+        //             const fileSize = fileInput.files[0].size / 1024 / 1024; // Convert to MB
+
+        //             if (fileSize > 2) {
+        //                 errorElement.classList.remove("hidden");
+        //                 fileInput.value = ''; // Clear the input
+        //                 return false;
+        //             } else {
+        //                 errorElement.classList.add("hidden");
+        //                 return true;
+        //             }
+        //         }
+        //         return true;
+        //     }
+
+        //     // Form submit handler
+        //     form.addEventListener("submit", function(event) {
+        //         let isValid = true;
+
+        //         // Validate all file inputs
+        //         fileInputs.forEach((fileInputId) => {
+        //             const fileInput = document.getElementById(fileInputId);
+
+        //             // Only validate required files or files that have been selected
+        //             if (fileInput && (fileInput.hasAttribute('required') || fileInput.files.length >
+        //                     0)) {
+        //                 if (!validateFileSize(fileInputId)) {
+        //                     isValid = false;
+        //                 }
+        //             }
+        //         });
+
+        //         // Prevent form submission if validation fails
+        //         if (!isValid) {
+        //             event.preventDefault();
+        //             alert("Form tidak dapat dikirim. Pastikan semua file berukuran kurang dari 2MB.");
+        //         }
+        //     });
+        // });
+        document.addEventListener("DOMContentLoaded", () => {
+            const form = document.getElementById("campaign-form");
+            const fileInputs = ["campaign_thumbnail", "campaign_image1", "campaign_image2", "campaign_image3"];
+
+            // Add change event listeners to all file inputs
+            fileInputs.forEach((fileInputId) => {
+                const fileInput = document.getElementById(fileInputId);
+                if (fileInput) {
+                    // Create preview container for each input
+                    const previewContainer = document.createElement("div");
+                    previewContainer.id = `${fileInputId}-preview-container`;
+                    previewContainer.className = "mt-2 hidden"; // Initially hidden
+
+                    // Create preview image element
+                    const previewImg = document.createElement("img");
+                    previewImg.id = `${fileInputId}-preview`;
+                    previewImg.className = "max-h-32 rounded-lg shadow-sm";
+                    previewContainer.appendChild(previewImg);
+
+                    // Insert preview container after the error message
+                    const errorElement = document.getElementById(`${fileInputId}-error`);
+                    errorElement.parentNode.insertBefore(previewContainer, errorElement.nextSibling);
+
+                    fileInput.addEventListener("change", function() {
+                        validateAndPreviewFile(fileInputId);
+                    });
+                }
+            });
+
+            // Validate file size and show preview
+            function validateAndPreviewFile(fileInputId) {
+                const fileInput = document.getElementById(fileInputId);
+                const errorElement = document.getElementById(`${fileInputId}-error`);
+                const previewContainer = document.getElementById(`${fileInputId}-preview-container`);
+                const previewImg = document.getElementById(`${fileInputId}-preview`);
+
+                // Hide preview initially
+                previewContainer.classList.add("hidden");
+
+                if (fileInput && fileInput.files.length > 0) {
+                    const file = fileInput.files[0];
+                    const fileSize = file.size / 1024 / 1024; // Convert to MB
+
+                    if (fileSize > 2) {
+                        // File too large
+                        errorElement.classList.remove("hidden");
+                        fileInput.value = ''; // Clear the input
+                        return false;
+                    } else {
+                        // Valid file, show preview
+                        errorElement.classList.add("hidden");
+
+                        // Create object URL for preview
+                        const objectUrl = URL.createObjectURL(file);
+                        previewImg.src = objectUrl;
+                        previewContainer.classList.remove("hidden");
+
+                        // Clean up object URL when image loads
+                        previewImg.onload = () => {
+                            URL.revokeObjectURL(objectUrl);
+                        };
+
+                        return true;
+                    }
+                }
+                return true;
+            }
+
+            // Form submit handler
+            form.addEventListener("submit", function(event) {
+                let isValid = true;
+
+                // Validate all file inputs
+                fileInputs.forEach((fileInputId) => {
+                    const fileInput = document.getElementById(fileInputId);
+
+                    // Only validate required files or files that have been selected
+                    if (fileInput && (fileInput.hasAttribute('required') || fileInput.files.length >
+                            0)) {
+                        if (!validateAndPreviewFile(fileInputId)) {
+                            isValid = false;
+                        }
+                    }
+                });
+
+                // Prevent form submission if validation fails
+                if (!isValid) {
+                    event.preventDefault();
+                    alert("Form tidak dapat dikirim. Pastikan semua file berukuran kurang dari 2MB.");
+                }
+            });
+        });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.all.min.js"></script>
+
 </body>
 
 </html>
