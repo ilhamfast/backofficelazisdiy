@@ -2,7 +2,7 @@
   <!-- Header -->
   <div class="flex items-center justify-center my-3">
       <a href="{{ route('dashboard.index') }}" class="flex items-center">
-          <img src="../assets/img/lazismu-logo.png" alt="" class="w-8">
+          <img src="{{ asset('assets/img/lazismu-logo.png') }}" alt="" class="w-8">
           <span class="ml-2 font-bold text-xl">Lazismu</span>
       </a>
   </div>
@@ -14,14 +14,14 @@
           <!-- Dashboard -->
           <a href="{{ route('dashboard.index') }}"
               class="w-full flex items-center px-8 py-2 hover:bg-orange-200 rounded-md transition duration-300 transform hover:scale-105 mb-2 {{ Request::routeIs('dashboard.index') ? 'ml-5 bg-orange-300 underline underline-offset-2' : '' }}">
-              <img src="../assets/img/dashboard.svg" alt="" class="w-7 mr-2">
+              <img src="{{ asset('assets/img/dashboard.svg') }}" alt="" class="w-7 mr-2">
               <li class="font-semibold">Dashboard</li>
           </a>
           
           <!-- Pengguna -->
           <a href="{{ route('pengguna.index') }}"
               class="w-full flex items-center px-8 py-2 hover:bg-orange-200 rounded-md transition duration-300 transform hover:scale-105 mb-2  {{ Request::routeIs('pengguna.index') ? 'ml-5 bg-orange-300 underline underline-offset-2' : '' }}">
-              <img src="../assets/img/user.svg" alt="" class="w-7 mr-2">
+              <img src="{{ asset('assets/img/user.svg') }}" alt="" class="w-7 mr-2">
               <li class="font-semibold">Pengguna</li>
           </a>
 
@@ -38,17 +38,17 @@
               <div id="dropdownMenu" class="w-full transition-all duration-300 overflow-hidden mb-4">
                   <a href="{{ route('campaign.index') }}"
                       class="ml-10 flex px-8 py-2 text-sm text-gray-700 hover:bg-orange-200 rounded-tl-md rounded-bl-md transition duration-200 mb-2 {{ Request::routeIs('campaign.index') ? 'bg-orange-200 font-semibold' : '' }}">
-                      <img src="../assets/img/campaign.svg" alt="" class="w-5 mr-2">
+                      <img src="{{ asset('assets/img/campaign.svg') }}" alt="" class="w-5 mr-2">
                       <span>Campaign</span>
                   </a>
                   <a href="{{ route('campaignCategory.index') }}"
                       class="ml-10 flex px-8 py-2 text-sm text-gray-700 hover:bg-orange-200 rounded-tl-md rounded-bl-md transition duration-200 mb-2 {{ Request::routeIs('campaignCategory.index') ? 'bg-orange-200 font-semibold' : '' }}">
-                      <img src="../assets/img/list.svg" alt="" class="w-5 mr-2">
+                      <img src="{{ asset('assets/img/list.svg') }}" alt="" class="w-5 mr-2">
                       <span>Category</span>
                   </a>
                   <a href="#"
                       class="ml-10 flex px-8 py-2 text-sm text-gray-700 hover:bg-orange-200 rounded-tl-md rounded-bl-md transition duration-200 mb-2 {{ Request::routeIs('campaign.active') ? 'bg-orange-200 font-semibold' : '' }}">
-                      <img src="../assets/img/pause.svg" alt="" class="w-5 mr-2">
+                      <img src="{{ asset('assets/img/pause.svg') }}" alt="" class="w-5 mr-2">
                       <span>Campaign non-aktif</span>
                   </a>
               </div>
@@ -57,14 +57,14 @@
           <!-- Transaksi -->
           <a href="{{ route('transaksi.index') }}"
               class="w-full flex items-center px-8 py-2 hover:bg-orange-200 rounded-md transition duration-300 transform hover:scale-105 mb-2 {{ Request::routeIs('transaksi.index') ? 'ml-5 bg-orange-300 underline underline-offset-2' : '' }}">
-              <img src="../assets/img/cash.svg" alt="" class="w-7 mr-2">
+              <img src="{{ asset('assets/img/cash.svg') }}" alt="" class="w-7 mr-2">
               <li class="font-semibold">Transaksi</li>
           </a>
 
           <!-- Kabar Terbaru -->
           <a href="#"
               class="w-full flex items-center px-8 py-2 hover:bg-orange-200 rounded-md transition duration-300 transform hover:scale-105 mb-2">
-              <img src="../assets/img/kabarterbaru.svg" alt="" class="w-7 mr-2">
+              <img src="{{ asset('assets/img/kabarterbaru.svg') }}" alt="" class="w-7 mr-2">
               <li class="font-semibold">Kabar terbaru</li>
           </a>
       </ul>
@@ -74,7 +74,7 @@
   <div class="w-full mt-auto">
       <a href="#"
           class="w-full flex items-center px-8 py-2 hover:bg-orange-200 rounded-md transition duration-300 transform hover:scale-105 mb-4">
-          <img src="assets/img/logout.svg" alt="" class="w-7 mr-2">
+          <img src="{{ asset('assets/img/logout.svg') }}" alt="" class="w-7 mr-2">
           <span class="font-semibold">Logout</span>
       </a>
   </div>
