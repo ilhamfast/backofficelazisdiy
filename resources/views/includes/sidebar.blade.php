@@ -47,7 +47,7 @@
                       <span>Category</span>
                   </a>
                   <a href="#"
-                      class="ml-10 flex px-8 py-2 text-sm text-gray-700 hover:bg-orange-200 rounded-tl-md rounded-bl-md transition duration-200 mb-2 {{ Request::routeIs('campaign.active') ? 'bg-orange-200 font-semibold' : '' }}">
+                      class="ml-10 flex px-8 py-2 text-sm text-gray-700 hover:bg-orange-200 rounded-tl-md rounded-bl-md transition duration-200 {{ Request::routeIs('campaign.active') ? 'bg-orange-200 font-semibold' : '' }}">
                       <img src="{{ asset('assets/img/pause.svg') }}" alt="" class="w-5 mr-2">
                       <span>Campaign non-aktif</span>
                   </a>

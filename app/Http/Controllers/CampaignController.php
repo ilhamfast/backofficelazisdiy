@@ -140,7 +140,7 @@ class CampaignController extends Controller
             'location' => $request->input('location'),
             'target_amount' => $request->input('target_amount'),
             'start_date' => $request->input('start_date'),
-            'end_date' => $request->input('end_date'),
+            // 'end_date' => $request->input('end_date'),
         ]);
     
         if ($response->successful()) {

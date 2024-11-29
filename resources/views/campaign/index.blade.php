@@ -4,10 +4,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
+
     {{-- @vite('resources/css/app.css') --}}
     {{-- <script src="//unpkg.com/alpinejs" defer></script> --}}
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.min.css" rel="stylesheet">
 
 
@@ -65,7 +66,8 @@
 
                                 <!-- Tombol untuk membuka modal -->
                                 <button type="button" @click="isOpen = true"
-                                    class="bg-green-600 p-2 rounded-md shadow-md text-white">Buat Campaign</button>
+                                    class="bg-green-600 p-2 rounded-md shadow-md text-white">Buat Campaign
+                                </button>
 
                                 <!-- Modal -->
                                 <div x-cloak x-show="isOpen" x-transition:enter="ease-out duration-300"
@@ -181,19 +183,20 @@
                                                         class="mt-1 block w-full py-1.5 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border"
                                                         required>
                                                 </div>
-                                                <div>
+                                                {{-- <div>
                                                     <label for="end_date"
                                                         class="block text-sm font-medium text-gray-700 mb-2">Tanggal
                                                         selesai</label>
                                                     <input type="date" name="end_date" id="end_date"
                                                         class="mt-1 block w-full py-1.5 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border"
                                                         required>
-                                                </div>
+                                                </div> --}}
                                                 <div>
                                                     <label for="campaign_thumbnail"
                                                         class="block text-sm font-medium text-gray-700 mb-2">
-                                                        Thumbnail Campaign 
-                                                        <span class="italic text-xs">( Hanya file JPEG, JPG, atau PNG, max 2MB )</span>
+                                                        Thumbnail Campaign
+                                                        <span class="italic text-xs">( Hanya file JPEG, JPG, atau PNG,
+                                                            max 2MB )</span>
                                                     </label>
                                                     <input type="file" name="campaign_thumbnail"
                                                         id="campaign_thumbnail"
@@ -209,11 +212,12 @@
                                                     <label for="campaign_image1"
                                                         class="block text-sm font-medium text-gray-700 mb-2">
                                                         Campaign Image 1
-                                                        <span class="italic text-xs">( Hanya file JPEG, JPG, atau PNG, max 2MB )</span>
+                                                        <span class="italic text-xs">( Hanya file JPEG, JPG, atau PNG,
+                                                            max 2MB )</span>
                                                     </label>
                                                     <input type="file" name="campaign_image1" id="campaign_image1"
                                                         class="mt-1 block w-full py-1.5 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border"
-                                                        accept="image/*" required>
+                                                        accept="image/*">
                                                     <p id="campaign_image1-error"
                                                         class="hidden text-sm text-red-500 mt-1">Ukuran file tidak
                                                         boleh lebih dari 2MB!</p>
@@ -224,11 +228,12 @@
                                                     <label for="campaign_image2"
                                                         class="block text-sm font-medium text-gray-700 mb-2">
                                                         Campaign Image 2
-                                                        <span class="italic text-xs">( Hanya file JPEG, JPG, atau PNG, max 2MB )</span>
+                                                        <span class="italic text-xs">( Hanya file JPEG, JPG, atau PNG,
+                                                            max 2MB )</span>
                                                     </label>
                                                     <input type="file" name="campaign_image2" id="campaign_image2"
                                                         class="mt-1 block w-full py-1.5 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border"
-                                                        accept="image/*" required>
+                                                        accept="image/*">
                                                     <p id="campaign_image2-error"
                                                         class="hidden text-sm text-red-500 mt-1">Ukuran file tidak
                                                         boleh lebih dari 2MB!</p>
@@ -239,7 +244,8 @@
                                                     <label for="campaign_image3"
                                                         class="block text-sm font-medium text-gray-700 mb-2">
                                                         Campaign Image 3
-                                                        <span class="italic text-xs">( Hanya file JPEG, JPG, atau PNG, max 2MB )</span>
+                                                        <span class="italic text-xs">( Hanya file JPEG, JPG, atau PNG,
+                                                            max 2MB )</span>
                                                     </label>
                                                     <input type="file" name="campaign_image3" id="campaign_image3"
                                                         class="mt-1 block w-full py-1.5 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border"
@@ -345,14 +351,312 @@
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                 <div class="flex items-center gap-2">
-                                                    <button class="text-yellow-800">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                            viewBox="0 0 24 24" stroke-width="1.5"
-                                                            stroke="currentColor" class="w-5">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                                                        </svg>
-                                                    </button>
+                                                    <div x-data="{ isOpen: false }">
+                                                        <button class="text-yellow-800" type="button"
+                                                            value="{{ $campaign['id'] }}" @click="isOpen = true">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                viewBox="0 0 24 24" stroke-width="1.5"
+                                                                stroke="currentColor" class="w-5">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                                            </svg>
+                                                        </button>
+                                                        <div x-cloak x-show="isOpen"
+                                                            x-transition:enter="ease-out duration-300"
+                                                            x-transition:enter-start="opacity-0 scale-95"
+                                                            x-transition:enter-end="opacity-100 scale-100"
+                                                            x-transition:leave="ease-in duration-200"
+                                                            x-transition:leave-start="opacity-100 scale-100"
+                                                            x-transition:leave-end="opacity-0 scale-95"
+                                                            class="fixed inset-0 z-20 flex items-center justify-center"
+                                                            aria-labelledby="modal-title" role="dialog"
+                                                            aria-modal="true">
+
+                                                            <!-- Backdrop -->
+                                                            <div class="fixed inset-0 bg-gray-500/75 transition-opacity"
+                                                                aria-hidden="true" @click="isOpen = false"></div>
+
+                                                            <!-- Modal content -->
+                                                            <div
+                                                                class="ml-56 mt-14 relative bg-white rounded-lg shadow-xl w-full max-w-4xl p-6 overflow-hidden transform transition-all">
+                                                                <!-- Header -->
+                                                                <div class="flex items-center justify-between">
+                                                                    <h3 class="text-lg font-medium text-gray-900 mb-3"
+                                                                        id="modal-title">Edit
+                                                                        Campaign
+                                                                    </h3>
+                                                                    <button @click="isOpen = false"
+                                                                        class="text-gray-400 hover:text-gray-500">
+                                                                        <span class="sr-only">Close</span>
+                                                                        &#10005;
+                                                                    </button>
+                                                                </div>
+
+                                                                <!-- Formulir Campaign -->
+                                                                <form id="campaign-form"
+                                                                    action="{{ route('campaign.store') }}"
+                                                                    method="POST" enctype="multipart/form-data"
+                                                                    class="h-96 overflow-y-auto">
+                                                                    @csrf
+                                                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                                                        <!-- Pilih Kategori -->
+                                                                        <div>
+                                                                            <label for="campaign_category_id"
+                                                                                class="block text-sm font-medium text-gray-700 mb-2">Kategori
+                                                                                campaign</label>
+                                                                            <select name="campaign_category_id"
+                                                                                id="campaign_category_id"
+                                                                                class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                                                required>
+                                                                                @foreach ($categories as $category)
+                                                                                    <option
+                                                                                        value="{{ $category['id'] }}"
+                                                                                        {{ request('category') == $category['id'] ? 'selected' : '' }}>
+                                                                                        {{ $category['campaign_category'] }}
+                                                                                    </option>
+                                                                                @endforeach
+                                                                            </select>
+                                                                        </div>
+
+                                                                        <!-- Nama Campaign -->
+
+
+                                                                        <div>
+                                                                            <label for="campaign_name"
+                                                                                class="block text-sm font-medium text-gray-700 mb-2">Nama
+                                                                                campaign</label>
+                                                                            <input type="text" name="campaign_name"
+                                                                                id="campaign_name"
+                                                                                class="mt-1 block w-full py-1.5 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border"
+                                                                                placeholder="Masukkan nama campaign..."
+                                                                                value="{{ $campaign['campaign_name'] }}"
+                                                                                required>
+                                                                        </div>
+                                                                        <div>
+                                                                            <label for="campaign_code"
+                                                                                class="block text-sm font-medium text-gray-700 mb-2">Kode
+                                                                                Campaign</label>
+                                                                            <input type="text" name="campaign_code"
+                                                                                id="campaign_code"
+                                                                                class="mt-1 block w-full py-1.5 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border"
+                                                                                placeholder="Masukkan kode campaign..."
+                                                                                value="{{ $campaign['campaign_code'] }}"
+                                                                                required>
+                                                                        </div>
+                                                                        <div>
+                                                                            <label for="description"
+                                                                                class="block text-sm font-medium text-gray-700 mb-2">Deskripsi
+                                                                                Campaign</label>
+                                                                            <textarea name="description" id="description" rows="3"
+                                                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border px-2"
+                                                                                placeholder="Masukkan deskripsi campaign..." required>{{ $campaign['description'] }}</textarea>
+                                                                        </div>
+                                                                        <div>
+                                                                            <label for="location"
+                                                                                class="block text-sm font-medium text-gray-700 mb-2">Lokasi</label>
+                                                                            <input type="text" name="location"
+                                                                                id="location"
+                                                                                class="mt-1 block w-full py-1.5 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border"
+                                                                                placeholder="Masukkan lokasi..."
+                                                                                value="{{ $campaign['location'] }}"
+                                                                                required>
+                                                                        </div>
+                                                                        <div class="relative">
+                                                                            <label for="formatted_target_amount"
+                                                                                class="block text-sm font-medium text-gray-700 mb-2">
+                                                                                Target donasi (Rp):
+                                                                            </label>
+                                                                            <!-- Wrapper untuk input -->
+                                                                            <div class="relative mt-1">
+                                                                                <!-- Label Rp di dalam input -->
+                                                                                <span
+                                                                                    class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                                                                                    Rp
+                                                                                </span>
+                                                                                <!-- Input Tampilan -->
+                                                                                <input type="text"
+                                                                                    id="formatted_target_amount"
+                                                                                    class="pl-10 pr-3 block w-full py-1.5 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border"
+                                                                                    placeholder="Masukkan target donasi..."
+                                                                                    value="{{ number_format($campaign['target_amount'], 0, ',', '.') }}"
+                                                                                    required>
+                                                                            </div>
+                                                                            <!-- Input Nilai Asli (Tersembunyi) -->
+                                                                            <input type="hidden" name="target_amount"
+                                                                                id="target_amount"
+                                                                                value="{{ $campaign['target_amount'] }}">
+                                                                        </div>
+
+                                                                        <div>
+                                                                            <label for="start_date"
+                                                                                class="block text-sm font-medium text-gray-700 mb-2">Tanggal
+                                                                                mulai</label>
+                                                                            <input type="date" name="start_date"
+                                                                                id="start_date"
+                                                                                class="mt-1 block w-full py-1.5 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border"
+                                                                                required
+                                                                                value="{{ $campaign['start_date'] }}">
+                                                                        </div>
+                                                                        <div>
+                                                                            <label for="campaign_thumbnail"
+                                                                                class="block text-sm font-medium text-gray-700 mb-2">
+                                                                                Thumbnail Campaign
+                                                                                <span class="italic text-xs">( Hanya
+                                                                                    file JPEG, JPG, atau PNG,
+                                                                                    max 2MB )</span>
+                                                                            </label>
+                                                                            <input type="file"
+                                                                                name="campaign_thumbnail"
+                                                                                id="campaign_thumbnail"
+                                                                                class="mt-1 block w-full py-1.5 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border"
+                                                                                accept="image/*" required>
+                                                                            <p id="campaign_thumbnail-error"
+                                                                                class="hidden text-sm text-red-500 mt-1">
+                                                                                Ukuran file tidak
+                                                                                boleh lebih dari 2MB!</p>
+                                                                            <!-- Pratinjau gambar jika ada -->
+                                                                            <div class="mt-4">
+                                                                                @if (!empty($campaign['campaign_thumbnail']))
+                                                                                    <img src="{{ $campaign['campaign_thumbnail'] }}"
+                                                                                        alt="Thumbnail Campaign"
+                                                                                        class="w-32 h-32 object-cover rounded-md border">
+                                                                                @else
+                                                                                    <!-- Jika thumbnail tidak ada -->
+                                                                                    <p
+                                                                                        class="text-sm text-gray-500 italic">
+                                                                                        Thumbnail belum diunggah.
+                                                                                        Silakan unggah gambar untuk
+                                                                                        campaign ini.
+                                                                                    </p>
+                                                                                @endif
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <!-- Input Campaign Image 1 -->
+                                                                        <div>
+                                                                            <label for="campaign_image1"
+                                                                                class="block text-sm font-medium text-gray-700 mb-2">
+                                                                                Campaign Image 1
+                                                                                <span class="italic text-xs">( Hanya
+                                                                                    file JPEG, JPG, atau PNG,
+                                                                                    max 2MB )</span>
+                                                                            </label>
+                                                                            <input type="file"
+                                                                                name="campaign_image1"
+                                                                                id="campaign_image1"
+                                                                                class="mt-1 block w-full py-1.5 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border"
+                                                                                accept="image/*"
+                                                                                value="{{ $campaign['campaign_image_1'] }}">
+                                                                            <p id="campaign_image1-error"
+                                                                                class="hidden text-sm text-red-500 mt-1">
+                                                                                Ukuran file tidak
+                                                                                boleh lebih dari 2MB!</p>
+                                                                            <!-- Pratinjau gambar jika ada -->
+                                                                            <div class="mt-4">
+                                                                                @if (!empty($campaign['campaign_image_1']))
+                                                                                    <img src="{{ $campaign['campaign_image_1'] }}"
+                                                                                        alt="Thumbnail Campaign"
+                                                                                        class="w-32 h-32 object-cover rounded-md border">
+                                                                                @else
+                                                                                    <!-- Jika thumbnail tidak ada -->
+                                                                                    <p
+                                                                                        class="text-sm text-wrap text-yellow-500 italic">
+                                                                                        Gambar campaign image 1 belum
+                                                                                        diunggah.
+                                                                                        Silakan unggah gambar!
+                                                                                    </p>
+                                                                                @endif
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <!-- Input Campaign Image 2 -->
+                                                                        <div>
+                                                                            <label for="campaign_image2"
+                                                                                class="block text-sm font-medium text-gray-700 mb-2">
+                                                                                Campaign Image 2
+                                                                                <span class="italic text-xs">( Hanya
+                                                                                    file JPEG, JPG, atau PNG,
+                                                                                    max 2MB )</span>
+                                                                            </label>
+                                                                            <input type="file"
+                                                                                name="campaign_image2"
+                                                                                id="campaign_image2"
+                                                                                class="mt-1 block w-full py-1.5 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border"
+                                                                                accept="image/*">
+                                                                            <p id="campaign_image2-error"
+                                                                                class="hidden text-sm text-red-500 mt-1">
+                                                                                Ukuran file tidak
+                                                                                boleh lebih dari 2MB!</p>
+                                                                            <div class="mt-4">
+                                                                                @if (!empty($campaign['campaign_image_2']))
+                                                                                    <img src="{{ $campaign['campaign_image_2'] }}"
+                                                                                        alt="Thumbnail Campaign"
+                                                                                        class="w-32 h-32 object-cover rounded-md border">
+                                                                                @else
+                                                                                    <!-- Jika thumbnail tidak ada -->
+                                                                                    <p
+                                                                                        class="text-sm text-wrap text-yellow-500 italic">
+                                                                                        Gambar campaign image 1 belum
+                                                                                        diunggah.
+                                                                                        Silakan unggah gambar!
+                                                                                    </p>
+                                                                                @endif
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <!-- Input Campaign Image 3 -->
+                                                                        <div>
+                                                                            <label for="campaign_image3"
+                                                                                class="block text-sm font-medium text-gray-700 mb-2">
+                                                                                Campaign Image 3
+                                                                                <span class="italic text-xs">( Hanya
+                                                                                    file JPEG, JPG, atau PNG,
+                                                                                    max 2MB )</span>
+                                                                            </label>
+                                                                            <input type="file"
+                                                                                name="campaign_image3"
+                                                                                id="campaign_image3"
+                                                                                class="mt-1 block w-full py-1.5 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border"
+                                                                                accept="image/*">
+                                                                            <p id="campaign_image3-error"
+                                                                                class="hidden text-sm text-red-500 mt-1">
+                                                                                Ukuran file tidak
+                                                                                boleh lebih dari 2MB!</p>
+                                                                            <div class="mt-4">
+                                                                                @if (!empty($campaign['campaign_image_3']))
+                                                                                    <img src="{{ $campaign['campaign_image_3'] }}"
+                                                                                        alt="Thumbnail Campaign"
+                                                                                        class="w-32 h-32 object-cover rounded-md border">
+                                                                                @else
+                                                                                    <!-- Jika thumbnail tidak ada -->
+                                                                                    <p
+                                                                                        class="text-sm text-wrap text-yellow-500 italic">
+                                                                                        Gambar campaign image 1 belum
+                                                                                        diunggah.
+                                                                                        Silakan unggah gambar!
+                                                                                    </p>
+                                                                                @endif
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                    <!-- Tombol Batal dan Simpan -->
+                                                                    <div class="flex justify-end mt-6 space-x-3">
+                                                                        <button type="button" @click="isOpen = false"
+                                                                            class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50">
+                                                                            Batal
+                                                                        </button>
+                                                                        <button type="submit"
+                                                                            class="inline-flex justify-center rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700">
+                                                                            Simpan
+                                                                        </button>
+                                                                    </div>
+                                                                </form>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <button class="text-red-600">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                             viewBox="0 0 24 24" stroke-width="1.5"
@@ -368,7 +672,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                            <div id="pagination"
+                            {{-- <div id="pagination"
                                 class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
 
 
@@ -428,11 +732,109 @@
                                         </nav>
                                     </div>
                                 </div>
+                            </div> --}}
+                            <div id="pagination"
+                                class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
+                                <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+                                    <div>
+                                        <p class="text-sm text-gray-500">
+                                            Showing
+                                            <span
+                                                class="font-medium">{{ ($pagination['current_page'] - 1) * $pagination['per_page'] + 1 }}</span>
+                                            to
+                                            <span class="font-medium">
+                                                {{ $pagination['current_page'] * $pagination['per_page'] > $pagination['total'] ? $pagination['total'] : $pagination['current_page'] * $pagination['per_page'] }}
+                                            </span>
+                                            of
+                                            <span class="font-medium">{{ $pagination['total'] }}</span>
+                                            results
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm"
+                                            aria-label="Pagination">
+                                            <!-- Previous Button -->
+                                            @if ($pagination['current_page'] > 1)
+                                                <a href="?page={{ $pagination['current_page'] - 1 }}"
+                                                    class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+                                                    <span>Previous</span>
+                                                    <svg class="size-5" viewBox="0 0 20 20" fill="currentColor"
+                                                        aria-hidden="true">
+                                                        <path fill-rule="evenodd"
+                                                            d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z"
+                                                            clip-rule="evenodd" />
+                                                    </svg>
+                                                </a>
+                                            @endif
+
+                                            <!-- Page Numbers -->
+                                            @php
+                                                $start = 1;
+                                                $end = $pagination['last_page'];
+
+                                                if ($pagination['last_page'] > 7) {
+                                                    if ($pagination['current_page'] <= 4) {
+                                                        $start = 1;
+                                                        $end = 5;
+                                                    } elseif (
+                                                        $pagination['current_page'] >=
+                                                        $pagination['last_page'] - 3
+                                                    ) {
+                                                        $start = $pagination['last_page'] - 4;
+                                                        $end = $pagination['last_page'];
+                                                    } else {
+                                                        $start = $pagination['current_page'] - 2;
+                                                        $end = $pagination['current_page'] + 2;
+                                                    }
+                                                }
+                                            @endphp
+
+                                            @if ($start > 1)
+                                                <a href="?page=1"
+                                                    class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">1</a>
+                                                @if ($start > 2)
+                                                    <span
+                                                        class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700">...</span>
+                                                @endif
+                                            @endif
+
+                                            @for ($i = $start; $i <= $end; $i++)
+                                                <a href="?page={{ $i }}"
+                                                    class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 {{ $i == $pagination['current_page'] ? 'bg-indigo-600 text-white' : '' }}">
+                                                    {{ $i }}
+                                                </a>
+                                            @endfor
+
+                                            @if ($end < $pagination['last_page'])
+                                                @if ($end < $pagination['last_page'] - 1)
+                                                    <span
+                                                        class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700">...</span>
+                                                @endif
+                                                <a href="?page={{ $pagination['last_page'] }}"
+                                                    class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">{{ $pagination['last_page'] }}</a>
+                                            @endif
+
+                                            <!-- Next Button -->
+                                            @if ($pagination['current_page'] < $pagination['last_page'])
+                                                <a href="?page={{ $pagination['current_page'] + 1 }}"
+                                                    class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+                                                    <span>Next</span>
+                                                    <svg class="size-5" viewBox="0 0 20 20" fill="currentColor"
+                                                        aria-hidden="true">
+                                                        <path fill-rule="evenodd"
+                                                            d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z"
+                                                            clip-rule="evenodd" />
+                                                    </svg>
+                                                </a>
+                                            @endif
+                                        </nav>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
         </div>
         </main>
     </div>
@@ -741,18 +1143,68 @@
             updatePagination(pagination);
         }
 
+        // function updatePagination(pagination) {
+        //     const paginationContainer = document.querySelector('#pagination nav');
+        //     let paginationHTML = '';
+
+        //     // Get current search query
+        //     const url = new URL(window.location);
+        //     const searchQuery = url.searchParams.get('search');
+
+        //     // Previous button
+        //     if (pagination.current_page > 1) {
+        //         const prevUrl = new URL(window.location);
+        //         prevUrl.searchParams.set('page', pagination.current_page - 1);
+        //         paginationHTML += `
+    //     <a href="javascript:void(0)" 
+    //        onclick="handlePageClick(${pagination.current_page - 1})"
+    //        class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+    //         <span>Previous</span>
+    //         <svg class="size-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+    //             <path fill-rule="evenodd" d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+    //         </svg>
+    //     </a>
+    //     `;
+        //     }
+
+        //     // Page numbers
+        //     for (let i = 1; i <= pagination.last_page; i++) {
+        //         const pageUrl = new URL(window.location);
+        //         pageUrl.searchParams.set('page', i);
+        //         paginationHTML += `
+    //     <a href="javascript:void(0)" 
+    //        onclick="handlePageClick(${i})"
+    //        class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${i === pagination.current_page ? 'bg-indigo-600 text-white' : ''}">
+    //         ${i}
+    //     </a>
+    //      `;
+        //     }
+
+        //     // Next button
+        //     if (pagination.current_page < pagination.last_page) {
+        //         const nextUrl = new URL(window.location);
+        //         nextUrl.searchParams.set('page', pagination.current_page + 1);
+        //         paginationHTML += `
+    //     <a href="javascript:void(0)" 
+    //        onclick="handlePageClick(${pagination.current_page + 1})"
+    //        class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+    //         <span>Next</span>
+    //         <svg class="size-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+    //             <path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+    //         </svg>
+    //     </a>
+    //     `;
+        //     }
+
+        //     paginationContainer.innerHTML = paginationHTML;
+        // }
+
         function updatePagination(pagination) {
             const paginationContainer = document.querySelector('#pagination nav');
             let paginationHTML = '';
 
-            // Get current search query
-            const url = new URL(window.location);
-            const searchQuery = url.searchParams.get('search');
-
             // Previous button
             if (pagination.current_page > 1) {
-                const prevUrl = new URL(window.location);
-                prevUrl.searchParams.set('page', pagination.current_page - 1);
                 paginationHTML += `
             <a href="javascript:void(0)" 
                onclick="handlePageClick(${pagination.current_page - 1})"
@@ -765,23 +1217,86 @@
         `;
             }
 
-            // Page numbers
-            for (let i = 1; i <= pagination.last_page; i++) {
-                const pageUrl = new URL(window.location);
-                pageUrl.searchParams.set('page', i);
+            // Calculate page range
+            let start = 1;
+            let end = pagination.last_page;
+            const showPages = 7; // Total number of page buttons to show
+
+            if (pagination.last_page > showPages) {
+                // Always show first page
                 paginationHTML += `
             <a href="javascript:void(0)" 
-               onclick="handlePageClick(${i})"
-               class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${i === pagination.current_page ? 'bg-indigo-600 text-white' : ''}">
-                ${i}
+               onclick="handlePageClick(1)"
+               class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${1 === pagination.current_page ? 'bg-indigo-600 text-white' : ''}">
+                1
             </a>
         `;
+
+                // Calculate start and end pages
+                if (pagination.current_page <= 4) {
+                    // Near the start
+                    start = 2;
+                    end = 5;
+
+                } else if (pagination.current_page >= pagination.last_page - 3) {
+                    // Near the end
+                    start = pagination.last_page - 4;
+                    end = pagination.last_page - 1;
+
+                } else {
+                    // In the middle
+                    start = pagination.current_page - 1;
+                    end = pagination.current_page + 1;
+                }
+
+                // Add first ellipsis
+                if (start > 2) {
+                    paginationHTML += `
+                <span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700">...</span>
+            `;
+                }
+
+                // Add middle pages
+                for (let i = start; i <= end; i++) {
+                    paginationHTML += `
+                <a href="javascript:void(0)" 
+                   onclick="handlePageClick(${i})"
+                   class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${i === pagination.current_page ? 'bg-indigo-600 text-white' : ''}">
+                    ${i}
+                </a>
+            `;
+                }
+
+                // Add last ellipsis
+                if (end < pagination.last_page - 1) {
+                    paginationHTML += `
+                <span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700">...</span>
+            `;
+                }
+
+                // Always show last page
+                paginationHTML += `
+            <a href="javascript:void(0)" 
+               onclick="handlePageClick(${pagination.last_page})"
+               class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${pagination.last_page === pagination.current_page ? 'bg-indigo-600 text-white' : ''}">
+                ${pagination.last_page}
+            </a>
+        `;
+            } else {
+                // If total pages are less than or equal to showPages, show all pages
+                for (let i = 1; i <= pagination.last_page; i++) {
+                    paginationHTML += `
+                <a href="javascript:void(0)" 
+                   onclick="handlePageClick(${i})"
+                   class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${i === pagination.current_page ? 'bg-indigo-600 text-white' : ''}">
+                    ${i}
+                </a>
+            `;
+                }
             }
 
             // Next button
             if (pagination.current_page < pagination.last_page) {
-                const nextUrl = new URL(window.location);
-                nextUrl.searchParams.set('page', pagination.current_page + 1);
                 paginationHTML += `
             <a href="javascript:void(0)" 
                onclick="handlePageClick(${pagination.current_page + 1})"
@@ -985,6 +1500,8 @@
             });
         });
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.all.min.js"></script>
 
 </body>

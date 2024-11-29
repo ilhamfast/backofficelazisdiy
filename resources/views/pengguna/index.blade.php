@@ -25,7 +25,7 @@
 
             <!-- Content -->
             <main class="p-4 max-w-5xl mx-auto">
-                <div class="bg-white rounded-md mt-1 shadow-xl">
+                <div class="bg-white rounded-md shadow-xl">
                     <div class="mx-10">
                         <div class="flex justify-between items-center mb-6">
                             <div class="mt-2">
@@ -52,57 +52,59 @@
 
                         </div>
                         <div class="overflow-x-auto">
-                            <table class="min-w-full bg-white sticky top-0 z-10">
-                                <thead>
-                                    <tr>
-                                        <th
-                                            class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            No</th>
-                                        <th
-                                            class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            <a
-                                                href="{{ request()->fullUrlWithQuery(['sortField' => 'name', 'sortDirection' => $sortDirection === 'asc' ? 'desc' : 'asc']) }}">
-                                                Nama
-                                                @if ($sortField === 'name')
-                                                    @if ($sortDirection === 'asc')
-                                                        ▲
-                                                    @else
-                                                        ▼
-                                                    @endif
-                                                @endif
-                                            </a>
-                                        </th>
-                                        <th
-                                            class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Email</th>
-                                        <th
-                                            class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            No Hp</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    @foreach ($users as $index => $user)
-                                        @php
-                                            $globalIndex =
-                                                ($pagination['current_page'] - 1) * $pagination['per_page'] +
-                                                $index +
-                                                1;
-                                        @endphp
+                            <div class="max-h-[calc(100vh-270px)] overflow-y-auto">
+                                <table class="min-w-full overflow-auto bg-white">
+                                    <thead class="sticky top-0 z-10">
                                         <tr>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                                {{ $globalIndex }}
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {{ $user['name'] }}</td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {{ $user['email'] ?? 'Email not available' }}</td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {{ $user['phone_number'] }}</td>
+                                            <th
+                                                class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                No</th>
+                                            <th
+                                                class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                <a
+                                                    href="{{ request()->fullUrlWithQuery(['sortField' => 'name', 'sortDirection' => $sortDirection === 'asc' ? 'desc' : 'asc']) }}">
+                                                    Nama
+                                                    @if ($sortField === 'name')
+                                                        @if ($sortDirection === 'asc')
+                                                            ▲
+                                                        @else
+                                                            ▼
+                                                        @endif
+                                                    @endif
+                                                </a>
+                                            </th>
+                                            <th
+                                                class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Email</th>
+                                            <th
+                                                class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                No Hp</th>
                                         </tr>
-                                    @endforeach
-
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        @foreach ($users as $index => $user)
+                                            @php
+                                                $globalIndex =
+                                                    ($pagination['current_page'] - 1) * $pagination['per_page'] +
+                                                    $index +
+                                                    1;
+                                            @endphp
+                                            <tr>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                    {{ $globalIndex }}
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                    {{ $user['name'] }}</td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                    {{ $user['email'] ?? 'Email not available' }}</td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                    {{ $user['phone_number'] }}</td>
+                                            </tr>
+                                        @endforeach
+    
+                                    </tbody>
+                                </table>
+                            </div>
                             <div
                                 class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
 
@@ -171,8 +173,8 @@
                                         );
                                     @endphp
 
-                                    <div>
-                                        <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm"
+                                    <div class="w-full flex justify-end">
+                                        <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm max-w-md"
                                             aria-label="Pagination">
                                             <!-- Tombol Previous -->
                                             @if ($pagination['current_page'] > 1)
@@ -220,10 +222,8 @@
                                     </div>
                                 </div>
                             </div>
-
-
-
                         </div>
+                        
                     </div>
                 </div>
             </main>

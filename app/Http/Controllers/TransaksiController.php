@@ -77,7 +77,7 @@ class TransaksiController extends Controller
              'categories' => $categories,
              'pagination' => $paginationData,
              'currentCategory' => $category,
-             'currentSearch' => $search
+             'currentSearch' => $search,
          ]);
      }
 
