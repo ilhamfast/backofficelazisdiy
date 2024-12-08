@@ -35,8 +35,7 @@
                                         kategori</label>
                                     <select name="category" id="category"
                                         class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                        <option value="all" {{ request('category') == 'all' ? 'selected' : '' }}>
-                                            Semua kategori</option>
+                                        {{-- <option value="all" {{ request('category') == 'all' ? 'selected' : '' }}></option> --}}
                                         @foreach ($categories as $category)
                                             <option value="{{ $category }}"
                                                 {{ request('category') == $category ? 'selected' : '' }}>
@@ -80,8 +79,8 @@
                                                 Kategori
                                             </th>
                                             <th
-                                                class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Nama Campaign
+                                                class="px-6 py-3 border-b text-center border-gray-200 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Nama
                                             </th>
                                             <th
                                                 class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -107,7 +106,7 @@
                                         </tr>
                                     </thead>
                                     <tbody class="bg-white divide-y divide-gray-200">
-                                       
+
                                         @foreach ($transactions as $trans)
                                             <!-- Table Rows -->
                                             <tr>
@@ -116,7 +115,7 @@
                                                     {{ ($pagination['current_page'] - 1) * $pagination['per_page'] + $loop->iteration }}
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    {{ $trans['invoice_id'] }}
+                                                    {{ $trans['invoice_id'] ?? 'N/A' }}
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                     {{ $trans['category'] }}
@@ -125,22 +124,22 @@
                                                     {{ $trans['campaign_name'] }}
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    {{ $trans['donatur'] }}
+                                                    {{ $trans['donatur'] ?? '-' }}
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    {{ $trans['phone_number'] }}
+                                                    {{ $trans['phone_number'] ?? '-' }}
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    {{ $trans['message'] }}
+                                                    {{ $trans['message'] ?? '-' }}
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    {{ $trans['method'] }}
+                                                    {{ $trans['method'] ?? '-' }}
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Rp {{ number_format($trans['transaction_amount'], 0, ',', '.') }}
+                                                    Rp {{ isset($trans['transaction_amount']) ? number_format($trans['transaction_amount'], 0, ',', '.') : 'Rp 0' }}
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    {{ $trans['transaction_date'] }}
+                                                    {{ $trans['transaction_date'] ?? '-' }}
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -574,7 +573,8 @@
                 pagination.style.display = 'block';
 
                 data.transactions.forEach((trans, index) => {
-                    const rowNumber = (data.pagination.current_page - 1) * data.pagination.per_page + index + 1;
+                    const rowNumber = (data.pagination.current_page - 1) * data.pagination.per_page +
+                        index + 1;
                     const row = `
                 <tr>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">

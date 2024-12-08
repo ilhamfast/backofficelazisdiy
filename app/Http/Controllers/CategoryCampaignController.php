@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Http;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class CategoryCampaignController extends Controller
@@ -19,11 +20,19 @@ class CategoryCampaignController extends Controller
         // Ambil data dari API
         $categoriesResponse = Http::get($categoriesUrl)->json();
 
-        // Tidak perlu `collect` jika respons sudah berupa array JSON
-        $data = [
-            'campaignsCategory' => $categoriesResponse, // Gunakan langsung hasil API
-        ];
+        // Pastikan data JSON diurutkan berdasarkan tanggal terbaru
+        $campaignsCategory = collect($categoriesResponse)
+            ->map(function ($category) {
+                // Validasi format tanggal dan konversi jika diperlukan
+                $category['created_at'] = Carbon::parse($category['created_at'])->toDateTimeString();
+                return $category;
+            })
+            ->sortByDesc('created_at') // Urutkan berdasarkan tanggal terbaru
+            ->values(); // Reset index setelah diurutkan
 
+        $data = [
+            'campaignsCategory' => $campaignsCategory,
+        ];
         // Debug data untuk memastikan struktur benar
         // dd($data);
 
@@ -47,6 +56,9 @@ class CategoryCampaignController extends Controller
             $baseUrl = env('API_BASE_URL');
             $categoriesUrl = "{$baseUrl}/campaign-categories";
 
+            $request->validate([
+                'campaign_category' => 'required|string|max:255',
+            ]);
             // Validasi input
             if (empty($request->input('campaign_category'))) {
                 return response()->json([
@@ -88,6 +100,9 @@ class CategoryCampaignController extends Controller
             $baseUrl = env('API_BASE_URL');
             $categoriesUrl = "{$baseUrl}/campaign-categories";
 
+            $request->validate([
+                'campaign_category' => 'required|string|max:255',
+            ]);
             // Validasi input
             if (empty($request->input('campaign_category'))) {
                 Alert::error('Gagal', 'Nama kategori tidak boleh kosong.');
@@ -152,7 +167,54 @@ class CategoryCampaignController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            $baseUrl = env('API_BASE_URL');
+            $categoriesUrl = "{$baseUrl}/campaign-categories";
+
+            $request->validate([
+                'campaign_category' => 'required|string|max:255',
+            ]);
+
+
+            // Validasi input
+            if (empty($request->input('campaign_category'))) {
+                Alert::error('Gagal', 'Nama kategori tidak boleh kosong.');
+                return redirect()->back()->withInput();
+            }
+
+            // Cek duplikasi sebelum menyimpan
+            $checkResponse = Http::get($categoriesUrl);
+
+            if ($checkResponse->successful()) {
+                $existingCategories = collect($checkResponse->json());
+
+                $isDuplicate = $existingCategories->contains(function ($category) use ($request, $id) {
+                    // Pastikan tidak memvalidasi kategori yang sedang diupdate
+                    return strtolower($category['campaign_category']) === strtolower($request->input('campaign_category'))
+                        && $category['id'] != $id;
+                });
+
+                if ($isDuplicate) {
+                    Alert::error('Gagal', 'Kategori ini sudah ada.');
+                    return redirect()->back()->withInput();
+                }
+            }
+            // Update data kategori menggunakan API
+            $response = Http::put("{$categoriesUrl}/{$id}", [
+                'campaign_category' => $request->input('campaign_category'),
+            ]);
+            if ($response->successful()) {
+                Alert::success('Berhasil', 'Kategori berhasil diperbarui.');
+                return redirect()->back();
+            } else {
+                Alert::error('Gagal', 'Terjadi kesalahan saat memperbarui kategori.');
+                return redirect()->back()->withInput();
+            }
+        } catch (\Throwable $th) {
+            // Tangani error
+            Alert::error('Error', 'Terjadi kesalahan: ' . $th->getMessage());
+            return redirect()->back()->withInput();
+        }
     }
 
     /**
