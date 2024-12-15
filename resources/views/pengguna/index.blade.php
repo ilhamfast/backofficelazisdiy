@@ -47,7 +47,7 @@
                                 <!-- Input field -->
                                 <input type="text" name="search" id="searchInput"
                                     class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                    placeholder="cari nama pengguna...">
+                                    placeholder="cari nama pengguna..." value="{{ request('search') }}">
                             </div>
 
                         </div>
@@ -82,7 +82,7 @@
                                         </tr>
                                     </thead>
                                     <tbody class="bg-white divide-y divide-gray-200">
-                                        @foreach ($users as $index => $user)
+                                        @forelse ($users as $index => $user)
                                             @php
                                                 $globalIndex =
                                                     ($pagination['current_page'] - 1) * $pagination['per_page'] +
@@ -90,7 +90,8 @@
                                                     1;
                                             @endphp
                                             <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                <td
+                                                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                                     {{ $globalIndex }}
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -100,8 +101,30 @@
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                     {{ $user['phone_number'] }}</td>
                                             </tr>
-                                        @endforeach
-    
+                                        @empty
+                                            <tr>
+                                                <td colspan="8" class="px-6 py-4 text-center text-gray-500">
+                                                    <div class="flex flex-col items-center justify-center space-y-2">
+                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                            class="h-8 w-8 text-gray-400" fill="none"
+                                                            viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                        </svg>
+                                                        <p class="text-gray-500">
+                                                            @if (request('search'))
+                                                                Tidak ada data ditemukan untuk pecarian
+                                                                <strong>"{{ request('search') }}"</strong>
+                                                            @else
+                                                                Data yang anda cari tidak ditemukan.
+                                                            @endif
+                                                        </p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+
                                     </tbody>
                                 </table>
                             </div>
@@ -223,14 +246,14 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
             </main>
         </div>
     </div>
 
-    <script>
+    {{-- <script>
         let searchTimer;
         const searchInput = document.getElementById('searchInput');
         const tableBody = document.querySelector('tbody');
@@ -324,61 +347,61 @@
         //         const endIndex = Math.min(pagination.current_page * pagination.per_page, pagination.total);
 
         //         let paginationHtml = `
-    //     <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
-    //         <div>
-    //             <p class="text-sm text-gray-700">
-    //                 Showing <span class="font-medium">${startIndex}</span> to
-    //                 <span class="font-medium">${endIndex}</span> of
-    //                 <span class="font-medium">${pagination.total}</span> results
-    //             </p>
-    //         </div>
-    //         <div>
-    //             <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
-    //     `;
+        //     <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+        //         <div>
+        //             <p class="text-sm text-gray-700">
+        //                 Showing <span class="font-medium">${startIndex}</span> to
+        //                 <span class="font-medium">${endIndex}</span> of
+        //                 <span class="font-medium">${pagination.total}</span> results
+        //             </p>
+        //         </div>
+        //         <div>
+        //             <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+        //     `;
 
-        //         // Previous button
-        //         if (pagination.current_page > 1) {
-        //             paginationHtml += `
-    //     <a href="#" onclick="fetchUsers('${searchInput.value}', ${pagination.current_page - 1}); return false;"
-    //         class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
-    //         <span>Previous</span>
-    //         <svg class="size-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-    //             <path fill-rule="evenodd" d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
-    //         </svg>
-    //     </a>
-    //   `;
-        //         }
+            //         // Previous button
+            //         if (pagination.current_page > 1) {
+            //             paginationHtml += `
+        //     <a href="#" onclick="fetchUsers('${searchInput.value}', ${pagination.current_page - 1}); return false;"
+        //         class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+        //         <span>Previous</span>
+        //         <svg class="size-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        //             <path fill-rule="evenodd" d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+        //         </svg>
+        //     </a>
+        //   `;
+            //         }
 
-        //         // Page numbers
-        //         for (let i = 1; i <= pagination.last_page; i++) {
-        //             paginationHtml += `
-    //     <a href="#" onclick="fetchUsers('${searchInput.value}', ${i}); return false;"
-    //         class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${i === pagination.current_page ? 'bg-indigo-600 text-white' : ''}">
-    //         ${i}
-    //     </a>
-    //  `;
-        //         }
+            //         // Page numbers
+            //         for (let i = 1; i <= pagination.last_page; i++) {
+            //             paginationHtml += `
+        //     <a href="#" onclick="fetchUsers('${searchInput.value}', ${i}); return false;"
+        //         class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${i === pagination.current_page ? 'bg-indigo-600 text-white' : ''}">
+        //         ${i}
+        //     </a>
+        //  `;
+            //         }
 
-        //         // Next button
-        //         if (pagination.current_page < pagination.last_page) {
-        //             paginationHtml += `
-    //     <a href="#" onclick="fetchUsers('${searchInput.value}', ${pagination.current_page + 1}); return false;"
-    //         class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
-    //         <span>Next</span>
-    //         <svg class="size-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-    //             <path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
-    //         </svg>
-    //     </a>
-    //     `;
-        //         }
+            //         // Next button
+            //         if (pagination.current_page < pagination.last_page) {
+            //             paginationHtml += `
+        //     <a href="#" onclick="fetchUsers('${searchInput.value}', ${pagination.current_page + 1}); return false;"
+        //         class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+        //         <span>Next</span>
+        //         <svg class="size-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        //             <path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+        //         </svg>
+        //     </a>
+        //     `;
+            //         }
 
-        //         paginationHtml += `
-    //         </nav>
-    //     </div>
-    //     </div>
-    //     `;
+            //         paginationHtml += `
+        //         </nav>
+        //     </div>
+        //     </div>
+        //     `;
 
-        //         paginationContainer.innerHTML = paginationHtml;
+            //         paginationContainer.innerHTML = paginationHtml;
         //     }
         function updatePagination(pagination) {
             const startIndex = (pagination.current_page - 1) * pagination.per_page + 1;
@@ -395,7 +418,7 @@
             </div>
             <div>
                 <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
-    `;
+        `;
 
             // Previous button
             if (pagination.current_page > 1) {
@@ -490,13 +513,55 @@
             paginationHtml += `
             </nav>
         </div>
-    </div>
-    `;
+     </div>
+     `;
 
             paginationContainer.innerHTML = paginationHtml;
         }
-    </script>
+    </script> --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('searchInput');
 
+
+            // Fungsi untuk mengupdate URL berdasarkan input
+            const updateUrl = () => {
+                const baseUrl = window.location.origin + window.location.pathname;
+                const search = searchInput.value.trim();
+
+                // Buat query string
+                const params = new URLSearchParams();
+                if (search) params.append('search', search);
+
+
+                // Redirect ke URL baru
+                window.location.href = `${baseUrl}?${params.toString()}`;
+            };
+
+            /// Event listener untuk input pencarian
+            searchInput.addEventListener('input', () => {
+                // Tambahkan delay agar tidak reload setiap karakter
+                setTimeout(updateUrl, 300);
+            });
+
+            // // Event listener untuk dropdown kategori
+            // categoryDropdown.addEventListener('change', updateUrl);
+        });
+        // document.addEventListener('DOMContentLoaded', function() {
+        //     // Menambahkan event listener untuk checkbox
+        //     document.getElementById('priority').addEventListener('change', function() {
+        //         // Jika dicentang, ubah nilai input hidden "priority" menjadi 1
+        //         if (this.checked) {
+        //             document.querySelector('input[name="priority"]').value = 1;
+        //         } else {
+        //             // Jika tidak dicentang, ubah nilai input hidden "priority" menjadi 0
+        //             document.querySelector('input[name="priority"]').value = 0;
+        //         }
+
+
+        //     });
+        // });
+    </script>
 </body>
 
 </html>

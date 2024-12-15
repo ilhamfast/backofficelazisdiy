@@ -22,8 +22,8 @@
         </div>
 
         <!-- Formulir Campaign -->
-        <form id="edit-campaign-form" action="{{ route('campaign.update', $campaign['id']) }}" method="POST"
-            enctype="multipart/form-data" class="h-96 overflow-y-auto">
+        <form id="edit-campaign-form-{{ $campaign['id'] }}" action="{{ route('campaign.update', $campaign['id']) }}"
+            method="POST" enctype="multipart/form-data" class="h-96 overflow-y-auto">
             @csrf
             {{-- @method('PUT') --}}
             <input type="hidden" name="_method" value="PUT">
@@ -102,103 +102,118 @@
                         required value="{{ $campaign['start_date'] }}">
                 </div>
 
-                <!-- Thumbnail Campaign -->
+
                 <div>
-                    <label for="campaign_thumbnail" class="block text-sm font-medium text-gray-700 mb-2">
+                    <label for="campaign_thumbnail_{{ $campaign['id'] }}"
+                        class="block text-sm font-medium text-gray-700 mb-2">
                         Thumbnail Campaign
                         <span class="italic text-xs">(Hanya file JPEG, JPG, atau PNG, max 2MB)</span>
                     </label>
-                    <input type="file" name="campaign_thumbnail" id="campaign_thumbnail"
+                    <input type="file" name="campaign_thumbnail" id="campaign_thumbnail_{{ $campaign['id'] }}"
+                        data-id="{{ $campaign['id'] }}"
                         class="mt-1 block w-full py-1.5 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border"
                         accept="image/*">
 
                     <!-- Preview Thumbnail -->
-                    <div id="previewContainerThumbnail"
+                    <div id="previewContainerThumbnail_{{ $campaign['id'] }}"
                         class="relative mt-3 w-40 h-auto rounded-lg border border-gray-300 {{ empty($campaign['campaign_thumbnail']) ? 'hidden' : '' }}">
-                        <img id="thumbnailPreview" src="{{ $campaign['campaign_thumbnail'] ?? '' }}"
-                            alt="Preview Thumbnail" class="w-full h-auto">
-                        <button id="resetButtonThumbnail" type="button"
+                        <img id="thumbnailPreview_{{ $campaign['id'] }}"
+                            src="{{ $campaign['campaign_thumbnail'] ?? '' }}" alt="Preview Thumbnail"
+                            class="w-full h-auto">
+                        <button id="resetButtonThumbnail_{{ $campaign['id'] }}" type="button"
                             class="absolute top-1 right-1 text-white bg-red-500 rounded-full w-6 h-6 flex items-center justify-center">
                             &times;
                         </button>
                     </div>
-                    <p id="thumbnailerror" class="hidden text-sm text-red-500 mt-1">Ukuran file tidak boleh lebih
-                        dari 2MB!</p>
+                    <p id="thumbnailerror_{{ $campaign['id'] }}" class="hidden text-sm text-red-500 mt-1">
+                        Ukuran file tidak boleh lebih dari 2MB!
+                    </p>
                 </div>
 
-                <!-- Campaign Image 1 -->
+                {{-- campaign image 1 --}}
                 <div>
-                    <label for="campaign_image1" class="block text-sm font-medium text-gray-700 mb-2">
+                    <label for="campaign_image1_{{ $campaign['id'] }}"
+                        class="block text-sm font-medium text-gray-700 mb-2">
                         Campaign Image 1
                         <span class="italic text-xs">(Hanya file JPEG, JPG, atau PNG, max 2MB)</span>
                     </label>
-                    <input type="file" name="campaign_image_1" id="campaign_image1"
+                    <input type="file" name="campaign_image_1" id="campaign_image1_{{ $campaign['id'] }}"
+                        data-id="{{ $campaign['id'] }}"
                         class="mt-1 block w-full py-1.5 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border"
                         accept="image/*">
 
                     <!-- Preview Campaign Image 1 -->
-                    <div id="previewContainerImage1"
+                    <div id="previewContainerImage1_{{ $campaign['id'] }}"
                         class="relative mt-3 w-40 h-auto rounded-lg border border-gray-300 {{ empty($campaign['campaign_image_1']) ? 'hidden' : '' }}">
-                        <img id="image1Preview" src="{{ $campaign['campaign_image_1'] ?? '' }}"
-                            alt="Preview Campaign Image 1" class="w-full h-auto">
-                        <button id="resetButtonImage1" type="button"
+                        <img id="image1Preview_{{ $campaign['id'] }}"
+                            src="{{ $campaign['campaign_image_1'] ?? '' }}" alt="Preview Campaign Image 1"
+                            class="w-full h-auto">
+                        <button id="resetButtonImage1_{{ $campaign['id'] }}" type="button"
                             class="absolute top-1 right-1 text-white bg-red-500 rounded-full w-6 h-6 flex items-center justify-center">
                             &times;
                         </button>
                     </div>
-                    <p id="campaignimage1error" class="hidden text-sm text-red-500 mt-1">Ukuran file tidak boleh
+                    <p id="campaignimage1error_{{ $campaign['id'] }}" class="hidden text-sm text-red-500 mt-1">Ukuran
+                        file tidak boleh
                         lebih dari 2MB!</p>
                 </div>
 
-                <!-- Campaign Image 2 -->
+                {{-- campaign image 2 --}}
                 <div>
-                    <label for="campaign_image2" class="block text-sm font-medium text-gray-700 mb-2">
+                    <label for="campaign_image2_{{ $campaign['id'] }}"
+                        class="block text-sm font-medium text-gray-700 mb-2">
                         Campaign Image 2
                         <span class="italic text-xs">(Hanya file JPEG, JPG, atau PNG, max 2MB)</span>
                     </label>
-                    <input type="file" name="campaign_image_2" id="campaign_image2"
-                        class="mt-1 block w-full py-1.5 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border"
+                    <input type="file" name="campaign_image_2" id="campaign_image2_{{ $campaign['id'] }}"
+                        data-id="{{ $campaign['id'] }}"
+                        class="mt-2 block w-full py-1.5 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border"
                         accept="image/*">
 
                     <!-- Preview Campaign Image 2 -->
-                    <div id="previewContainerImage2"
+                    <div id="previewContainerImage2_{{ $campaign['id'] }}"
                         class="relative mt-3 w-40 h-auto rounded-lg border border-gray-300 {{ empty($campaign['campaign_image_2']) ? 'hidden' : '' }}">
-                        <img id="image2Preview" src="{{ $campaign['campaign_image_2'] ?? '' }}"
-                            alt="Preview Campaign Image 2" class="w-full h-auto">
-                        <button id="resetButtonImage2" type="button"
-                            class="absolute top-1 right-1 text-white bg-red-500 rounded-full w-6 h-6 flex items-center justify-center">
+                        <img id="image2Preview_{{ $campaign['id'] }}"
+                            src="{{ $campaign['campaign_image_2'] ?? '' }}" alt="Preview Campaign Image 2"
+                            class="w-full h-auto">
+                        <button id="resetButtonImage2_{{ $campaign['id'] }}" type="button"
+                            class="absolute top-1 right-2 text-white bg-red-500 rounded-full w-6 h-6 flex items-center justify-center">
                             &times;
                         </button>
                     </div>
-                    <p id="campaignimage2error" class="hidden text-sm text-red-500 mt-1">Ukuran file tidak boleh
+                    <p id="campaignimage2error_{{ $campaign['id'] }}" class="hidden text-sm text-red-500 mt-1">Ukuran
+                        file tidak boleh
                         lebih dari 2MB!</p>
                 </div>
 
-                <!-- Campaign Image 3 -->
+
+                {{-- campaign image 3 --}}
                 <div>
-                    <label for="campaign_image3" class="block text-sm font-medium text-gray-700 mb-2">
+                    <label for="campaign_image3_{{ $campaign['id'] }}"
+                        class="block text-sm font-medium text-gray-700 mb-2">
                         Campaign Image 3
-                        <span class="italic text-xs">(Hanya file JPEG, JPG, atau PNG, max 2MB)</span>
+                        <span class="italic text-xs">(Hanya file JPEG, JPG, atau PNG, max 3MB)</span>
                     </label>
-                    <input type="file" name="campaign_image_3" id="campaign_image3"
-                        class="mt-1 block w-full py-1.5 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border"
+                    <input type="file" name="campaign_image_3" id="campaign_image3_{{ $campaign['id'] }}"
+                        data-id="{{ $campaign['id'] }}"
+                        class="mt-2 block w-full py-1.5 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border"
                         accept="image/*">
 
                     <!-- Preview Campaign Image 3 -->
-                    <div id="previewContainerImage3"
-                        class="relative mt-3 w-40 h-auto rounded-lg border border-gray-300 {{ empty($campaign['campaign_image_3']) ? 'hidden' : '' }}">
-                        <img id="image3Preview" src="{{ $campaign['campaign_image_3'] ?? '' }}"
-                            alt="Preview Campaign Image 3" class="w-full h-auto">
-                        <button id="resetButtonImage3" type="button"
-                            class="absolute top-1 right-1 text-white bg-red-500 rounded-full w-6 h-6 flex items-center justify-center">
+                    <div id="previewContainerImage3_{{ $campaign['id'] }}"
+                        class="relative mt-2 w-40 h-auto rounded-lg border border-gray-300 {{ empty($campaign['campaign_image_3']) ? 'hidden' : '' }}">
+                        <img id="image3Preview_{{ $campaign['id'] }}"
+                            src="{{ $campaign['campaign_image_3'] ?? '' }}" alt="Preview Campaign Image 3"
+                            class="w-full h-auto">
+                        <button id="resetButtonImage3_{{ $campaign['id'] }}" type="button"
+                            class="absolute top-1 right-2 text-white bg-red-500 rounded-full w-6 h-6 flex items-center justify-center">
                             &times;
                         </button>
                     </div>
-                    <p id="campaignimage3error" class="hidden text-sm text-red-500 mt-1">Ukuran file tidak boleh
+                    <p id="campaignimage3error_{{ $campaign['id'] }}" class="hidden text-sm text-red-500 mt-1">Ukuran
+                        file tidak boleh
                         lebih dari 2MB!</p>
                 </div>
-
-
 
             </div>
 
@@ -219,7 +234,7 @@
 </div>
 
 {{-- 
-<script>
+{{-- <script>
     document.addEventListener('DOMContentLoaded', function() {
         document.addEventListener('change', function(event) {
             // Untuk campaign thumbnail
@@ -462,5 +477,153 @@
                 errorMessage.classList.add('hidden'); // Sembunyikan pesan error
             }
         });
+    });
+</script> --}}
+
+<script>
+    document.addEventListener('change', function(event) {
+        // Deteksi input file yang berubah
+        if (event.target && event.target.matches('input[type="file"][id^="campaign_thumbnail_"]')) {
+            const thumbnailInput = event.target;
+            const campaignId = thumbnailInput.dataset.id; // Ambil ID dari data-id
+            const previewContainer = document.getElementById(`previewContainerThumbnail_${campaignId}`);
+            const thumbnailPreview = document.getElementById(`thumbnailPreview_${campaignId}`);
+            const errorMessage = document.getElementById(`thumbnailerror_${campaignId}`);
+
+            const file = thumbnailInput.files[0];
+
+            if (file) {
+                // Validasi ukuran file (maksimum 2MB)
+                if (file.size >= 2 * 1024 * 1024) {
+                    errorMessage.textContent =
+                        "Ukuran file tidak boleh lebih dari 2MB!"; // Tampilkan pesan error
+                    errorMessage.classList.remove('hidden');
+                    thumbnailInput.value = ''; // Reset input file
+                    previewContainer.classList.add('hidden');
+                } else {
+                    errorMessage.classList.add('hidden'); // Sembunyikan pesan error
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        thumbnailPreview.src = e.target.result; // Tampilkan preview gambar baru
+                        previewContainer.classList.remove('hidden');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        }
+        if (event.target && event.target.id.startsWith('campaign_image1_')) {
+            const campaignId = event.target.getAttribute('data-id'); // Ambil ID campaign dari atribut data-id
+            const fileInput = event.target; // Input file yang diubah
+            const previewContainer = document.getElementById(
+                `previewContainerImage1_${campaignId}`); // Kontainer preview
+            const imagePreview = document.getElementById(`image1Preview_${campaignId}`); // Elemen img preview
+            const errorMessage = document.getElementById(`campaignimage1error_${campaignId}`); // Pesan error
+
+            const file = fileInput.files[0]; // Ambil file yang diunggah
+
+            if (file) {
+                // Validasi ukuran file (maksimum 2MB)
+                if (file.size >= 2 * 1024 * 1024) {
+                    errorMessage.textContent =
+                        "Ukuran file tidak boleh lebih dari 2MB!"; // Tampilkan pesan error
+                    errorMessage.classList.remove('hidden'); // Perlihatkan pesan error
+                    fileInput.value = ''; // Reset input file
+                    previewContainer.classList.add('hidden'); // Sembunyikan preview
+                } else {
+                    errorMessage.classList.add('hidden'); // Sembunyikan pesan error
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreview.src = e.target.result; // Tampilkan preview gambar
+                        previewContainer.classList.remove('hidden'); // Perlihatkan preview
+                    };
+                    reader.readAsDataURL(file); // Baca file sebagai Data URL
+                }
+            }
+        }
+        if (event.target && event.target.id.startsWith('campaign_image2_')) {
+            const campaignId2 = event.target.getAttribute('data-id'); // Ambil ID campaign dari atribut data-id
+            const fileInput2 = event.target; // Input file yang diubah
+            const previewContainer2 = document.getElementById(
+                `previewContainerImage2_${campaignId2}`); // Kontainer preview
+            const imagePreview2 = document.getElementById(`image2Preview_${campaignId2}`); // Elemen img preview
+            const errorMessage2 = document.getElementById(`campaignimage2error_${campaignId2}`); // Pesan error
+
+            const file2 = fileInput2.files[0]; // Ambil file yang diunggah
+
+            if (file2) {
+                // Validasi ukuran file (maksimum 2MB)
+                if (file2.size >= 2 * 1024 * 1024) {
+                    errorMessage2.textContent =
+                        "Ukuran file tidak boleh lebih dari 2MB!"; // Tampilkan pesan error
+                    errorMessage2.classList.remove('hidden'); // Perlihatkan pesan error
+                    fileInput2.value = ''; // Reset input file
+                    previewContainer2.classList.add('hidden'); // Sembunyikan preview
+                } else {
+                    errorMessage2.classList.add('hidden'); // Sembunyikan pesan error
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreview2.src = e.target.result; // Tampilkan preview gambar
+                        previewContainer2.classList.remove('hidden'); // Perlihatkan preview
+                    };
+                    reader.readAsDataURL(file2); // Baca file sebagai Data URL
+                }
+            }
+        }
+        if (event.target && event.target.id.startsWith('campaign_image3_')) {
+            const campaignId3 = event.target.getAttribute('data-id'); // Ambil ID campaign dari atribut data-id
+            const fileInput3 = event.target; // Input file yang diubah
+            const previewContainer3 = document.getElementById(
+                `previewContainerImage3_${campaignId3}`); // Kontainer preview
+            const imagePreview3 = document.getElementById(`image3Preview_${campaignId3}`); // Elemen img preview
+            const errorMessage3 = document.getElementById(`campaignimage3error_${campaignId3}`); // Pesan error
+
+            const file3 = fileInput3.files[0]; // Ambil file yang diunggah
+
+            if (file3) {
+                // Validasi ukuran file (maksimum 2MB)
+                if (file3.size >= 2 * 1024 * 1024) {
+                    errorMessage3.textContent =
+                        "Ukuran file tidak boleh lebih dari 2MB!"; // Tampilkan pesan error
+                    errorMessage3.classList.remove('hidden'); // Perlihatkan pesan error
+                    fileInput3.value = ''; // Reset input file
+                    previewContainer3.classList.add('hidden'); // Sembunyikan preview
+                } else {
+                    errorMessage3.classList.add('hidden'); // Sembunyikan pesan error
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreview3.src = e.target.result; // Tampilkan preview gambar
+                        previewContainer3.classList.remove('hidden'); // Perlihatkan preview
+                    };
+                    reader.readAsDataURL(file3); // Baca file sebagai Data URL
+                }
+            }
+        }
+    });
+    document.addEventListener('click', function(event) {
+        // Deteksi jika elemen yang diklik adalah tombol reset
+        if (event.target && event.target.id.startsWith('resetButton')) {
+            const buttonId = event.target.id; // ID tombol reset
+            const campaignId = event.target.id.split('_')[1]; // Ambil ID campaign dari tombol reset
+            const buttonType = event.target.id.split('_')[0].replace('resetButton', '')
+        .toLowerCase(); // Ambil tipe elemen (thumbnail, image1, image2, image3)
+
+            // Identifikasi elemen terkait berdasarkan tipe tombol reset
+            const fileInput = document.getElementById(`campaign_${buttonType}_${campaignId}`);
+            const previewContainer = document.getElementById(
+                `previewContainer${buttonType.charAt(0).toUpperCase() + buttonType.slice(1)}_${campaignId}`);
+            const imagePreview = document.getElementById(
+            `${buttonType}Preview_${campaignId}`); // Elemen img untuk preview
+
+            // Reset input file dan preview
+            if (fileInput) {
+                fileInput.value = ''; // Reset nilai input file
+            }
+            if (imagePreview) {
+                imagePreview.src = ''; // Kosongkan src gambar
+            }
+            if (previewContainer) {
+                previewContainer.classList.add('hidden'); // Sembunyikan preview container
+            }
+        }
     });
 </script>

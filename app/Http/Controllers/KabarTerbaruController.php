@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class KabarTerbaruController extends Controller
 {
@@ -21,17 +22,12 @@ class KabarTerbaruController extends Controller
         $newsResponse = Http::get($newsUrl)->json();
         $campaignsResponse = Http::get($campaignsUrl)->json(); // Ambil data campaign
 
-
-
         // Menggunakan keyBy untuk memetakan campaign berdasarkan campaign_id
         $campaigns = collect($campaignsResponse['data'])->keyBy('id');
 
         // Memetakan data berita
         $newss = collect($newsResponse)
             ->map(function ($news) use ($campaigns) {
-                // Validasi format tanggal dan konversi jika diperlukan
-                $news['created_at'] = Carbon::parse($news['created_at'])->toDateTimeString();
-
                 // Pencocokan campaign berdasarkan campaign_id menggunakan keyBy
                 $campaign = $campaigns->get($news['campaign_id']); // Mendapatkan campaign berdasarkan campaign_id
 
@@ -57,22 +53,23 @@ class KabarTerbaruController extends Controller
         return view('kabarTerbaru.index', $data);
     }
 
+   
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
-    }
+
+
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, string $id)
     {
-        //
+       
     }
+
+
 
     /**
      * Display the specified resource.
@@ -95,7 +92,46 @@ class KabarTerbaruController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $baseUrl = env('API_BASE_URL');
+        $newsUrledit = "{$baseUrl}/latestNews/campaign/{$id}?_method=PUT";
+
+        $request->validate([
+            'latest_news_date' => 'required|date',
+            'image' => 'file|mimes:jpeg,png,jpg|max:2048',
+            'description' => 'required|string',
+        ]);
+
+        $requestHttp = Http::asMultipart();
+
+
+        $files = ['image'];
+
+        foreach ($files as $file) {
+            if ($request->hasFile($file)) {
+                $requestHttp->attach(
+                    $file,
+                    fopen($request->file($file)->getPathname(), 'r'),
+                    $request->file($file)->getClientOriginalName()
+                );
+            }
+        }
+
+
+        // Mengirim data ke API
+        $response = $requestHttp->pOST("{$newsUrledit}", [
+            'latest_news_date' => $request->input('latest_news_date'),
+            'description' => $request->input('description'),
+            
+        ]);
+
+        if ($response->successful()) {
+            Alert::success('Berhasil', 'Kabar terbaru berhasil diupdate!');
+            return redirect()->back();
+        } else {
+            Alert::error('Gagal', 'Gagal update kabar terbaru. Silakan coba lagi.');
+            return redirect()->back()->withInput();
+        }
+
     }
 
     /**
@@ -103,6 +139,18 @@ class KabarTerbaruController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $baseUrl = env('API_BASE_URL');
+        $deleteNewsurl = "{$baseUrl}/latestNews/delete/{$id}";
+
+        // Kirim request PUT untuk set recomendation
+        $response = Http::delete($deleteNewsurl);
+
+        if ($response->successful()) {
+            Alert::success('Berhasil', 'Berhasil menghapus kabar terbaru');
+            return redirect()->back();
+        } else {
+            Alert::error('Gagal', 'Gagal menghapus kabar terbaru. Silakan coba lagi.');
+            return redirect()->back()->withInput();
+        }
     }
 }

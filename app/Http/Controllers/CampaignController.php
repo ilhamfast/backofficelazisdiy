@@ -8,29 +8,45 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class CampaignController extends Controller
 {
+  
+
     public function index(Request $request)
     {
         $page = $request->get('page', 1);
         $search = $request->get('search', '');
+        $categoryId = $request->get('category_id', '');
+
         $baseUrl = env('API_BASE_URL');
         $campaignsUrl = "{$baseUrl}/campaigns?page={$page}";
+
+
+        // Tambahkan parameter category_id jika ada
+        if (!empty($categoryId)) {
+            $campaignsUrl .= "&category_id={$categoryId}";
+        }
+
+        // Tambahkan parameter search jika ada
+        if (!empty($search)) {
+            $campaignsUrl .= "&search={$search}";
+        }
+
         $categoriesUrl = "{$baseUrl}/campaign-categories";
 
+        // Fetch data dari API
         $campaignsResponse = Http::get($campaignsUrl)->json();
-        $categoriesResponse = Http::get($categoriesUrl)->json();
+        // $categoriesResponse = Http::get($categoriesUrl)->json();
+        $categoriesResponse = collect(Http::get($categoriesUrl)->json()); // Ubah menjadi koleksi
 
-        $campaigns = collect($campaignsResponse['data'])
+        // Filter hanya kampanye dengan priority = 0
+        $filteredCampaigns = collect($campaignsResponse['data'])
+            ->filter(function ($campaign) {
+                return $campaign['priority'] == 0 && $campaign['recomendation'] == 0 && $campaign['active'] == 1;
+            });
+
+        $campaigns = $filteredCampaigns
             ->map(function ($campaign) {
                 $campaign['category_name'] = $campaign['category']['campaign_category'] ?? 'No Category';
                 return $campaign;
-            })
-            ->when($search, function ($collection) use ($search) {
-                return $collection->filter(function ($campaign) use ($search) {
-                    return str_contains(
-                        strtolower($campaign['campaign_name']),
-                        strtolower($search)
-                    );
-                });
             })
             ->sortByDesc('created_at')
             ->values();
@@ -44,57 +60,12 @@ class CampaignController extends Controller
                 'next_page_url' => $campaignsResponse['next_page_url'],
                 'prev_page_url' => $campaignsResponse['prev_page_url'],
                 'per_page' => $campaignsResponse['per_page'],
-                'total' => $campaignsResponse['total'],
-            ]
+                'total' => $filteredCampaigns->count(),
+            ],
         ];
-        // dd($categoriesResponse);
 
         return view('campaign.index', $data);
     }
-
-
-    public function search(Request $request)
-    {
-        if ($request->ajax()) {
-            $page = $request->get('page', 1);
-            $search = $request->get('search', '');
-            $baseUrl = env('API_BASE_URL');
-            $campaignsUrl = "{$baseUrl}/campaigns?page={$page}";
-
-            $campaignsResponse = Http::get($campaignsUrl)->json();
-
-            $campaigns = collect($campaignsResponse['data'])
-                ->map(function ($campaign) {
-                    $campaign['category_name'] = $campaign['category']['campaign_category'] ?? 'No Category';
-                    return $campaign;
-                })
-                ->when($search, function ($collection) use ($search) {
-                    return $collection->filter(function ($campaign) use ($search) {
-                        return str_contains(
-                            strtolower($campaign['campaign_name']),
-                            strtolower($search)
-                        );
-                    });
-                })
-                ->sortByDesc('created_at')
-                ->values();
-
-            return response()->json([
-                'campaigns' => $campaigns,
-                'pagination' => [
-                    'current_page' => $campaignsResponse['current_page'],
-                    'last_page' => $campaignsResponse['last_page'],
-                    'next_page_url' => $campaignsResponse['next_page_url'],
-                    'prev_page_url' => $campaignsResponse['prev_page_url'],
-                    'per_page' => $campaignsResponse['per_page'],
-                    'total' => $campaignsResponse['total'],
-                ]
-            ]);
-        }
-    }
-
-
-
 
     public function store(Request $request)
 
@@ -114,6 +85,7 @@ class CampaignController extends Controller
             'location' => 'required|string|max:255',
             'target_amount' => 'required|numeric',
             'start_date' => 'required|date',
+            'priority' => 'nullable|boolean',
         ]);
 
         $requestHttp = Http::asMultipart();
@@ -130,6 +102,7 @@ class CampaignController extends Controller
             }
         }
 
+
         // Mengirim data ke API
         $response = $requestHttp->post("{$campaignsUrl}", [
             'campaign_category_id' => $request->input('campaign_category_id'),
@@ -139,7 +112,10 @@ class CampaignController extends Controller
             'location' => $request->input('location'),
             'target_amount' => $request->input('target_amount'),
             'start_date' => $request->input('start_date'),
+            'priority' => $request->input('priority'),
         ]);
+
+        // dd($response);
 
         if ($response->successful()) {
             Alert::success('Berhasil', 'Campaign berhasil dibuat!');
@@ -209,4 +185,155 @@ class CampaignController extends Controller
             return redirect()->back()->with('error', 'Failed to update campaign. ' . $response->body());
         }
     }
+
+    public function campaignActive(Request $request)
+    {
+        $page = $request->get('page', 1);
+        $search = $request->get('search', '');
+        $categoryId = $request->get('category_id', '');
+
+        $baseUrl = env('API_BASE_URL');
+        $campaignsUrl = "{$baseUrl}/campaigns?page={$page}";
+
+
+        // Tambahkan parameter category_id jika ada
+        if (!empty($categoryId)) {
+            $campaignsUrl .= "&category_id={$categoryId}";
+        }
+
+        // Tambahkan parameter search jika ada
+        if (!empty($search)) {
+            $campaignsUrl .= "&search={$search}";
+        }
+
+        $categoriesUrl = "{$baseUrl}/campaign-categories";
+
+        // Fetch data dari API
+        $campaignsResponse = Http::get($campaignsUrl)->json();
+        // $categoriesResponse = Http::get($categoriesUrl)->json();
+        $categoriesResponse = collect(Http::get($categoriesUrl)->json()); // Ubah menjadi koleksi
+
+        // Filter hanya kampanye dengan priority = 0
+        $filteredCampaigns = collect($campaignsResponse['data'])
+            ->filter(function ($campaign) {
+                return $campaign['priority'] == 0 && $campaign['recomendation'] == 0 && $campaign['active'] == 1;
+            });
+
+        $campaigns = $filteredCampaigns
+            ->map(function ($campaign) {
+                $campaign['category_name'] = $campaign['category']['campaign_category'] ?? 'No Category';
+                return $campaign;
+            })
+            ->sortByDesc('created_at')
+            ->values();
+
+        $data = [
+            'campaigns' => $campaigns,
+            'categories' => $categoriesResponse,
+            'pagination' => [
+                'current_page' => $campaignsResponse['current_page'],
+                'last_page' => $campaignsResponse['last_page'],
+                'next_page_url' => $campaignsResponse['next_page_url'],
+                'prev_page_url' => $campaignsResponse['prev_page_url'],
+                'per_page' => $campaignsResponse['per_page'],
+                'total' => $filteredCampaigns->count(),
+            ],
+        ];
+
+        return view('campaign.campaignActive.index', $data);
+    }
+
+    public function campNonActive(Request $request)
+    {
+        $page = $request->get('page', 1);
+        $search = $request->get('search', '');
+        $categoryId = $request->get('category_id', '');
+
+        $baseUrl = env('API_BASE_URL');
+        $campaignsUrl = "{$baseUrl}/campaigns?page={$page}";
+
+
+        // Tambahkan parameter category_id jika ada
+        if (!empty($categoryId)) {
+            $campaignsUrl .= "&category_id={$categoryId}";
+        }
+
+        // Tambahkan parameter search jika ada
+        if (!empty($search)) {
+            $campaignsUrl .= "&search={$search}";
+        }
+
+        $categoriesUrl = "{$baseUrl}/campaign-categories";
+
+        // Fetch data dari API
+        $campaignsResponse = Http::get($campaignsUrl)->json();
+        // $categoriesResponse = Http::get($categoriesUrl)->json();
+        $categoriesResponse = collect(Http::get($categoriesUrl)->json()); // Ubah menjadi koleksi
+
+        // Filter hanya kampanye dengan priority = 0
+        $filteredCampaigns = collect($campaignsResponse['data'])
+            ->filter(function ($campaign) {
+                return $campaign['priority'] == 0 && $campaign['recomendation'] == 0 && $campaign['active'] == 0;
+            });
+
+        $campaigns = $filteredCampaigns
+            ->map(function ($campaign) {
+                $campaign['category_name'] = $campaign['category']['campaign_category'] ?? 'No Category';
+                return $campaign;
+            })
+            ->sortByDesc('created_at')
+            ->values();
+
+        $data = [
+            'campaigns' => $campaigns,
+            'categories' => $categoriesResponse,
+            'pagination' => [
+                'current_page' => $campaignsResponse['current_page'],
+                'last_page' => $campaignsResponse['last_page'],
+                'next_page_url' => $campaignsResponse['next_page_url'],
+                'prev_page_url' => $campaignsResponse['prev_page_url'],
+                'per_page' => $campaignsResponse['per_page'],
+                'total' => $filteredCampaigns->count(),
+            ],
+        ];
+
+        return view('campaign.campaignNonActive.index', $data);
+    }
+
+
+    public function setaktif(string $id)
+    {
+        $baseUrl = env('API_BASE_URL');
+        $setaktif = "{$baseUrl}/campaign/set-active/{$id}";
+
+        // Kirim request PUT untuk set priority
+        $response = Http::put($setaktif);
+
+        if ($response->successful()) {
+            Alert::success('Berhasil', 'campaign berhasil diaktifkan!');
+            return redirect()->back();
+        } else {
+            Alert::error('Gagal', 'Gagal mengaktifkan campaign. Silakan coba lagi.');
+            return redirect()->back()->withInput();
+        }
+    }
+
+    public function unaktif(string $id)
+    {
+        $baseUrl = env('API_BASE_URL');
+        $unsetaktif = "{$baseUrl}/campaign/unset-active/{$id}";
+
+        // Kirim request PUT untuk set priority
+        $response = Http::put($unsetaktif);
+
+        if ($response->successful()) {
+            Alert::success('Berhasil', 'campaign berhasil dinonaktifkan');
+            return redirect()->back();
+        } else {
+            Alert::error('Gagal', 'Gagal menonaktifkan campaign. Silakan coba lagi.');
+            return redirect()->back()->withInput();
+        }
+    }
+
+ 
 }

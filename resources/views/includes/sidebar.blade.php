@@ -28,7 +28,7 @@
             <!-- Campaign Dropdown -->
             <div class="w-full" id="campaignDropdown">
                 <button id="dropdownToggle"
-                    class="w-full flex justify-between items-center px-8 py-2 rounded-md transition duration-300 transform hover:scale-105 {{ Request::routeIs('campaign.index', 'campaignCategory.index', 'campaign.active') ? 'open' : '' }}">
+                    class="w-full flex justify-between items-center px-8 py-2 rounded-md transition duration-300 transform hover:scale-105 {{ Request::routeIs('campaign.index', 'campaignCategory.index', 'priority.index', 'recomendation.index', 'aktif.index', 'nonaktif.index') ? 'open' : '' }}">
                     <span class="font-semibold">Campaign</span>
                     <svg id="arrowIcon" xmlns="http://www.w3.org/2000/svg"
                         class="w-4 transform transition-transform rotate-180" fill="none" viewBox="0 0 24 24"
@@ -47,10 +47,25 @@
                         <img src="{{ asset('assets/img/list.svg') }}" alt="" class="w-5 mr-2">
                         <span>Category</span>
                     </a>
-                    <a href="#"
-                        class="ml-10 flex px-8 py-2 text-sm text-gray-700 hover:bg-orange-200 rounded-tl-md rounded-bl-md transition duration-200 {{ Request::routeIs('campaign.active') ? 'bg-orange-200 font-semibold' : '' }}">
-                        <img src="{{ asset('assets/img/pause.svg') }}" alt="" class="w-5 mr-2">
-                        <span>Campaign non-aktif</span>
+                    <a href="{{ route('priority.index') }}"
+                        class="ml-10 flex px-8 py-2 text-sm text-gray-700 hover:bg-orange-200 rounded-tl-md rounded-bl-md transition duration-200 mb-2 {{ Request::routeIs('priority.index') ? 'bg-orange-200 font-semibold' : '' }}">
+                        <img src="{{ asset('assets/img/priority.svg') }}" alt="" class="w-5 mr-2">
+                        <span>Campaign priority</span>
+                    </a>
+                    <a href="{{ route('recomendation.index') }}"
+                        class="ml-10 flex px-8 py-2 text-sm text-gray-700 hover:bg-orange-200 rounded-tl-md rounded-bl-md transition duration-200 mb-2 {{ Request::routeIs('recomendation.index') ? 'bg-orange-200 font-semibold' : '' }}">
+                        <img src="{{ asset('assets/img/lightning.svg') }}" alt="" class="w-5 mr-2">
+                        <span>Campaign rekomendasi</span>
+                    </a>
+                    <a href="{{ route('aktif.index') }}"
+                        class="ml-10 flex px-8 py-2 text-sm text-gray-700 hover:bg-orange-200 rounded-tl-md rounded-bl-md transition duration-200 mb-2{{ Request::routeIs('aktif.index') ? 'font-semibold bg-orange-200' : '' }}">
+                        <img src="{{ asset('assets/img/active.svg') }}" alt="" class="w-5 mr-2">
+                        <span>Campaign aktif</span>
+                    </a>
+                    <a href="{{ route('nonaktif.index') }}"
+                        class="ml-10 flex px-8 py-2 text-sm text-gray-700 hover:bg-orange-200 rounded-tl-md rounded-bl-md transition duration-200 {{ Request::routeIs('nonaktif.index') ? 'font-semibold bg-orange-200' : '' }}">
+                        <img src="{{ asset('assets/img/nonactive.svg') }}" alt="" class="w-5 mr-2">
+                        <span>Campaign nonaktif</span>
                     </a>
                 </div>
             </div>
@@ -87,23 +102,41 @@
                 <li class="font-semibold">Transaksi</li>
             </a>
 
-            <!-- Kabar Terbaru -->
-            <a href="{{ route('news.index') }}"
-                class="w-full flex items-center px-8 py-2 hover:bg-orange-200 rounded-md transition duration-300 transform hover:scale-105 mb-2 {{ Request::routeIs('news.index') ? 'ml-5 bg-orange-300 underline underline-offset-2' : '' }}">
-                <img src="{{ asset('assets/img/kabarterbaru.svg') }}" alt="" class="w-7 mr-2">
-                <li class="font-semibold">Kabar terbaru</li>
-            </a>
+            <div class="w-full mt-2" id="newsDropdown">
+                <button id="dropdownTogglenews"
+                    class="w-full flex justify-between items-center px-8 py-2 rounded-md transition duration-300 transform hover:scale-105 {{ Request::routeIs('news.index', 'newscampaign.index') ? 'open' : '' }}">
+                    <span class="font-semibold">Kabar terbaru</span>
+                    <svg id="arrowIconnews" xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 transform transition-transform rotate-180" fill="none" viewBox="0 0 24 24"
+                        stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+                    </svg>
+                </button>
+                <div id="dropdownMenunews" class="w-full transition-all duration-300 overflow-hidden mb-4">
+                    <a href="{{ route('news.index') }}"
+                        class="ml-10 flex px-8 py-2 text-sm text-gray-700 hover:bg-orange-200 rounded-tl-md rounded-bl-md transition duration-200 mb-2 {{ Request::routeIs('news.index') ? 'bg-orange-200 font-semibold' : '' }}">
+                        <img src="{{ asset('assets/img/kabarterbaru.svg') }}" alt="" class="w-5 mr-2">
+                        <span>List news</span>
+                    </a>
+                    <a href="{{ route('newscampaign.index') }}"
+                        class="ml-10 flex px-8 py-2 text-sm text-gray-700 hover:bg-orange-200 rounded-tl-md rounded-bl-md transition duration-200 mb-2 {{ Request::routeIs('newscampaign.index') ? 'bg-orange-200 font-semibold' : '' }}">
+                        <img src="{{ asset('assets/img/listnews.svg') }}" alt="" class="w-5 mr-2">
+                        <span>News</span>
+                    </a>
+                </div>
+            </div>
         </ul>
     </div>
 
     <!-- Footer -->
-    <div class="w-full mt-auto">
-        <a href="#"
+    <form method="POST" action="{{ route('logout') }}" class="w-full">
+        @csrf
+        <button type="submit"
             class="w-full flex items-center px-8 py-2 hover:bg-orange-200 rounded-md transition duration-300 transform hover:scale-105 mb-4">
             <img src="{{ asset('assets/img/logout.svg') }}" alt="" class="w-7 mr-2">
             <span class="font-semibold">Logout</span>
-        </a>
-    </div>
+        </button>
+    </form>
 </aside>
 
 <script>
@@ -142,26 +175,86 @@
     const arrowIconZiswaf = document.getElementById('arrowIconZiswaf');
 
     // Status default dropdown
-    let ZiswafisOpen = false;
-    dropdownMenuZiswaf.style.maxHeight = '0'; // Default tertutup
+    let isOpenZiswaf = false;
+    dropdownMenuZiswaf.style.maxHeight = '0'; // Dropdown tertutup di awal
 
     // Fungsi untuk toggle dropdown
     dropdownToggleZiswaf.addEventListener('click', () => {
-        ZiswafisOpen = !ZiswafisOpen;
+        // Toggle status dropdown
+        isOpenZiswaf = !isOpenZiswaf;
 
-        if (ZiswafisOpen) {
-            // Buka dropdown
-            dropdownMenuZiswaf.style.maxHeight = dropdownMenuZiswaf.scrollHeight + 'px'; // Sesuai isi konten
-            arrowIconZiswaf.classList.add('rotate-180'); // Tambahkan rotasi
+        if (isOpenZiswaf) {
+            // Jika terbuka
+            dropdownMenuZiswaf.style.maxHeight = dropdownMenuZiswaf.scrollHeight + 'px'; // Buka dropdown
+            arrowIconZiswaf.classList.remove('rotate-180'); // Putar ikon
         } else {
-            // Tutup dropdown
+            // Jika tertutup
             dropdownMenuZiswaf.style.maxHeight = '0'; // Tutup dropdown
-            arrowIconZiswaf.classList.remove('rotate-180'); // Hilangkan rotasi
+            arrowIconZiswaf.classList.add('rotate-180'); // Kembalikan ikon
         }
     });
+
     if (dropdownToggleZiswaf.classList.contains('open')) {
-        dropdownMenuZiswaf.style.maxHeight = dropdownMenu.scrollHeight + 'px';
+        dropdownMenuZiswaf.style.maxHeight = dropdownMenuZiswaf.scrollHeight + 'px';
         arrowIconZiswaf.classList.remove('rotate-180');
-        ZiswafisOpen = true; // Set status dropdown terbuka
+        isOpenZiswaf = true; // Set status dropdown terbuka
+    }
+
+    // const dropdownToggleZiswaf = document.getElementById('dropdownToggleZiswaf');
+    // const dropdownMenuZiswaf = document.getElementById('dropdownMenuZiswaf');
+    // const arrowIconZiswaf = document.getElementById('arrowIconZiswaf');
+
+    // // Status default dropdown
+    // let ZiswafisOpen = false;
+    // dropdownMenuZiswaf.style.maxHeight = '0'; // Default tertutup
+
+    // // Fungsi untuk toggle dropdown
+    // dropdownToggleZiswaf.addEventListener('click', () => {
+    //     ZiswafisOpen = !ZiswafisOpen;
+
+    //     if (ZiswafisOpen) {
+    //         // Buka dropdown
+    //         dropdownMenuZiswaf.style.maxHeight = dropdownMenuZiswaf.scrollHeight + 'px'; // Sesuai isi konten
+    //         arrowIconZiswaf.classList.add('rotate-180'); // Tambahkan rotasi
+    //     } else {
+    //         // Tutup dropdown
+    //         dropdownMenuZiswaf.style.maxHeight = '0'; // Tutup dropdown
+    //         arrowIconZiswaf.classList.remove('rotate-180'); // Hilangkan rotasi
+    //     }
+    // });
+    // if (dropdownToggleZiswaf.classList.contains('open')) {
+    //     dropdownMenuZiswaf.style.maxHeight = dropdownMenu.scrollHeight + 'px';
+    //     arrowIconZiswaf.classList.remove('rotate-180');
+    //     ZiswafisOpen = true; // Set status dropdown terbuka
+    // }
+
+    const dropdownTogglenews = document.getElementById('dropdownTogglenews');
+    const dropdownMenunews = document.getElementById('dropdownMenunews');
+    const arrowIconnews = document.getElementById('arrowIconnews');
+
+    // Status default dropdown
+    let isOpennews = false;
+    dropdownMenunews.style.maxHeight = '0'; // Dropdown tertutup di awal
+
+    // Fungsi untuk toggle dropdown
+    dropdownTogglenews.addEventListener('click', () => {
+        // Toggle status dropdown
+        isOpennews = !isOpennews;
+
+        if (isOpennews) {
+            // Jika terbuka
+            dropdownMenunews.style.maxHeight = dropdownMenunews.scrollHeight + 'px'; // Buka dropdown
+            arrowIconnews.classList.remove('rotate-180'); // Putar ikon
+        } else {
+            // Jika tertutup
+            dropdownMenunews.style.maxHeight = '0'; // Tutup dropdown
+            arrowIconnews.classList.add('rotate-180'); // Kembalikan ikon
+        }
+    });
+
+    if (dropdownTogglenews.classList.contains('open')) {
+        dropdownMenunews.style.maxHeight = dropdownMenunews.scrollHeight + 'px';
+        arrowIconnews.classList.remove('rotate-180');
+        isOpennews = true; // Set status dropdown terbuka
     }
 </script>

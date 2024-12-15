@@ -21,7 +21,10 @@ class PenggunaController extends Controller
         $baseUrl = env('API_BASE_URL');
         $usersUrl = "{$baseUrl}/users?page={$page}";
 
-
+         // Tambahkan parameter search jika ada
+         if (!empty($search)) {
+            $usersUrl .= "&search={$search}";
+        }
 
 
         $usersResponse = Http::get($usersUrl)->json();
@@ -34,6 +37,7 @@ class PenggunaController extends Controller
             ->sortBy($sortField, SORT_REGULAR, $sortDirection === 'desc')
             ->values()
             ->toArray();
+            
         if ($request->ajax()) {
             return response()->json([
                 'users' => $users,
