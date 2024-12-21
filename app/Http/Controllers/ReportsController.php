@@ -36,7 +36,7 @@ class ReportsController extends Controller
         // Mengubah path file menjadi URL lengkap dengan REPORTS_URL
         foreach ($reportsResponse as &$report) {
             // Gantikan 'file_path' dengan URL lengkap untuk file yang disimpan di storage
-            $report['file_url'] = "{$reportsUrl}/{$report['file_path']}";
+            $report['file_url'] = "{$reportsUrl}/storage/{$report['file_path']}";
         }
     
         $data = [
