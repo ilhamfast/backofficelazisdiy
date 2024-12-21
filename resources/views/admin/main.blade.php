@@ -10,6 +10,8 @@
 </head>
 
 <body class="h-screen bg-gray-100">
+    @include('sweetalert::alert')
+
     <div class="flex h-full">
         <aside class="w-56 h-full bg-white shadow-md fixed">
             @include('includes.sidebar')
@@ -76,7 +78,7 @@
                     </div>
 
                 </div>
-               
+
                 <div class="mt-10 flex gap-4">
                     <div class="w-1/2 h-1/2">
                         <canvas id="transactionChart" class="w-full h-auto"></canvas>
@@ -85,7 +87,7 @@
                         <canvas id="campaignschart" class="w-full h-auto"></canvas>
                     </div>
                 </div>
-                
+
 
 
 
@@ -152,6 +154,7 @@
     </script> --}}
     <script src="{{ asset('js/transactionChart.js') }}"></script>
     <script src="{{ asset('js/campaignchart.js') }}"></script>
+   
 
 </body>
 

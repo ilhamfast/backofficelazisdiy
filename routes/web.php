@@ -13,6 +13,7 @@ use App\Http\Controllers\PriorityController;
 use App\Http\Controllers\RecommendedController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\ZakatController;
+use App\Http\Controllers\ReportsController;
 
 // Route::get('/', function () {
 //     return view('admin.main');
@@ -83,4 +84,8 @@ Route::middleware('auth.api')->group(function () {
     Route::delete('/latestNews/delete/{id}', [KabarTerbaruController::class, 'destroy'])->name('news.destroy');
     Route::get('/latestNews/campaign', [CampaignNewsController::class, 'index'])->name('newscampaign.index');
     Route::post('/latestNews/campaign/{id}', [CampaignNewsController::class, 'setNews'])->name('newsCampaign.setNews');
+
+    //reports
+    Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
+    Route::post('/upload-reports', [ReportsController::class, 'store'])->name('reports.store');
 });

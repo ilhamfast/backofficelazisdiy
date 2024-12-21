@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    const API_URL = "http://103.23.103.43/lazismuDIY/backendLazismuDIY/public/api/transactions";
+    const API_URL = "https://ws.jalankebaikan.id/api/transactions";
 
     // Fungsi untuk mendapatkan semua data dari API dengan pagination
     async function fetchAllTransactions(url, transactions = []) {

@@ -17,7 +17,6 @@ class AuthController extends Controller
 
         return view('auth.login');
     }
-
     
 
     /**
@@ -31,9 +30,10 @@ class AuthController extends Controller
         $loginAdmin = "{$baseUrl}/login-admin";
 
         try {
-            // Kirim request login API
+            // // Kirim request login API
             $response = Http::asJson()->post($loginAdmin, $credentials);
-
+            //   $response = Http::timeout(30)->asJson()->post($loginAdmin, $credentials);
+            
             // Cek response
             if ($response->successful()) {
                 $responseData = $response->json();

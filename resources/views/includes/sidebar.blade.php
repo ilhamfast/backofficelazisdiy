@@ -125,6 +125,11 @@
                     </a>
                 </div>
             </div>
+            <a href="{{ route('reports.index') }}"
+                class="w-full flex items-center px-8 py-2 hover:bg-orange-200 rounded-md transition duration-300 transform hover:scale-105 mb-2 {{ Request::routeIs('reports.index') ? 'ml-5 bg-orange-300 underline underline-offset-2' : '' }}">
+                <img src="{{ asset('assets/img/document.svg') }}" alt="" class="w-7 mr-2">
+                <li class="font-semibold">Laporan</li>
+            </a>
         </ul>
     </div>
 
@@ -132,7 +137,7 @@
     <form method="POST" action="{{ route('logout') }}" class="w-full">
         @csrf
         <button type="submit"
-            class="w-full flex items-center px-8 py-2 hover:bg-orange-200 rounded-md transition duration-300 transform hover:scale-105 mb-4">
+            class="w-full flex items-center px-8 py-2 hover:bg-orange-200 hover:overflow-hidden rounded-md transition duration-300 transform hover:scale-105 mb-4">
             <img src="{{ asset('assets/img/logout.svg') }}" alt="" class="w-7 mr-2">
             <span class="font-semibold">Logout</span>
         </button>
