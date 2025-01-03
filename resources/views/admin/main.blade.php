@@ -27,7 +27,7 @@
             <!-- Content -->
             <main class="p-4 mt-10"> <!-- Padding top for the main content -->
                 <h1 class="font-bold text-2xl">Dashboard</h1>
-                <div class="grid gap-4 grid-cols-3">
+                <div class="grid gap-4 grid-cols-4">
 
                     <div class="bg-gradient-to-tr from-green-600 to-slate-700/50 rounded-md shadow-md p-4 mt-5">
                         <!-- SVG di belakang -->
@@ -74,6 +74,24 @@
                         <span class="font-bold text-white relative z-10">Jumlah Transaksi</span>
                         <div class="font-bold text-white relative z-10">
                             {{ number_format($totalTransaksi, 0, ',', '.') }}</div>
+
+                    </div>
+
+                    <div class="bg-gradient-to-tr from-emerald-700 to-slate-600/50 rounded-md shadow-md p-4 mt-5">
+                        <!-- SVG di belakang -->
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor"
+                            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white/20 size-32">>
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5m.75-9 3-3 2.148 2.148A12.061 12.061 0 0 1 16.5 7.605" />
+                        </svg>
+
+
+                        <!-- Konten Depan -->
+                        <span class="font-bold text-white relative z-10">Total Tagihan ICT</span>
+                        <div class="font-bold text-white relative z-10">
+                            Rp {{ number_format($billings, 0, ',', '.') ?? "Rp 0" }}
+                        </div>
 
                     </div>
 

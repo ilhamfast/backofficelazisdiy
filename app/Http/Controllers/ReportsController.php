@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Http;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -26,9 +27,9 @@ class ReportsController extends Controller
             $reportUrl .= "?month={$month}";
         }
     
-        // Tambahkan parameter year jika ada
+       // Jika parameter year ada dan month sudah ada di URL, gunakan "&" untuk menggabungkannya
         if (!empty($year)) {
-            $reportUrl .= "&year={$year}";
+            $reportUrl .= empty($month) ? "?year={$year}" : "&year={$year}";
         }
     
         $reportsResponse = Http::get($reportUrl)->json();
@@ -37,6 +38,7 @@ class ReportsController extends Controller
         foreach ($reportsResponse as &$report) {
             // Gantikan 'file_path' dengan URL lengkap untuk file yang disimpan di storage
             $report['file_url'] = "{$reportsUrl}/storage/{$report['file_path']}";
+            $report['created_at'] = Carbon::parse($report['created_at'])->setTimezone(config('app.timezone'))->format('Y-m-d H:i:s');
         }
     
         $data = [
@@ -45,6 +47,47 @@ class ReportsController extends Controller
     
         return view('Reports.index', $data);
     }
+    
+    // public function index(Request $request)
+    // {
+    //     $baseUrl = env('API_BASE_URL');  // Base URL API (misalnya untuk mengambil laporan)
+    //     $reportsUrl = env('REPORTS_URL'); // URL untuk akses file PDF (misalnya untuk akses storage)
+    
+    //     $reportUrl = "{$baseUrl}/get-report";  // URL untuk API laporan
+    
+    //     $month = $request->get('month', '');  // Mendapatkan bulan dari request
+    //     $year = $request->get('year', '');    // Mendapatkan tahun dari request
+    
+    //     // Menambahkan parameter month dan year jika ada
+    //     if (!empty($month)) {
+    //         $reportUrl .= "?month={$month}";
+    //     }
+    
+    //     if (!empty($year)) {
+    //         $reportUrl .= empty($month) ? "?year={$year}" : "&year={$year}";
+    //     }
+    
+    //     // Mengambil data laporan dari API
+    //     $reportsResponse = Http::get($reportUrl)->json();
+    
+    //     // Mengubah path file menjadi URL lengkap dengan REPORTS_URL
+    //     foreach ($reportsResponse as &$report) {
+    //         // Gantikan 'file_path' dengan URL lengkap untuk file yang disimpan di storage
+    //         $report['file_url'] = "{$reportsUrl}/storage/{$report['file_path']}";
+
+    //                 // Format tanggal 'created_at' menjadi 'Y-m-d H:i:s'
+    //         // 
+    //     }
+    
+      
+    
+    //     // Menyiapkan data yang akan dikirimkan ke view
+    //     $data = [
+    //         'reports' => $reportsResponse,
+    //     ];
+    
+    //     return view('Reports.index', $data);  // Mengirim data ke view
+    // }
     
 
     /**

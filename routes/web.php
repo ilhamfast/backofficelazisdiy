@@ -14,6 +14,7 @@ use App\Http\Controllers\RecommendedController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\ZakatController;
 use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\TagihanController;
 
 // Route::get('/', function () {
 //     return view('admin.main');
@@ -88,4 +89,7 @@ Route::middleware('auth.api')->group(function () {
     //reports
     Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
     Route::post('/upload-reports', [ReportsController::class, 'store'])->name('reports.store');
+
+     //reports
+     Route::get('/billings', [TagihanController::class, 'index'])->name('tagihan.index');
 });

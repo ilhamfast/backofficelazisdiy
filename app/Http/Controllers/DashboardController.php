@@ -23,6 +23,7 @@ class DashboardController extends Controller
         $transactionsUrl = "{$baseUrl}/transactions";
         $zakatsUrl = "{$baseUrl}/zakats";
         $infaksUrl = "{$baseUrl}/infaks";
+        $billingssUrl = "{$baseUrl}/total-for-ict";
 
         // Panggil API untuk masing-masing data menggunakan Http::get
         $campaignsResponse = Http::get($campaignsUrl);
@@ -30,17 +31,20 @@ class DashboardController extends Controller
         $transactionsResponse = Http::get($transactionsUrl);
         $zakatsResponse = Http::get($zakatsUrl);
         $infaksResponse = Http::get($infaksUrl);
-
+        $billingResponse = Http::get($billingssUrl);
+        
         $error = null;
 
         // Pastikan respons API berhasil
-        if ($campaignsResponse->successful() && $usersResponse->successful() && $transactionsResponse->successful() && $zakatsResponse->successful() && $infaksResponse->successful()) {
+        if ($campaignsResponse->successful() && $usersResponse->successful() && $transactionsResponse->successful() && $zakatsResponse->successful() && $infaksResponse->successful() && $billingResponse->successful()) {
             // Ambil data JSON dari respons API
             $campaigns = $campaignsResponse->json();
             $users = $usersResponse->json();
             $transactions = $transactionsResponse->json();
             $zakats = $zakatsResponse->json();
             $infaks = $infaksResponse->json();
+            $billings = $billingResponse->json()['total_for_ict'] ?? 0;
+          
 
             $totalCurrentAmount = 0;
             $totalUser = 0;
@@ -76,6 +80,7 @@ class DashboardController extends Controller
         return view('admin.main', compact(
             'campaigns',
             'users',
+            'billings',
             'transactions',
             'zakats',
             'infaks',

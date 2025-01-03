@@ -96,6 +96,13 @@
             </div>
 
             <!-- Transaksi -->
+            <a href="{{ route('tagihan.index') }}"
+                class="w-full flex items-center px-8 py-2 hover:bg-orange-200 rounded-md transition duration-300 transform hover:scale-105 mb-2 {{ Request::routeIs('tagihan.index') ? 'ml-5 bg-orange-300 underline underline-offset-2' : '' }}">
+                <img src="{{ asset('assets/img/credit.svg') }}" alt="" class="w-7 mr-2">
+                <li class="font-semibold">Tagihan</li>
+            </a>
+
+            <!-- Transaksi -->
             <a href="{{ route('transaksi.index') }}"
                 class="w-full flex items-center px-8 py-2 hover:bg-orange-200 rounded-md transition duration-300 transform hover:scale-105 mb-2 {{ Request::routeIs('transaksi.index') ? 'ml-5 bg-orange-300 underline underline-offset-2' : '' }}">
                 <img src="{{ asset('assets/img/cash.svg') }}" alt="" class="w-7 mr-2">

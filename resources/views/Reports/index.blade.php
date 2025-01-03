@@ -46,9 +46,75 @@
                     <div class="mx-5">
                         <div class="flex justify-between items-center mb-6">
                             <div class="mt-2">
-                                <h1 class="text-2xl font-semibold text-gray-900">Laporan</h1>
-                            </div>
+                                <h1 class="text-2xl font-semibold text-gray-900 mb-4">Laporan</h1>
+                                <div class="flex gap-4">
+                                    <div>
+                                        <label for="month">Bulan:</label>
+                                        <select id="month" onchange="window.location.href=this.value"
+                                            class="px-1 py-1 rounded-md shadow-md ml-2">
+                                            <!-- Default empty option to reset the month -->
+                                            <option value="{{ route('reports.index', ['year' => request('year')]) }}">
+                                                Pilih
+                                                Bulan</option>
+                                            <option
+                                                value="{{ route('reports.index', ['month' => '01', 'year' => request('year')]) }}"
+                                                {{ request('month') == '01' ? 'selected' : '' }}>Januari</option>
+                                            <option
+                                                value="{{ route('reports.index', ['month' => '02', 'year' => request('year')]) }}"
+                                                {{ request('month') == '02' ? 'selected' : '' }}>Februari</option>
+                                            <option
+                                                value="{{ route('reports.index', ['month' => '03', 'year' => request('year')]) }}"
+                                                {{ request('month') == '03' ? 'selected' : '' }}>Maret</option>
+                                            <option
+                                                value="{{ route('reports.index', ['month' => '04', 'year' => request('year')]) }}"
+                                                {{ request('month') == '04' ? 'selected' : '' }}>April</option>
+                                            <option
+                                                value="{{ route('reports.index', ['month' => '05', 'year' => request('year')]) }}"
+                                                {{ request('month') == '05' ? 'selected' : '' }}>Mei</option>
+                                            <option
+                                                value="{{ route('reports.index', ['month' => '06', 'year' => request('year')]) }}"
+                                                {{ request('month') == '06' ? 'selected' : '' }}>Juni</option>
+                                            <option
+                                                value="{{ route('reports.index', ['month' => '07', 'year' => request('year')]) }}"
+                                                {{ request('month') == '07' ? 'selected' : '' }}>Juli</option>
+                                            <option
+                                                value="{{ route('reports.index', ['month' => '08', 'year' => request('year')]) }}"
+                                                {{ request('month') == '08' ? 'selected' : '' }}>Agustus</option>
+                                            <option
+                                                value="{{ route('reports.index', ['month' => '09', 'year' => request('year')]) }}"
+                                                {{ request('month') == '09' ? 'selected' : '' }}>September</option>
+                                            <option
+                                                value="{{ route('reports.index', ['month' => '10', 'year' => request('year')]) }}"
+                                                {{ request('month') == '10' ? 'selected' : '' }}>Oktober</option>
+                                            <option
+                                                value="{{ route('reports.index', ['month' => '11', 'year' => request('year')]) }}"
+                                                {{ request('month') == '11' ? 'selected' : '' }}>November</option>
+                                            <option
+                                                value="{{ route('reports.index', ['month' => '12', 'year' => request('year')]) }}"
+                                                {{ request('month') == '12' ? 'selected' : '' }}>Desember</option>
+                                        </select>
+                                    </div>
 
+                                    <div>
+                                        <label for="year">Tahun:</label>
+                                        <select id="year" onchange="window.location.href=this.value"
+                                            class="px-1 py-1 rounded-md shadow-md ml-2">
+                                            <!-- Default empty option to reset the year -->
+                                            <option
+                                                value="{{ route('reports.index', ['month' => request('month')]) }}">
+                                                Pilih
+                                                Tahun</option>
+                                            @for ($year = 2000; $year <= 2230; $year++)
+                                                <option
+                                                    value="{{ route('reports.index', ['year' => $year, 'month' => request('month')]) }}"
+                                                    {{ request('year') == $year ? 'selected' : '' }}>
+                                                    {{ $year }}
+                                                </option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                             <div x-data="{ isOpen: false }" class="relative mt-10">
 
                                 <!-- Tombol untuk membuka modal -->
@@ -81,10 +147,14 @@
                                                 class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                 File
                                             </th>
+                                            <th
+                                                class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Tanggal upload
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody class="bg-white divide-y divide-gray-200">
-                                        @foreach ($reports as $index => $report)
+                                        @forelse ($reports as $index => $report)
                                             @php
                                                 $globalIndex = $index + 1;
                                             @endphp
@@ -102,29 +172,41 @@
                                                             class="w-7 h-7">
                                                     </a>
                                                 </td>
-                                                {{-- <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Rp {{ number_format($report['distribution'], 0, ',', '.') }}
-                                                </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    <div class="flex items-center gap-2">
-                                                        <div x-data="{ isOpen: false }">
-                                                            <button class="text-yellow-800" type="button"
-                                                                value="{{ $report['id'] }}" @click="isOpen = true">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                                    viewBox="0 0 24 24" stroke-width="1.5"
-                                                                    stroke="currentColor" class="w-5">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                                                                </svg>
-                                                            </button>
-                                                            <div>
-                                                                @include('Zakat.edit')
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td> --}}
+                                                    {{ $report['created_at'] }}
+                                                </td>
                                             </tr>
-                                        @endforeach
+                                        @empty
+                                            <tr>
+                                                <td colspan="4" class="px-6 py-4 text-center text-gray-500">
+                                                    <div class="flex flex-col items-center justify-center space-y-2">
+                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                            class="h-8 w-8 text-gray-400" fill="none"
+                                                            viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                        </svg>
+                                                        <p class="text-gray-500">
+                                                            @if (request('month') && request('year'))
+                                                                Tidak ada data ditemukan untuk pencarian bulan ke
+                                                                <strong>"{{ request('month') }}"</strong> pada
+                                                                tahun
+                                                                <strong>"{{ request('year') }}"</strong>.
+                                                            @elseif (request('month'))
+                                                                Tidak ada data ditemukan untuk pencarian bulan ke
+                                                                <strong>"{{ request('month') }}"</strong>.
+                                                            @elseif (request('year'))
+                                                                Tidak ada data ditemukan untuk kategori pada tahun
+                                                                <strong>"{{ request('year') }}"</strong>.
+                                                            @else
+                                                                Data yang anda cari atau filter tidak ditemukan.
+                                                            @endif
+                                                        </p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>
@@ -233,7 +315,26 @@
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.all.min.js"></script>
+    <script>
+        function submitForm() {
+            // Ambil bulan dan tahun dari input
+            const date = document.getElementById('month').value;
 
+            // Jika ada tanggal yang dipilih
+            if (date) {
+                // Ubah input bulan menjadi bulan dan tahun dalam format yang diinginkan
+                const [year, month] = date.split('-');
+
+                // Set nilai input month dan year pada form
+                const form = document.getElementById('reportForm');
+                form.querySelector('[name="month"]').value = month;
+                form.querySelector('[name="year"]').value = year;
+
+                // Submit form secara otomatis
+                form.submit();
+            }
+        }
+    </script>
 </body>
 
 </html>

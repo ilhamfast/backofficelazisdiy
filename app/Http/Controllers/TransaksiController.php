@@ -28,13 +28,19 @@ class TransaksiController extends Controller
         if ($category !== 'all') {
             $queryParams['category'] = $category;
         }
-
         // Fetch transactions data
         $transResponse = Http::get($transUrl, $queryParams)->json();
         $transactions = collect($transResponse['data'] ?? [])
             ->filter(fn($trans) => !empty($trans['transaction_amount'])) // Hanya yang memiliki transaksi
             ->map(function ($trans) {
                 $trans['campaign_name'] = $trans['campaign']['campaign_name'] ?? 'No Campaign';
+                if (isset($trans['campaign']['campaign_name'])) {
+                    $trans['campaign_name'] = $trans['campaign']['campaign_name'] ?? 'No Campaign';
+                } elseif (isset($trans['zakat']['category_name'])) {
+                    $trans['zakat_name'] = $trans['zakat']['category_name'] ?? 'No zakat';
+                } elseif (isset($trans['infak']['category_name'])) {
+                    $trans['infak_name'] = $trans['infak']['category_name'] ?? 'No infak';
+                }
                 return $trans;
             });
 
@@ -82,10 +88,11 @@ class TransaksiController extends Controller
         // Sort data by transaction_date (if exists) or created_at
         $allData = $allData->sortByDesc('transaction_date');
 
-        // Get unique categories for filter dropdown
-        $categories = collect(['all', 'zakat', 'infak', 'campaign'])->merge(
-            $allData->pluck('category')->unique()
-        );
+        $categories = collect(['all', 'zakat', 'infak', 'campaign'])
+        ->merge($allData->pluck('category'))
+        ->unique()
+        ->values(); // Reset index untuk memastikan struktur bersih
+
 
         // Prepare pagination (adjust manually as merging data may disrupt original pagination)
         $paginationData = [

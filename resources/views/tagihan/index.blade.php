@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     {{-- @vite('resources/css/app.css') --}}
-    <title>Transaksi</title>
+    <title>Tagihan</title>
 </head>
 
 <body class="h-screen bg-gray-100 overflow-x-hidden">
@@ -28,8 +28,8 @@
                 <div class="bg-white rounded-md shadow-xl">
                     <div class="mx-5">
                         <div class="flex justify-between items-center mb-3">
-                            <div class="mt-2">
-                                <h1 class="text-2xl font-semibold text-gray-900">Transaksi</h1>
+                            <h1 class="text-2xl font-semibold text-gray-900">Tagihan</h1>
+                            <div class="mt-2 flex gap-2">
                                 <div class="mt-2">
                                     <label for="category" class="block mb-2 text-sm font-medium text-gray-700">Filter
                                         kategori</label>
@@ -44,25 +44,26 @@
                                     </select>
 
                                 </div>
+                                <div class="mt-2">
+                                    <label for="status" class="block mb-2 text-sm font-medium text-gray-700">Filter
+                                        status</label>
+                                    <select name="status" id="status"
+                                        class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                        <option value="all">all</option>
+                                        <option value="1">sukses</option>
+                                        <option value="0">gagal</option>
+                                    </select>
+                                </div>
+
+
+
                             </div>
 
-                            <!-- Form Pencarian -->
-                            <div class="relative mt-2 w-72">
-                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke-width="1.5" stroke="currentColor" class="size-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                                    </svg>
-                                </div>
-                                <input type="text" name="search" id="searchInput"
-                                    class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                    placeholder="cari id invoice atau nama campaign...">
-                            </div>
+
                         </div>
                         <div class="overflow-auto w-full">
                             <div class="max-h-[calc(100vh-270px)] overflow-y-auto">
-                                <table id="transaction-table" class="min-w-full bg-white table-auto">
+                                <table id="billings-table" class="min-w-full bg-white table-auto">
                                     <thead class="sticky top-0 z-10">
                                         <!-- Table Header -->
                                         <tr>
@@ -72,23 +73,15 @@
                                             </th>
                                             <th
                                                 class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                ID Invoice
+                                                username
                                             </th>
                                             <th
                                                 class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Kategori
+                                                No Hp
                                             </th>
                                             <th
                                                 class="px-6 py-3 border-b text-center border-gray-200 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Nama campaign/ZIS
-                                            </th>
-                                            <th
-                                                class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Nama Donatur
-                                            </th>
-                                            <th
-                                                class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                No HP
+                                                Tagihan
                                             </th>
                                             <th
                                                 class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -96,23 +89,27 @@
                                             </th>
                                             <th
                                                 class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Metode </th>
-                                            <th
-                                                class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Donasi 
+                                                Kategori
                                             </th>
                                             <th
-                                            class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Tanggal transaksi </th>
+                                                class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Nama campaign/ZIS
+                                            </th>
                                             <th
                                                 class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Biaya admin 
+                                                Tanggal tagihan </th>
+                                            <th
+                                                class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                No va
                                             </th>
+                                            <th
+                                                class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Status </th>
                                         </tr>
                                     </thead>
                                     <tbody class="bg-white divide-y divide-gray-200">
 
-                                        @foreach ($transactions as $trans)
+                                        @foreach ($billings as $bills)
                                             <!-- Table Rows -->
                                             <tr>
                                                 <td
@@ -120,42 +117,43 @@
                                                     {{ ($pagination['current_page'] - 1) * $pagination['per_page'] + $loop->iteration }}
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    {{ $trans['invoice_id'] ?? 'N/A' }}
+                                                    {{ $bills['username'] ?? 'N/A' }}
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    {{ $trans['category'] }}
+                                                    {{ $bills['phone_number'] }}
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    @if (isset($trans['campaign_name']))
-                                                        {{ $trans['campaign_name'] }}
-                                                    @elseif(isset($trans['zakat_name']))
-                                                        {{ $trans['zakat_name'] }}
-                                                    @elseif(isset($trans['infak_name']))
-                                                        {{ $trans['infak_name'] }}
+                                                    Rp {{ number_format($bills['billing_amount'], 0, ',', '.') }}
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                    {{ $bills['message'] ?? '-' }}
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                    {{ $bills['category'] ?? '-' }}
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                    @if (isset($bills['campaign_name']))
+                                                        {{ $bills['campaign_name'] }}
+                                                    @elseif(isset($bills['zakat_name']))
+                                                        {{ $bills['zakat_name'] }}
+                                                    @elseif(isset($bills['infak_name']))
+                                                        {{ $bills['infak_name'] }}
                                                     @else
                                                         -
                                                     @endif
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    {{ $trans['donatur'] ?? '-' }}
+                                                    {{ $bills['billing_date'] ?? '-' }}
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    {{ $trans['phone_number'] ?? '-' }}
+                                                    {{ $bills['va_number'] ?? '-' }}
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    {{ $trans['message'] ?? '-' }}
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    {{ $trans['method'] ?? '-' }}
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    {{ ($trans['for_ict']) }}
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    {{ $trans['transaction_date'] ?? '-' }}
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                   Rp {{ $trans['for_ict'] !== null ? number_format($trans['for_ict'], 0, ',', '.') : '0' }}
+                                                    @if ($bills['success'] == 1)
+                                                        <p class="text-green-500 text-center font-semibold">sukses</p>
+                                                    @else
+                                                        <p class="text-red-500 text-center font-semibold">gagal</p>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -278,7 +276,7 @@
                                         @endphp
 
                                         <!-- First Page -->
-                                        @if ($pagination['last_page'] > 7)
+                                        @if ($pagination['last_page'] > 4)
                                             <a href="?page=1"
                                                 class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 {{ 1 == $pagination['current_page'] ? 'bg-indigo-600 text-white' : '' }}">
                                                 1
@@ -553,9 +551,10 @@
     </script> --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const searchInput = document.getElementById('searchInput');
+
             const categorySelect = document.getElementById('category');
-            const transactionTable = document.getElementById('transaction-table');
+            const statusSelect = document.getElementById('status');
+            const transactionTable = document.getElementById('billings-table');
             const pagination = document.getElementById('pagination');
 
             // Function to update the table content
@@ -563,9 +562,10 @@
                 const tbody = transactionTable.querySelector('tbody');
                 tbody.innerHTML = '';
 
-                if (data.transactions.length === 0) {
+                if (data.billings.length === 0) {
                     // Add "no data found" message spanning all columns
                     const columnCount = transactionTable.querySelector('thead tr').childElementCount;
+
                     const noDataRow = `
                 <tr>
                     <td colspan="${columnCount}" class="px-6 py-8 text-center text-gray-500">
@@ -588,52 +588,59 @@
                 // Show pagination when there is data
                 pagination.style.display = 'block';
 
-                data.transactions.forEach((trans, index) => {
+                data.billings.forEach((bills, index) => {
                     const rowNumber = (data.pagination.current_page - 1) * data.pagination.per_page +
                         index + 1;
-                     // Set campaign, zakat, or infak name
+
+                    // Set campaign, zakat, or infak name
                     let nameHTML = '-'; // Default value
-                    if (trans.campaign_name) {
-                        nameHTML = trans.campaign_name;
-                    } else if (trans.zakat_name) {
-                        nameHTML = trans.zakat_name;
-                    } else if (trans.infak_name) {
-                        nameHTML = trans.infak_name;
+                    if (bills.campaign_name) {
+                        nameHTML = bills.campaign_name;
+                    } else if (bills.zakat_name) {
+                        nameHTML = bills.zakat_name;
+                    } else if (bills.infak_name) {
+                        nameHTML = bills.infak_name;
                     }
+
+                    // Set success status based on bills.success
+                    let statusHTML = '';
+                    if (bills.success == 1) {
+                        statusHTML = '<p class="text-green-500 text-center font-semibold">sukses</p>';
+                    } else {
+                        statusHTML = '<p class="text-red-500 text-center font-semibold">gagal</p>';
+                    }
+
                     const row = `
                 <tr>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         ${rowNumber}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        ${trans.invoice_id}
+                        ${bills.username}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        ${trans.category}
+                        ${bills.phone_number}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        ${nameHTML}
+                         Rp ${new Intl.NumberFormat('id-ID').format(bills.billing_amount)}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        ${trans.donatur}
+                        ${bills.message}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        ${trans.phone_number}
+                        ${bills.category}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        ${trans.message ? trans.message : '-'}
+                         ${nameHTML}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        ${trans.method}
+                        ${bills.billing_date}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        Rp ${new Intl.NumberFormat('id-ID').format(trans.transaction_amount)}
+                        ${bills.va_number}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        ${trans.transaction_date}
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                         Rp ${new Intl.NumberFormat('id-ID').format(trans.for_ict)}
+                         ${statusHTML} 
                     </td>
                 </tr>
             `;
@@ -677,44 +684,6 @@
                 attachPaginationHandlers();
             };
 
-            // Function to generate pagination buttons
-            // const generatePaginationButtons = (paginationData) => {
-            //     let buttons = '';
-
-            //     // Previous button
-            //     if (paginationData.current_page > 1) {
-            //         buttons += `
-        //     <a href="#" data-page="${paginationData.current_page - 1}" 
-        //        class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
-        //         <span>Previous</span>
-        //     </a>
-        //     `;
-            //     }
-
-            //     // Page numbers
-            //     for (let i = 1; i <= paginationData.last_page; i++) {
-            //         buttons += `
-        //     <a href="#" data-page="${i}"
-        //        class="relative inline-flex items-center px-4 py-2 text-sm font-medium ${i === paginationData.current_page 
-        //            ? 'bg-indigo-600 text-white' 
-        //            : 'text-gray-900'} ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
-        //         ${i}
-        //     </a>
-        //      `;
-            //     }
-
-            //     // Next button
-            //     if (paginationData.current_page < paginationData.last_page) {
-            //         buttons += `
-        //     <a href="#" data-page="${paginationData.current_page + 1}"
-        //        class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
-        //         <span>Next</span>
-        //     </a>
-        //      `;
-            //     }
-
-            //     return buttons;
-            // };
 
             // Function to generate pagination buttons with ellipsis
             const generatePaginationButtons = (paginationData) => {
@@ -747,7 +716,7 @@
         <span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 ring-1 ring-inset ring-gray-300">
             ...
         </span>
-    `;
+     `;
 
                 // Always show first page
                 buttons += getPageButton(1, currentPage === 1);
@@ -814,19 +783,20 @@
             // Function to update URL with current filters
             const updateURL = () => {
                 const searchParams = new URLSearchParams(window.location.search);
-                const currentSearch = searchInput.value;
                 const currentCategory = categorySelect.value;
+                const currentStatus = statusSelect.value;
 
-                if (currentSearch) {
-                    searchParams.set('search', currentSearch);
-                } else {
-                    searchParams.delete('search');
-                }
+
 
                 if (currentCategory !== 'all') {
                     searchParams.set('category', currentCategory);
                 } else {
                     searchParams.delete('category');
+                }
+                if (currentStatus !== 'all') {
+                    searchParams.set('success', currentStatus); // Kirim 1 atau 0
+                } else {
+                    searchParams.delete('success');
                 }
 
                 const newUrl =
@@ -836,24 +806,28 @@
 
             // Function to fetch data with combined filters
             const fetchData = async (page = 1) => {
-                const searchQuery = searchInput.value;
+
                 const selectedCategory = categorySelect.value;
+                const selectedStatus = statusSelect.value;
+
+                // console.log('Selected Status:', selectedStatus); // Debugging: Cek nilai selectedStatus
 
                 const params = new URLSearchParams({
                     page: page,
                     ajax: 1
                 });
 
-                if (searchQuery) {
-                    params.append('search', searchQuery);
-                }
+
 
                 if (selectedCategory !== 'all') {
                     params.append('category', selectedCategory);
                 }
+                if (selectedStatus !== 'all') {
+                    params.append('success', selectedStatus);
+                }
 
                 try {
-                    const response = await fetch(`/transaksi?${params.toString()}`);
+                    const response = await fetch(`/billings?${params.toString()}`);
                     const data = await response.json();
                     updateTable(data);
                 } catch (error) {
@@ -877,8 +851,9 @@
             const debouncedFetch = debounce(() => fetchData(1), 300);
 
             // Event listeners for combined filtering
-            searchInput.addEventListener('input', debouncedFetch);
+
             categorySelect.addEventListener('change', () => fetchData(1));
+            statusSelect.addEventListener('change', () => fetchData(1));
 
             // Load initial data
             fetchData(1);
