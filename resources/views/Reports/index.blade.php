@@ -154,31 +154,64 @@
                                         </tr>
                                     </thead>
                                     <tbody class="bg-white divide-y divide-gray-200">
-                                        @forelse ($reports as $index => $report)
-                                            @php
-                                                $globalIndex = $index + 1;
-                                            @endphp
+                                        @if (count($reports) > 0)
+                                            @forelse ($reports as $index => $report)
+                                                @php
+                                                    $globalIndex = $index + 1;
+                                                @endphp
+                                                <tr>
+                                                    <td
+                                                        class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                        {{ $globalIndex }}
+                                                    </td>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                        {{ $report['title'] }}</td>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                        <a href="{{ $report['file_url'] }}" target="_blank"
+                                                            data-id="{{ $report['id'] }}">
+                                                            <img src="{{ asset('assets/img/doc.svg') }}"
+                                                                alt="PDF Preview" class="w-7 h-7">
+                                                        </a>
+                                                    </td>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                        {{ $report['created_at'] }}
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="4" class="px-6 py-4 text-center text-gray-500">
+                                                        <div
+                                                            class="flex flex-col items-center justify-center space-y-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                class="h-8 w-8 text-gray-400" fill="none"
+                                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                            </svg>
+                                                            <p class="text-gray-500">
+                                                                @if (request('month') && request('year'))
+                                                                    Tidak ada data ditemukan untuk pencarian bulan ke
+                                                                    <strong>"{{ request('month') }}"</strong> pada
+                                                                    tahun
+                                                                    <strong>"{{ request('year') }}"</strong>.
+                                                                @elseif (request('month'))
+                                                                    Tidak ada data ditemukan untuk pencarian bulan ke
+                                                                    <strong>"{{ request('month') }}"</strong>.
+                                                                @elseif (request('year'))
+                                                                    Tidak ada data ditemukan untuk kategori pada tahun
+                                                                    <strong>"{{ request('year') }}"</strong>.
+                                                                @else
+                                                                    Data yang anda cari atau filter tidak ditemukan.
+                                                                @endif
+                                                            </p>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforelse
+                                        @else
                                             <tr>
-                                                <td
-                                                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                                    {{ $globalIndex }}
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    {{ $report['title'] }}</td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    <a href="{{ $report['file_url'] }}" target="_blank"
-                                                        data-id="{{ $report['id'] }}">
-                                                        <img src="{{ asset('assets/img/doc.svg') }}" alt="PDF Preview"
-                                                            class="w-7 h-7">
-                                                    </a>
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    {{ $report['created_at'] }}
-                                                </td>
-                                            </tr>
-                                        @empty
-                                            <tr>
-                                                <td colspan="4" class="px-6 py-4 text-center text-gray-500">
+                                                <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500">
                                                     <div class="flex flex-col items-center justify-center space-y-2">
                                                         <svg xmlns="http://www.w3.org/2000/svg"
                                                             class="h-8 w-8 text-gray-400" fill="none"
@@ -188,25 +221,12 @@
                                                                 d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                         </svg>
                                                         <p class="text-gray-500">
-                                                            @if (request('month') && request('year'))
-                                                                Tidak ada data ditemukan untuk pencarian bulan ke
-                                                                <strong>"{{ request('month') }}"</strong> pada
-                                                                tahun
-                                                                <strong>"{{ request('year') }}"</strong>.
-                                                            @elseif (request('month'))
-                                                                Tidak ada data ditemukan untuk pencarian bulan ke
-                                                                <strong>"{{ request('month') }}"</strong>.
-                                                            @elseif (request('year'))
-                                                                Tidak ada data ditemukan untuk kategori pada tahun
-                                                                <strong>"{{ request('year') }}"</strong>.
-                                                            @else
-                                                                Data yang anda cari atau filter tidak ditemukan.
-                                                            @endif
+                                                            Tidak ada data yang tersedia
                                                         </p>
                                                     </div>
                                                 </td>
                                             </tr>
-                                        @endforelse
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>

@@ -123,12 +123,12 @@
                     <a href="{{ route('news.index') }}"
                         class="ml-10 flex px-8 py-2 text-sm text-gray-700 hover:bg-orange-200 rounded-tl-md rounded-bl-md transition duration-200 mb-2 {{ Request::routeIs('news.index') ? 'bg-orange-200 font-semibold' : '' }}">
                         <img src="{{ asset('assets/img/kabarterbaru.svg') }}" alt="" class="w-5 mr-2">
-                        <span>List news</span>
+                        <span>List kabar terbaru</span>
                     </a>
                     <a href="{{ route('newscampaign.index') }}"
                         class="ml-10 flex px-8 py-2 text-sm text-gray-700 hover:bg-orange-200 rounded-tl-md rounded-bl-md transition duration-200 mb-2 {{ Request::routeIs('newscampaign.index') ? 'bg-orange-200 font-semibold' : '' }}">
                         <img src="{{ asset('assets/img/listnews.svg') }}" alt="" class="w-5 mr-2">
-                        <span>News</span>
+                        <span>Kabar terbaru</span>
                     </a>
                 </div>
             </div>
