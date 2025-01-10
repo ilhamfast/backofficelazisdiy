@@ -108,6 +108,10 @@
                                                 class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                 Biaya admin 
                                             </th>
+                                            <th
+                                                class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Asal transaksi
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody class="bg-white divide-y divide-gray-200">
@@ -149,13 +153,16 @@
                                                     {{ $trans['method'] ?? '-' }}
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    {{ ($trans['for_ict']) }}
+                                                    {{ ($trans['transaction_amount']) }}
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                     {{ $trans['transaction_date'] ?? '-' }}
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                    Rp {{ $trans['for_ict'] !== null ? number_format($trans['for_ict'], 0, ',', '.') : '0' }}
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                    {{ $trans['asal_transaksi'] ?? '-' }}
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -634,6 +641,9 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                          Rp ${new Intl.NumberFormat('id-ID').format(trans.for_ict)}
+                    </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ${trans.asal_transaksi ? trans.asal_transaksi : '-'}
                     </td>
                 </tr>
             `;
