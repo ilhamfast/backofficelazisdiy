@@ -11,7 +11,7 @@ class DashboardController extends Controller
      * Display a listing of the resource.
      * 
      */
-    
+
     public function index()
     {
         // Ambil base URL dari .env
@@ -21,6 +21,7 @@ class DashboardController extends Controller
         $campaignsUrl = "{$baseUrl}/campaigns";
         $usersUrl = "{$baseUrl}/users";
         $transactionsUrl = "{$baseUrl}/transactions";
+        $totalTransaction = "{$baseUrl}/total-transaction";
         $zakatsUrl = "{$baseUrl}/zakats";
         $infaksUrl = "{$baseUrl}/infaks";
         $billingssUrl = "{$baseUrl}/total-for-ict";
@@ -32,7 +33,8 @@ class DashboardController extends Controller
         $zakatsResponse = Http::get($zakatsUrl);
         $infaksResponse = Http::get($infaksUrl);
         $billingResponse = Http::get($billingssUrl);
-        
+        $totalTransactionResponse = Http::get($totalTransaction);
+
         $error = null;
 
         // Pastikan respons API berhasil
@@ -44,34 +46,34 @@ class DashboardController extends Controller
             $zakats = $zakatsResponse->json();
             $infaks = $infaksResponse->json();
             $billings = $billingResponse->json()['total_for_ict'] ?? 0;
-          
+            $totTransaction = $totalTransactionResponse->json()['total_transaction'] ?? 0;
+         
 
-            $totalCurrentAmount = 0;
             $totalUser = 0;
 
-            // Penjumlahan untuk campaigns
-            if (!empty($campaigns['data'])) {
-                $totalCurrentAmount += collect($campaigns['data'])->sum('current_amount');
-            }
+            // // Penjumlahan untuk campaigns
+            // if (!empty($campaigns['data'])) {
+            //     $totalCurrentAmount += collect($campaigns['data'])->sum('current_amount');
+            // }
 
-            // Penjumlahan untuk zakats
-            if (!empty($zakats['data'])) {
-                $totalCurrentAmount += collect($zakats['data'])->sum('current_amount');
-            }
+            // // Penjumlahan untuk zakats
+            // if (!empty($zakats['data'])) {
+            //     $totalCurrentAmount += collect($zakats['data'])->sum('current_amount');
+            // }
 
-            // Penjumlahan untuk infaks
-            if (!empty($infaks['data'])) {
-                $totalCurrentAmount += collect($infaks['data'])->sum('current_amount');
-            }
+            // // Penjumlahan untuk infaks
+            // if (!empty($infaks['data'])) {
+            //     $totalCurrentAmount += collect($infaks['data'])->sum('current_amount');
+            // }
 
             $totalUser = $users['total'];
             $totalTransaksi = $transactions['total'];
 
-            // dd($transactions);
+            // dd($totTransaction);
         } else {
             // Jika ada salah satu API gagal, kirimkan pesan error
             $campaigns = $users = $transactions = $zakats = $infaks = [];
-            $totalCurrentAmount = 0;
+            // $totalCurrentAmount = 0;
             $totalUser = 0;
             $error = 'Terjadi kesalahan saat mengambil data dari API.';
         }
@@ -84,7 +86,7 @@ class DashboardController extends Controller
             'transactions',
             'zakats',
             'infaks',
-            'totalCurrentAmount',
+            'totTransaction',
             'totalUser',
             'totalTransaksi',
             'error' // Kirimkan pesan error jika ada
@@ -92,47 +94,47 @@ class DashboardController extends Controller
     }
 
     public function chartData()
-{
-    $data = [];
-    $page = 1;
+    {
+        $data = [];
+        $page = 1;
 
-    // Ambil semua halaman data
-    do {
-        $response = Http::get("http://localhost/api/transactions?page=$page");
-        $transactions = $response->json();
-        
-        if (isset($transactions['data']) && count($transactions['data']) > 0) {
-            $data = array_merge($data, $transactions['data']);
-            $page++;
-        } else {
-            break;
+        // Ambil semua halaman data
+        do {
+            $response = Http::get("http://localhost/api/transactions?page=$page");
+            $transactions = $response->json();
+
+            if (isset($transactions['data']) && count($transactions['data']) > 0) {
+                $data = array_merge($data, $transactions['data']);
+                $page++;
+            } else {
+                break;
+            }
+        } while (true);
+
+        // Filter dan kelompokkan data
+        $campaigns = [];
+        $zakats = [];
+        $infaks = [];
+
+        foreach ($data as $transaction) {
+            $date = date('Y-m-d', strtotime($transaction['transaction_date']));
+            $amount = $transaction['transaction_amount'];
+
+            if ($transaction['category'] === 'campaign') {
+                $campaigns[$date] = ($campaigns[$date] ?? 0) + $amount;
+            } elseif ($transaction['category'] === 'zakat') {
+                $zakats[$date] = ($zakats[$date] ?? 0) + $amount;
+            } elseif ($transaction['category'] === 'infak') {
+                $infaks[$date] = ($infaks[$date] ?? 0) + $amount;
+            }
         }
-    } while (true);
 
-    // Filter dan kelompokkan data
-    $campaigns = [];
-    $zakats = [];
-    $infaks = [];
-
-    foreach ($data as $transaction) {
-        $date = date('Y-m-d', strtotime($transaction['transaction_date']));
-        $amount = $transaction['transaction_amount'];
-
-        if ($transaction['category'] === 'campaign') {
-            $campaigns[$date] = ($campaigns[$date] ?? 0) + $amount;
-        } elseif ($transaction['category'] === 'zakat') {
-            $zakats[$date] = ($zakats[$date] ?? 0) + $amount;
-        } elseif ($transaction['category'] === 'infak') {
-            $infaks[$date] = ($infaks[$date] ?? 0) + $amount;
-        }
+        return response()->json([
+            'campaigns' => $campaigns,
+            'zakats' => $zakats,
+            'infaks' => $infaks,
+        ]);
     }
-
-    return response()->json([
-        'campaigns' => $campaigns,
-        'zakats' => $zakats,
-        'infaks' => $infaks,
-    ]);
-}
 
 
     /**
@@ -272,5 +274,5 @@ class DashboardController extends Controller
     //     }
     // }
 
-   
+
 }

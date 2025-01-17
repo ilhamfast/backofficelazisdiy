@@ -41,7 +41,7 @@
                         <!-- Konten Depan -->
                         <span class="font-bold text-white relative z-10">Total Transaksi</span>
                         <div class="font-bold text-white relative z-10">Rp
-                            {{ number_format($totalCurrentAmount, 0, ',', '.') }}</div>
+                            {{ number_format($totTransaction, 0, ',', '.') }}</div>
 
                     </div>
                     <div class="bg-gradient-to-tr from-blue-600 to-slate-600/50 rounded-md shadow-md p-4 mt-5 relative">
