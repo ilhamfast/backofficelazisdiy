@@ -8,7 +8,7 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class CampaignController extends Controller
 {
-  
+
 
     public function index(Request $request)
     {
@@ -48,8 +48,9 @@ class CampaignController extends Controller
                 $campaign['category_name'] = $campaign['category']['campaign_category'] ?? 'No Category';
                 return $campaign;
             })
-            ->sortByDesc('created_at')
             ->values();
+        // dd(session()->all());
+
 
         $data = [
             'campaigns' => $campaigns,
@@ -224,7 +225,6 @@ class CampaignController extends Controller
                 $campaign['category_name'] = $campaign['category']['campaign_category'] ?? 'No Category';
                 return $campaign;
             })
-            ->sortByDesc('created_at')
             ->values();
 
         $data = [
@@ -281,7 +281,6 @@ class CampaignController extends Controller
                 $campaign['category_name'] = $campaign['category']['campaign_category'] ?? 'No Category';
                 return $campaign;
             })
-            ->sortByDesc('created_at')
             ->values();
 
         $data = [
@@ -334,6 +333,4 @@ class CampaignController extends Controller
             return redirect()->back()->withInput();
         }
     }
-
- 
 }

@@ -42,7 +42,6 @@ class RecommendedController extends Controller
                 $campaign['category_name'] = $campaign['category']['campaign_category'] ?? 'No Category';
                 return $campaign;
             })
-            ->sortByDesc('created_at')
             ->values();
 
         $data = [

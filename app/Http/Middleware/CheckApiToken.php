@@ -16,7 +16,7 @@ class CheckApiToken
     public function handle(Request $request, Closure $next): Response
     {
         // Cek apakah token API ada di session
-        if (!$request->session()->has('api_token')) {
+        if (!$request->session()->has('token')) {
             return redirect()->route('login.index')->withErrors('Silakan login terlebih dahulu.');
         }
 

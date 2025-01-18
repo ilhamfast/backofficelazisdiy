@@ -26,7 +26,7 @@ class ZakatController extends Controller
                 $zakat['created_at'] = Carbon::parse($zakat['created_at'])->toDateTimeString();
                 return $zakat;
             })
-            ->sortByDesc('created_at') // Urutkan berdasarkan tanggal terbaru
+            // ->sortByDesc('created_at') // Urutkan berdasarkan tanggal terbaru
             ->values(); // Reset index setelah pengurutan
 
         $data = [

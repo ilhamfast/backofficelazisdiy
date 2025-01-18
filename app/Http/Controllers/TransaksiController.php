@@ -85,8 +85,8 @@ class TransaksiController extends Controller
             $allData = $allData->where('category', $category);
         }
 
-        // Sort data by transaction_date (if exists) or created_at
-        $allData = $allData->sortByDesc('transaction_date');
+        // // Sort data by transaction_date (if exists) or created_at
+        // $allData = $allData->sortByDesc('transaction_date');
 
         $categories = collect(['all', 'zakat', 'infak', 'campaign'])
         ->merge($allData->pluck('category'))

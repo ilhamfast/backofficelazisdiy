@@ -211,10 +211,10 @@ class TagihanController extends Controller
                 }
             });
 
-        // Sort data by billing_date or created_at
-        $allData = $allData->sortByDesc(function ($item) {
-            return $item['billing_date'] ?? $item['created_at'];
-        });
+        // // Sort data by billing_date or created_at
+        // $allData = $allData->sortByDesc(function ($item) {
+        //     return $item['billing_date'] ?? $item['created_at'];
+        // });
 
         // Get unique categories for filter dropdown
         $categories = collect(['all', 'zakat', 'infak', 'campaign'])

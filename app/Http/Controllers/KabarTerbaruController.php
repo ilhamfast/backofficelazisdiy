@@ -40,7 +40,7 @@ class KabarTerbaruController extends Controller
 
                 return $news;
             })
-            ->sortByDesc('created_at') // Urutkan berdasarkan tanggal terbaru
+            // ->sortByDesc('created_at') // Urutkan berdasarkan tanggal terbaru
             ->values(); // Reset index setelah pengurutan
 
         $data = [

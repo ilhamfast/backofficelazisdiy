@@ -27,7 +27,7 @@ class CategoryCampaignController extends Controller
                 $category['created_at'] = Carbon::parse($category['created_at'])->toDateTimeString();
                 return $category;
             })
-            ->sortByDesc('created_at') // Urutkan berdasarkan tanggal terbaru
+            // ->sortByDesc('created_at') // Urutkan berdasarkan tanggal terbaru
             ->values(); // Reset index setelah diurutkan
 
         $data = [

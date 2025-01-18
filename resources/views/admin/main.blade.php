@@ -4,6 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <!-- Favicon -->
+    <link rel="icon" href="{{ asset('assets/img/lazismu-logo.png') }}" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
     {{-- @vite('resources/css/app.css') --}}
     <title>Dashboard</title>

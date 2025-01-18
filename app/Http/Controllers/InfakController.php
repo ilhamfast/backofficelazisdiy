@@ -26,7 +26,7 @@ class InfakController extends Controller
                 $infak['created_at'] = Carbon::parse($infak['created_at'])->toDateTimeString();
                 return $infak;
             })
-            ->sortByDesc('created_at') // Urutkan berdasarkan tanggal terbaru
+            // ->sortByDesc('created_at') // Urutkan berdasarkan tanggal terbaru
             ->values(); // Reset index setelah pengurutan
 
         $data = [

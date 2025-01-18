@@ -30,7 +30,7 @@ class PenggunaController extends Controller
         $usersResponse = Http::get($usersUrl)->json();
         // Sort data di sisi klien
         $users = collect($usersResponse['data'])
-            ->sortByDesc('created_at')
+            // ->sortByDesc('created_at')
             ->filter(function ($user) use ($search) {
                 return empty($search) || str_contains(strtolower($user['name']), strtolower($search));
             })
