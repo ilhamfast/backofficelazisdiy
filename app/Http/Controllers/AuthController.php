@@ -174,23 +174,23 @@ class AuthController extends Controller
     //     }
     // }
 
-    // public function logout(Request $request)
-    // {
-    //     // Invalidate the session
-    //     $request->session()->invalidate();
+    public function logout(Request $request)
+    {
+        // Invalidate the session
+        $request->session()->invalidate();
 
-    //     // Regenerate CSRF token
-    //     $request->session()->regenerateToken();
+        // Regenerate CSRF token
+        $request->session()->regenerateToken();
 
-    //     // Clear authentication
-    //     Auth::logout();
+        // Clear authentication
+        Auth::logout();
 
-    //     // Show logout success alert
-    //     Alert::success('Berhasil', 'Anda berhasil logout.');
+        // Show logout success alert
+        Alert::success('Berhasil', 'Anda berhasil logout.');
 
-    //     // Redirect to login page
-    //     return redirect()->route('login.index');
-    // }
+        // Redirect to login page
+        return redirect()->route('login.index');
+    }
 
     public function create()
     {
