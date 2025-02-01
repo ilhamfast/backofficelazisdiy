@@ -12,86 +12,75 @@ class DashboardController extends Controller
      * 
      */
 
-    public function index()
+    // public function index(Request $request)
+    // {
+    //     // Ambil base URL dari .env
+    //     $baseUrl = env('API_BASE_URL');
+    //     $start_date = $request->get('start_date', '');
+    //     $end_date = $request->get('end_date', '');
+
+    //     // Tentukan URL endpoint untuk masing-masing data
+
+    //     $summaryFilterUrl = "{$baseUrl}/summary";
+
+    //     if (!empty($start_date) && !empty($end_date)) {
+    //         $summaryFilterUrl .= "?start_date=($start_date)&end_date=($end_date)";
+    //     }
+
+    //     $summaryResponse = Http::get($summaryFilterUrl)->json();
+
+    //     $data = [
+    //         'totalTransaction' => $summaryResponse['total_transaction'],
+    //         'countTransaction' => $summaryResponse['total_transaction_count'],
+    //         'countBilling' => $summaryResponse['total_billing_count'],
+    //         'totalDonatur' => $summaryResponse['total_donatur'],
+    //         'totalMigration' => $summaryResponse['total_migration'],
+    //         'totalQris' => $summaryResponse['total_qris'],
+    //         'totalForIct' => $summaryResponse['total_for_ict'],
+    //     ];
+
+    //     return view('admin.main', $data);
+    // }
+
+    public function index(Request $request)
     {
         // Ambil base URL dari .env
         $baseUrl = env('API_BASE_URL');
 
-        // Tentukan URL endpoint untuk masing-masing data
-        $campaignsUrl = "{$baseUrl}/campaigns";
-        $usersUrl = "{$baseUrl}/users";
-        $transactionsUrl = "{$baseUrl}/transactions";
-        $totalTransaction = "{$baseUrl}/total-transaction";
-        $zakatsUrl = "{$baseUrl}/zakats";
-        $infaksUrl = "{$baseUrl}/infaks";
-        $billingssUrl = "{$baseUrl}/total-for-ict";
+        // Ambil nilai filter dari request
+        $start_date = $request->query('start_date');
+        $end_date = $request->query('end_date');
 
-        // Panggil API untuk masing-masing data menggunakan Http::get
-        $campaignsResponse = Http::get($campaignsUrl);
-        $usersResponse = Http::get($usersUrl);
-        $transactionsResponse = Http::get($transactionsUrl);
-        $zakatsResponse = Http::get($zakatsUrl);
-        $infaksResponse = Http::get($infaksUrl);
-        $billingResponse = Http::get($billingssUrl);
-        $totalTransactionResponse = Http::get($totalTransaction);
+        // Validasi tanggal agar tidak error jika kosong atau tidak sesuai format
+        $request->validate([
+            'start_date' => 'nullable|date',
+            'end_date'   => 'nullable|date|after_or_equal:start_date',
+        ]);
 
-        $error = null;
+        // Buat URL dengan query parameter jika filter diterapkan
+        $queryParams = array_filter([
+            'start_date' => $start_date,
+            'end_date'   => $end_date,
+        ]);
 
-        // Pastikan respons API berhasil
-        if ($campaignsResponse->successful() && $usersResponse->successful() && $transactionsResponse->successful() && $zakatsResponse->successful() && $infaksResponse->successful() && $billingResponse->successful()) {
-            // Ambil data JSON dari respons API
-            $campaigns = $campaignsResponse->json();
-            $users = $usersResponse->json();
-            $transactions = $transactionsResponse->json();
-            $zakats = $zakatsResponse->json();
-            $infaks = $infaksResponse->json();
-            $billings = $billingResponse->json()['total_for_ict'] ?? 0;
-            $totTransaction = $totalTransactionResponse->json()['total_transaction'] ?? 0;
-         
+        $summaryFilterUrl = $baseUrl . '/summary' . (count($queryParams) ? '?' . http_build_query($queryParams) : '');
 
-            $totalUser = 0;
+        // Panggil API dan konversi hasil ke array
+        $summaryResponse = Http::get($summaryFilterUrl)->json();
 
-            // // Penjumlahan untuk campaigns
-            // if (!empty($campaigns['data'])) {
-            //     $totalCurrentAmount += collect($campaigns['data'])->sum('current_amount');
-            // }
-
-            // // Penjumlahan untuk zakats
-            // if (!empty($zakats['data'])) {
-            //     $totalCurrentAmount += collect($zakats['data'])->sum('current_amount');
-            // }
-
-            // // Penjumlahan untuk infaks
-            // if (!empty($infaks['data'])) {
-            //     $totalCurrentAmount += collect($infaks['data'])->sum('current_amount');
-            // }
-
-            $totalUser = $users['total'];
-            $totalTransaksi = $transactions['total'];
-
-            // dd($totTransaction);
-        } else {
-            // Jika ada salah satu API gagal, kirimkan pesan error
-            $campaigns = $users = $transactions = $zakats = $infaks = [];
-            // $totalCurrentAmount = 0;
-            $totalUser = 0;
-            $error = 'Terjadi kesalahan saat mengambil data dari API.';
-        }
-
-        // Kirim data ke view
-        return view('admin.main', compact(
-            'campaigns',
-            'users',
-            'billings',
-            'transactions',
-            'zakats',
-            'infaks',
-            'totTransaction',
-            'totalUser',
-            'totalTransaksi',
-            'error' // Kirimkan pesan error jika ada
-        ));
+        // Pastikan response memiliki data yang sesuai
+        $data = [
+            'totalTransaction' => $summaryResponse['total_transaction'],
+            'countTransaction' => $summaryResponse['total_transaction_count'],
+            'countBilling' => $summaryResponse['total_billing_count'],
+            'totalDonatur' => $summaryResponse['total_donatur'],
+            'totalMigration' => $summaryResponse['total_migration'],
+            'totalQris' => $summaryResponse['total_qris'],
+            'totalForIct' => $summaryResponse['total_for_ict'],
+        ];
+        return view('admin.main', $data);
     }
+
 
     public function chartData()
     {
