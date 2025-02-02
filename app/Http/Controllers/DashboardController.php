@@ -101,53 +101,11 @@ class DashboardController extends Controller
     }
 
 
-
-    public function chartData()
-    {
-        $data = [];
-        $page = 1;
-
-        // Ambil semua halaman data
-        do {
-            $response = Http::get("http://localhost/api/transactions?page=$page");
-            $transactions = $response->json();
-
-            if (isset($transactions['data']) && count($transactions['data']) > 0) {
-                $data = array_merge($data, $transactions['data']);
-                $page++;
-            } else {
-                break;
-            }
-        } while (true);
-
-        // Filter dan kelompokkan data
-        $campaigns = [];
-        $zakats = [];
-        $infaks = [];
-
-        foreach ($data as $transaction) {
-            $date = date('Y-m-d', strtotime($transaction['transaction_date']));
-            $amount = $transaction['transaction_amount'];
-
-            if ($transaction['category'] === 'campaign') {
-                $campaigns[$date] = ($campaigns[$date] ?? 0) + $amount;
-            } elseif ($transaction['category'] === 'zakat') {
-                $zakats[$date] = ($zakats[$date] ?? 0) + $amount;
-            } elseif ($transaction['category'] === 'infak') {
-                $infaks[$date] = ($infaks[$date] ?? 0) + $amount;
-            }
-        }
-
-        return response()->json([
-            'campaigns' => $campaigns,
-            'zakats' => $zakats,
-            'infaks' => $infaks,
-        ]);
-    }
-
     public function getAllTransactions()
     {
-        $apiUrl = "https://ws.jalankebaikan.id/api/transactions";
+         // Ambil base URL dari .env
+        $baseUrl = env('API_BASE_URL');
+        $apiUrl = "{$baseUrl}/transactions";
 
         $chartData = [];
         $categories = ['zakat', 'campaign', 'infak']; // Kategori yang ingin dipisahkan
@@ -166,8 +124,8 @@ class DashboardController extends Controller
 
             // Proses transaksi dan kelompokkan berdasarkan kategori
             foreach ($transactions as $transaction) {
-                $date = date('Y-m-d', strtotime($transaction['transaction_date']));
-                $amount = $transaction['transaction_amount'];
+                $date = $this->safeGet($transaction, 'transaction_date');
+                $amount = $this->safeGet($transaction, 'transaction_amount', 0); // Default 0 jika tidak ada amount
 
                 // Tentukan kategori transaksi
                 $category = 'lainnya'; // Default jika bukan zakat, campaign, atau infak
@@ -240,10 +198,10 @@ class DashboardController extends Controller
             'datasets' => $datasets
         ]);
     }
-
     public function getCampaigns()
     {
-        $url = 'https://ws.jalankebaikan.id/api/campaigns'; // URL API yang mengembalikan data kampanye
+        $baseUrl = env('API_BASE_URL');
+        $url = "{$baseUrl}/campaigns"; // URL API yang mengembalikan data kampanye
 
         $campaigns = $this->fetchAllCampaigns($url); // Panggil fungsi untuk mengambil semua data
 
@@ -253,7 +211,7 @@ class DashboardController extends Controller
 
         // Filter hanya campaign dengan current_amount > 0
         $filteredCampaigns = collect($campaigns)
-            ->filter(fn($campaign) => $campaign['current_amount'] > 0)
+            ->filter(fn($campaign) => $this->safeGet($campaign, 'current_amount') > 0)
             ->values();
 
         // Sorting berdasarkan current_amount tertinggi
@@ -273,11 +231,17 @@ class DashboardController extends Controller
             $chartData['labels'][] = strlen($campaign['campaign_name']) > 20
                 ? substr($campaign['campaign_name'], 0, 20) . "..."
                 : $campaign['campaign_name'];
-            $chartData['target_amounts'][] = $campaign['target_amount'];
-            $chartData['current_amounts'][] = $campaign['current_amount'];
+            $chartData['target_amounts'][] = $this->safeGet($campaign, 'target_amount');
+            $chartData['current_amounts'][] = $this->safeGet($campaign, 'current_amount');
         }
 
         return response()->json($chartData);
+    }
+
+    // Fungsi untuk mengambil nilai dengan pengamanan terhadap null atau undefined
+    private function safeGet($data, $key)
+    {
+        return isset($data[$key]) && $data[$key] !== null ? $data[$key] : 0;
     }
 
     // Fungsi untuk mengambil seluruh data dengan pagination
@@ -300,8 +264,6 @@ class DashboardController extends Controller
 
         return $campaigns; // Kembalikan data yang sudah digabungkan
     }
-
-
 
 
     /**
