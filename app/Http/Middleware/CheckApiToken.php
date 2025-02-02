@@ -19,6 +19,12 @@ class CheckApiToken
         if (!$request->session()->has('token')) {
             return redirect()->route('login.index')->withErrors('Silakan login terlebih dahulu.');
         }
+        // Ambil token dari session
+        $token = $request->session()->get('token');
+
+        // Menyertakan token dalam header request untuk API
+        $request->headers->set('Authorization', 'Bearer ' . $token);
+        
 
         return $next($request);
     }

@@ -13,23 +13,35 @@ class DashboardController extends Controller
      * 
      */
 
+
+
     // public function index(Request $request)
     // {
     //     // Ambil base URL dari .env
     //     $baseUrl = env('API_BASE_URL');
-    //     $start_date = $request->get('start_date', '');
-    //     $end_date = $request->get('end_date', '');
 
-    //     // Tentukan URL endpoint untuk masing-masing data
+    //     // Ambil nilai filter dari request
+    //     $start_date = $request->query('start_date');
+    //     $end_date = $request->query('end_date');
 
-    //     $summaryFilterUrl = "{$baseUrl}/summary";
+    //     // Validasi tanggal agar tidak error jika kosong atau tidak sesuai format
+    //     $request->validate([
+    //         'start_date' => 'nullable|date',
+    //         'end_date'   => 'nullable|date|after_or_equal:start_date',
+    //     ]);
 
-    //     if (!empty($start_date) && !empty($end_date)) {
-    //         $summaryFilterUrl .= "?start_date=($start_date)&end_date=($end_date)";
-    //     }
+    //     // Buat URL dengan query parameter jika filter diterapkan
+    //     $queryParams = array_filter([
+    //         'start_date' => $start_date,
+    //         'end_date'   => $end_date,
+    //     ]);
 
+    //     $summaryFilterUrl = $baseUrl . '/summary' . (count($queryParams) ? '?' . http_build_query($queryParams) : '');
+
+    //     // Panggil API dan konversi hasil ke array
     //     $summaryResponse = Http::get($summaryFilterUrl)->json();
 
+    //     // Pastikan response memiliki data yang sesuai
     //     $data = [
     //         'totalTransaction' => $summaryResponse['total_transaction'],
     //         'countTransaction' => $summaryResponse['total_transaction_count'],
@@ -39,7 +51,6 @@ class DashboardController extends Controller
     //         'totalQris' => $summaryResponse['total_qris'],
     //         'totalForIct' => $summaryResponse['total_for_ict'],
     //     ];
-
     //     return view('admin.main', $data);
     // }
 
@@ -47,6 +58,9 @@ class DashboardController extends Controller
     {
         // Ambil base URL dari .env
         $baseUrl = env('API_BASE_URL');
+
+        // Ambil token dari session
+        $token = $request->session()->get('token');
 
         // Ambil nilai filter dari request
         $start_date = $request->query('start_date');
@@ -66,8 +80,10 @@ class DashboardController extends Controller
 
         $summaryFilterUrl = $baseUrl . '/summary' . (count($queryParams) ? '?' . http_build_query($queryParams) : '');
 
-        // Panggil API dan konversi hasil ke array
-        $summaryResponse = Http::get($summaryFilterUrl)->json();
+        // Panggil API dengan token di header
+        $summaryResponse = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $token
+        ])->get($summaryFilterUrl)->json();
 
         // Pastikan response memiliki data yang sesuai
         $data = [
@@ -79,8 +95,11 @@ class DashboardController extends Controller
             'totalQris' => $summaryResponse['total_qris'],
             'totalForIct' => $summaryResponse['total_for_ict'],
         ];
+
+        // Tampilkan data di view
         return view('admin.main', $data);
     }
+
 
 
     public function chartData()

@@ -17,7 +17,7 @@ class AuthController extends Controller
 
         return view('auth.login');
     }
-    
+
 
     /**
      * Show the form for creating a new resource.
@@ -33,7 +33,7 @@ class AuthController extends Controller
     //         // // Kirim request login API
     //         $response = Http::asJson()->post($loginAdmin, $credentials);
     //         //   $response = Http::timeout(30)->asJson()->post($loginAdmin, $credentials);
-            
+
     //         // Cek response
     //         if ($response->successful()) {
     //             $responseData = $response->json();
@@ -124,8 +124,8 @@ class AuthController extends Controller
     //     Alert::success('Berhasil', 'Anda berhasil logout.')->persistent(true);
     //     return redirect()->route('login');
     // }
-    
-    
+
+
 
 
     // public function register(Request $request)
@@ -176,6 +176,8 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
+        session()->forget('token');
+        session()->forget('user');
         // Invalidate the session
         $request->session()->invalidate();
 
