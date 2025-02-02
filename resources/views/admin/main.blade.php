@@ -33,10 +33,11 @@
                     <h1 class="font-bold text-2xl">Dashboard</h1>
                     <div class="flex flex-col items-center">
                         <form action="{{ route('dashboard.index') }}" method="get">
-                            <div class="flex grid-cols-3 space-x-3">
+                            <div class="flex grid-cols-3 space-x-3 justify-center items-center">
+                                <label for="start_date">Tanggal mulai:</label>
                                 <input type="date" name="start_date" id="start_date"
                                     class="shadow-md text-sm rounded-md px-2 py-1" value="{{ request('start_date') }}">
-                                <p class="flex justify-center items-center">
+                                <p class="text-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="size-6">
                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -44,6 +45,7 @@
                                     </svg>
 
                                 </p>
+                                <label for="end_date">Tanggal selesai:</label>
                                 <input type="date" name="end_date" id="end_date"
                                     class="shadow-md text-sm rounded-md px-2 py-1" value="{{ request('end_date') }}">
                                 <button type="submit"
@@ -58,7 +60,7 @@
                 <div class="grid gap-4 grid-cols-4">
 
                     <div
-                        class="bg-gradient-to-r from-neutral-50 to-neutral-200 border-1 border-gray-400 rounded-md flex flex-col shadow-md p-4 mt-5 justify-center items-center">
+                        class="bg-gradient-to-br from-neutral-50 to-gray-100 border-1 border-gray-400 rounded-md flex flex-col shadow-md p-4 mt-5 justify-center items-center">
                         <div class="pb-2">
                             <h2 class="font-semibold">Total Donasi</h2>
                             <p class="text-lg font-bold">
@@ -82,7 +84,7 @@
 
                     </div>
                     <div
-                        class="bg-gradient-to-r from-neutral-50 to-neutral-200 border-1 border-gray-400 rounded-md shadow-md p-4 mt-5 text-center">
+                        class="bg-gradient-to-br from-neutral-50 to-gray-100 border-1 border-gray-400 rounded-md shadow-md p-4 mt-5 text-center">
                         <div class="pb-2">
                             <h2 class="font-semibold mb-10">Jumlah Donatur</h2>
                             <p class="mt-2 font-bold text-lg">
@@ -90,7 +92,7 @@
                         </div>
                     </div>
                     <div
-                        class="bg-gradient-to-r from-neutral-50 to-neutral-200 border-1 border-gray-400 rounded-md flex flex-col shadow-md p-4 mt-5 justify-center items-center">
+                        class="bg-gradient-to-br from-neutral-50 to-gray-100 border-1 border-gray-400 rounded-md flex flex-col shadow-md p-4 mt-5 justify-center items-center">
                         <div class="pb-2">
                             <h2 class="font-semibold">Jumlah Donasi</h2>
                             <p class="text-center font-bold text-lg">
@@ -111,7 +113,7 @@
                     </div>
 
                     <div
-                        class="bg-gradient-to-r from-neutral-50 to-neutral-200 border-1 border-gray-400 rounded-md shadow-md p-4 mt-5 text-center">
+                        class="bg-gradient-to-br from-neutral-50 to-gray-100 border-1 border-gray-400 rounded-md shadow-md p-4 mt-5 text-center">
                         <div class="pb-2">
                             <h2 class="font-semibold mb-10">Total tagihan ICT</h2>
                             <p class="mt-2 text-lg font-bold">
