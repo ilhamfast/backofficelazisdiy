@@ -28,8 +28,8 @@ Route::post('/login-admin', [AuthController::class, 'login'])->name('logins.inde
 
 Route::middleware('auth.api')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
-    Route::get('/chart-transactions', [DashboardController::class, 'getAllTransactions']);
-    Route::get('/chart-campaigns', [DashboardController::class, 'getCampaigns']);
+    // Route::get('/chart-transactions', [DashboardController::class, 'getAllTransactions']);
+    // Route::get('/chart-campaigns', [DashboardController::class, 'getCampaigns']);
     
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     

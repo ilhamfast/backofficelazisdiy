@@ -101,169 +101,169 @@ class DashboardController extends Controller
     }
 
 
-    public function getAllTransactions()
-    {
-         // Ambil base URL dari .env
-        $baseUrl = env('API_BASE_URL');
-        $apiUrl = "{$baseUrl}/transactions";
+    // public function getAllTransactions()
+    // {
+    //      // Ambil base URL dari .env
+    //     $baseUrl = env('API_BASE_URL');
+    //     $apiUrl = "{$baseUrl}/transactions";
 
-        $chartData = [];
-        $categories = ['zakat', 'campaign', 'infak']; // Kategori yang ingin dipisahkan
-        $currentPage = 1;
+    //     $chartData = [];
+    //     $categories = ['zakat', 'campaign', 'infak']; // Kategori yang ingin dipisahkan
+    //     $currentPage = 1;
 
-        do {
-            // Ambil data per halaman
-            $response = Http::get($apiUrl, ['page' => $currentPage]);
+    //     do {
+    //         // Ambil data per halaman
+    //         $response = Http::get($apiUrl, ['page' => $currentPage]);
 
-            if (!$response->successful()) {
-                return response()->json(['error' => 'Gagal mengambil data'], 500);
-            }
+    //         if (!$response->successful()) {
+    //             return response()->json(['error' => 'Gagal mengambil data'], 500);
+    //         }
 
-            $data = $response->json();
-            $transactions = $data['data']; // Sesuaikan dengan struktur API
+    //         $data = $response->json();
+    //         $transactions = $data['data']; // Sesuaikan dengan struktur API
 
-            // Proses transaksi dan kelompokkan berdasarkan kategori
-            foreach ($transactions as $transaction) {
-                $date = $this->safeGet($transaction, 'transaction_date');
-                $amount = $this->safeGet($transaction, 'transaction_amount', 0); // Default 0 jika tidak ada amount
+    //         // Proses transaksi dan kelompokkan berdasarkan kategori
+    //         foreach ($transactions as $transaction) {
+    //             $date = $this->safeGet($transaction, 'transaction_date');
+    //             $amount = $this->safeGet($transaction, 'transaction_amount', 0); // Default 0 jika tidak ada amount
 
-                // Tentukan kategori transaksi
-                $category = 'lainnya'; // Default jika bukan zakat, campaign, atau infak
-                if (!empty($transaction['zakat_id'])) {
-                    $category = 'zakat';
-                } elseif (!empty($transaction['campaign_id'])) {
-                    $category = 'campaign';
-                } elseif (!empty($transaction['infak_id'])) {
-                    $category = 'infak';
-                }
+    //             // Tentukan kategori transaksi
+    //             $category = 'lainnya'; // Default jika bukan zakat, campaign, atau infak
+    //             if (!empty($transaction['zakat_id'])) {
+    //                 $category = 'zakat';
+    //             } elseif (!empty($transaction['campaign_id'])) {
+    //                 $category = 'campaign';
+    //             } elseif (!empty($transaction['infak_id'])) {
+    //                 $category = 'infak';
+    //             }
 
-                // Inisialisasi jika belum ada
-                if (!isset($chartData[$category])) {
-                    $chartData[$category] = [];
-                }
-                if (!isset($chartData[$category][$date])) {
-                    $chartData[$category][$date] = 0;
-                }
+    //             // Inisialisasi jika belum ada
+    //             if (!isset($chartData[$category])) {
+    //                 $chartData[$category] = [];
+    //             }
+    //             if (!isset($chartData[$category][$date])) {
+    //                 $chartData[$category][$date] = 0;
+    //             }
 
-                // Tambahkan jumlah transaksi ke kategori yang sesuai
-                $chartData[$category][$date] += $amount;
-            }
+    //             // Tambahkan jumlah transaksi ke kategori yang sesuai
+    //             $chartData[$category][$date] += $amount;
+    //         }
 
-            // Cek apakah masih ada halaman berikutnya
-            $currentPage++;
-            $totalPages = $data['total_pages'] ?? 1;
-        } while ($currentPage <= $totalPages);
+    //         // Cek apakah masih ada halaman berikutnya
+    //         $currentPage++;
+    //         $totalPages = $data['total_pages'] ?? 1;
+    //     } while ($currentPage <= $totalPages);
 
-        // Buat format data untuk Chart.js
-        $datasets = [];
-        $allDates = [];
+    //     // Buat format data untuk Chart.js
+    //     $datasets = [];
+    //     $allDates = [];
 
-        foreach ($categories as $category) {
-            if (!isset($chartData[$category])) {
-                continue;
-            }
+    //     foreach ($categories as $category) {
+    //         if (!isset($chartData[$category])) {
+    //             continue;
+    //         }
 
-            $allDates = array_merge($allDates, array_keys($chartData[$category]));
-        }
+    //         $allDates = array_merge($allDates, array_keys($chartData[$category]));
+    //     }
 
-        $allDates = array_unique($allDates);
-        sort($allDates); // Urutkan tanggal
+    //     $allDates = array_unique($allDates);
+    //     sort($allDates); // Urutkan tanggal
 
-        // Warna berbeda untuk tiap kategori
-        $colors = [
-            'zakat' => ['border' => 'rgba(255, 99, 132, 1)', 'background' => 'rgba(255, 99, 132, 0.2)'],
-            'campaign' => ['border' => 'rgba(54, 162, 235, 1)', 'background' => 'rgba(54, 162, 235, 0.2)'],
-            'infak' => ['border' => 'rgba(255, 206, 86, 1)', 'background' => 'rgba(255, 206, 86, 0.2)']
-        ];
+    //     // Warna berbeda untuk tiap kategori
+    //     $colors = [
+    //         'zakat' => ['border' => 'rgba(255, 99, 132, 1)', 'background' => 'rgba(255, 99, 132, 0.2)'],
+    //         'campaign' => ['border' => 'rgba(54, 162, 235, 1)', 'background' => 'rgba(54, 162, 235, 0.2)'],
+    //         'infak' => ['border' => 'rgba(255, 206, 86, 1)', 'background' => 'rgba(255, 206, 86, 0.2)']
+    //     ];
 
-        foreach ($categories as $category) {
-            $dataPoints = [];
-            foreach ($allDates as $date) {
-                $dataPoints[] = $chartData[$category][$date] ?? 0; // Jika tidak ada, beri 0
-            }
+    //     foreach ($categories as $category) {
+    //         $dataPoints = [];
+    //         foreach ($allDates as $date) {
+    //             $dataPoints[] = $chartData[$category][$date] ?? 0; // Jika tidak ada, beri 0
+    //         }
 
-            $datasets[] = [
-                'label' => ucfirst($category), // Nama kategori
-                'data' => $dataPoints,
-                'borderColor' => $colors[$category]['border'],
-                'backgroundColor' => $colors[$category]['background'],
-                'borderWidth' => 2,
-                'fill' => true
-            ];
-        }
+    //         $datasets[] = [
+    //             'label' => ucfirst($category), // Nama kategori
+    //             'data' => $dataPoints,
+    //             'borderColor' => $colors[$category]['border'],
+    //             'backgroundColor' => $colors[$category]['background'],
+    //             'borderWidth' => 2,
+    //             'fill' => true
+    //         ];
+    //     }
 
-        // Kirim data dalam format JSON yang diterima Chart.js
-        return response()->json([
-            'labels' => $allDates,
-            'datasets' => $datasets
-        ]);
-    }
-    public function getCampaigns()
-    {
-        $baseUrl = env('API_BASE_URL');
-        $url = "{$baseUrl}/campaigns"; // URL API yang mengembalikan data kampanye
+    //     // Kirim data dalam format JSON yang diterima Chart.js
+    //     return response()->json([
+    //         'labels' => $allDates,
+    //         'datasets' => $datasets
+    //     ]);
+    // }
+    // public function getCampaigns()
+    // {
+    //     $baseUrl = env('API_BASE_URL');
+    //     $url = "{$baseUrl}/campaigns"; // URL API yang mengembalikan data kampanye
 
-        $campaigns = $this->fetchAllCampaigns($url); // Panggil fungsi untuk mengambil semua data
+    //     $campaigns = $this->fetchAllCampaigns($url); // Panggil fungsi untuk mengambil semua data
 
-        if (empty($campaigns)) {
-            return response()->json(['error' => 'Gagal mengambil data dari API.'], 500);
-        }
+    //     if (empty($campaigns)) {
+    //         return response()->json(['error' => 'Gagal mengambil data dari API.'], 500);
+    //     }
 
-        // Filter hanya campaign dengan current_amount > 0
-        $filteredCampaigns = collect($campaigns)
-            ->filter(fn($campaign) => $this->safeGet($campaign, 'current_amount') > 0)
-            ->values();
+    //     // Filter hanya campaign dengan current_amount > 0
+    //     $filteredCampaigns = collect($campaigns)
+    //         ->filter(fn($campaign) => $this->safeGet($campaign, 'current_amount') > 0)
+    //         ->values();
 
-        // Sorting berdasarkan current_amount tertinggi
-        $sortedCampaigns = $filteredCampaigns
-            ->sortByDesc('current_amount')
-            ->slice(0, 5) // Batasi ke 5 campaign dengan current amount tertinggi
-            ->toArray();
+    //     // Sorting berdasarkan current_amount tertinggi
+    //     $sortedCampaigns = $filteredCampaigns
+    //         ->sortByDesc('current_amount')
+    //         ->slice(0, 5) // Batasi ke 5 campaign dengan current amount tertinggi
+    //         ->toArray();
 
-        // Struktur data untuk ChartJS
-        $chartData = [
-            'labels' => [],
-            'target_amounts' => [],
-            'current_amounts' => [],
-        ];
+    //     // Struktur data untuk ChartJS
+    //     $chartData = [
+    //         'labels' => [],
+    //         'target_amounts' => [],
+    //         'current_amounts' => [],
+    //     ];
 
-        foreach ($sortedCampaigns as $campaign) {
-            $chartData['labels'][] = strlen($campaign['campaign_name']) > 20
-                ? substr($campaign['campaign_name'], 0, 20) . "..."
-                : $campaign['campaign_name'];
-            $chartData['target_amounts'][] = $this->safeGet($campaign, 'target_amount');
-            $chartData['current_amounts'][] = $this->safeGet($campaign, 'current_amount');
-        }
+    //     foreach ($sortedCampaigns as $campaign) {
+    //         $chartData['labels'][] = strlen($campaign['campaign_name']) > 20
+    //             ? substr($campaign['campaign_name'], 0, 20) . "..."
+    //             : $campaign['campaign_name'];
+    //         $chartData['target_amounts'][] = $this->safeGet($campaign, 'target_amount');
+    //         $chartData['current_amounts'][] = $this->safeGet($campaign, 'current_amount');
+    //     }
 
-        return response()->json($chartData);
-    }
+    //     return response()->json($chartData);
+    // }
 
-    // Fungsi untuk mengambil nilai dengan pengamanan terhadap null atau undefined
-    private function safeGet($data, $key)
-    {
-        return isset($data[$key]) && $data[$key] !== null ? $data[$key] : 0;
-    }
+    // // Fungsi untuk mengambil nilai dengan pengamanan terhadap null atau undefined
+    // private function safeGet($data, $key)
+    // {
+    //     return isset($data[$key]) && $data[$key] !== null ? $data[$key] : 0;
+    // }
 
-    // Fungsi untuk mengambil seluruh data dengan pagination
-    private function fetchAllCampaigns($url, $campaigns = [])
-    {
-        // Ambil data dari URL API
-        $response = Http::get($url);
+    // // Fungsi untuk mengambil seluruh data dengan pagination
+    // private function fetchAllCampaigns($url, $campaigns = [])
+    // {
+    //     // Ambil data dari URL API
+    //     $response = Http::get($url);
 
-        if ($response->successful()) {
-            $result = $response->json();
+    //     if ($response->successful()) {
+    //         $result = $response->json();
 
-            // Gabungkan data campaign yang didapatkan
-            $campaigns = array_merge($campaigns, $result['data']);
+    //         // Gabungkan data campaign yang didapatkan
+    //         $campaigns = array_merge($campaigns, $result['data']);
 
-            // Jika ada link untuk halaman berikutnya, ambil data dari halaman berikutnya
-            if (isset($result['next_page_url']) && $result['next_page_url']) {
-                return $this->fetchAllCampaigns($result['next_page_url'], $campaigns);
-            }
-        }
+    //         // Jika ada link untuk halaman berikutnya, ambil data dari halaman berikutnya
+    //         if (isset($result['next_page_url']) && $result['next_page_url']) {
+    //             return $this->fetchAllCampaigns($result['next_page_url'], $campaigns);
+    //         }
+    //     }
 
-        return $campaigns; // Kembalikan data yang sudah digabungkan
-    }
+    //     return $campaigns; // Kembalikan data yang sudah digabungkan
+    // }
 
 
     /**
