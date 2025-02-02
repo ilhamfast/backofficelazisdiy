@@ -1,4 +1,4 @@
-<!doctype html>
+<!Doctype html>
 <html lang="en">
 
 <head>
@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('assets/img/lazismu-logo.png') }}" type="image/x-icon">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="https://cdn.tailwindcss.com"></script>
     {{-- @vite('resources/css/app.css') --}}
     <title>Dashboard</title>
@@ -33,17 +34,25 @@
                     <div class="flex flex-col items-center">
                         <form action="{{ route('dashboard.index') }}" method="get">
                             <div class="flex grid-cols-3 space-x-3">
-                                <input type="date" name="start_date" id="start_date" class="shadow-md text-sm rounded-md px-2 py-1" value="{{ request('start_date') }}">
+                                <input type="date" name="start_date" id="start_date"
+                                    class="shadow-md text-sm rounded-md px-2 py-1" value="{{ request('start_date') }}">
                                 <p class="flex justify-center items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                                      </svg>
-                                      
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                                    </svg>
+
                                 </p>
-                                <input type="date" name="end_date" id="end_date" class="shadow-md text-sm rounded-md px-2 py-1" value="{{ request('end_date') }}">
-                                <button type="submit" class="text-white bg-green-600 rounded-md shadow-md px-3 py-1">Filter</button>
+                                <input type="date" name="end_date" id="end_date"
+                                    class="shadow-md text-sm rounded-md px-2 py-1" value="{{ request('end_date') }}">
+                                <button type="submit"
+                                    class="text-white bg-green-600 rounded-md shadow-md px-3 py-1">Filter</button>
+                                <button type="button" onclick="resetFilter()"
+                                    class="text-white bg-red-600 rounded-md shadow-md px-3 py-1">Reset</button>
                             </div>
                         </form>
+
                     </div>
                 </div>
                 <div class="grid gap-4 grid-cols-4">
@@ -72,22 +81,26 @@
                         </div>
 
                     </div>
-                    <div class="bg-gradient-to-r from-neutral-50 to-neutral-200 border-1 border-gray-400 rounded-md shadow-md p-4 mt-5 text-center">
+                    <div
+                        class="bg-gradient-to-r from-neutral-50 to-neutral-200 border-1 border-gray-400 rounded-md shadow-md p-4 mt-5 text-center">
                         <div class="pb-2">
                             <h2 class="font-semibold mb-10">Jumlah Donatur</h2>
-                            <p class="mt-2 text-gray-600 font-bold text-lg">{{ number_format($totalDonatur ?? 0, 0, ',', '.') }}</p>
+                            <p class="mt-2 font-bold text-lg">
+                                {{ number_format($totalDonatur ?? 0, 0, ',', '.') }}</p>
                         </div>
                     </div>
                     <div
                         class="bg-gradient-to-r from-neutral-50 to-neutral-200 border-1 border-gray-400 rounded-md flex flex-col shadow-md p-4 mt-5 justify-center items-center">
                         <div class="pb-2">
                             <h2 class="font-semibold">Jumlah Donasi</h2>
-                            <p class="text-center font-bold text-lg">{{ number_format($countTransaction ?? 0, 0, ',', '.') }}</p>
+                            <p class="text-center font-bold text-lg">
+                                {{ number_format($countTransaction ?? 0, 0, ',', '.') }}</p>
                         </div>
                         <div class="grid grid-cols-2 border-t-2 border-gray-400 w-full">
                             <div class="border-r-2 border-gray-400 p-2">
                                 <h3 class="font-semibold text-sm text-green-600">Success</h3>
-                                <p class="text-sm font-bold">{{ number_format($countTransaction ?? 0, 0, ',', '.') }}</p>
+                                <p class="text-sm font-bold">{{ number_format($countTransaction ?? 0, 0, ',', '.') }}
+                                </p>
                             </div>
                             <div class="p-2">
                                 <h3 class="font-semibold text-sm text-yellow-600">Waiting</h3>
@@ -97,10 +110,11 @@
 
                     </div>
 
-                    <div class="bg-gradient-to-r from-neutral-50 to-neutral-200 border-1 border-gray-400 rounded-md shadow-md p-4 mt-5 text-center">
+                    <div
+                        class="bg-gradient-to-r from-neutral-50 to-neutral-200 border-1 border-gray-400 rounded-md shadow-md p-4 mt-5 text-center">
                         <div class="pb-2">
                             <h2 class="font-semibold mb-10">Total tagihan ICT</h2>
-                            <p class="mt-2 text-gray-600 text-lg font-bold">
+                            <p class="mt-2 text-lg font-bold">
                                 Rp {{ number_format($totalForIct ?? 0, 0, ',', '.') }}
                             </p>
                         </div>
@@ -116,74 +130,16 @@
                         <canvas id="campaignschart" class="w-full h-auto"></canvas>
                     </div>
                 </div>
-
-
-
-
             </main>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    {{-- <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            fetch('/transactions/chart')
-                .then(response => response.json())
-                .then(data => {
-                    const ctx = document.getElementById('transactionChart').getContext('2d');
-
-                    new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: Object.keys(data.campaigns),
-                            datasets: [{
-                                    label: 'Campaign',
-                                    data: Object.values(data.campaigns),
-                                    borderColor: 'rgba(255, 99, 132, 1)',
-                                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                                    fill: true,
-                                },
-                                {
-                                    label: 'Zakat',
-                                    data: Object.values(data.zakats),
-                                    borderColor: 'rgba(54, 162, 235, 1)',
-                                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                                    fill: true,
-                                },
-                                {
-                                    label: 'Infak',
-                                    data: Object.values(data.infaks),
-                                    borderColor: 'rgba(75, 192, 192, 1)',
-                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                    fill: true,
-                                }
-                            ]
-                        },
-                        options: {
-                            responsive: true,
-                            scales: {
-                                x: {
-                                    type: 'category',
-                                    title: {
-                                        display: true,
-                                        text: 'Tanggal'
-                                    }
-                                },
-                                y: {
-                                    beginAtZero: true,
-                                    title: {
-                                        display: true,
-                                        text: 'Jumlah'
-                                    }
-                                }
-                            }
-                        }
-                    });
-                });
-        });
-    </script> --}}
+    <script src="{{ asset('js/resetfilter.js') }}"></script>
     <script src="{{ asset('js/transactionChart.js') }}"></script>
     <script src="{{ asset('js/campaignchart.js') }}"></script>
+
+
 
 
 </body>
